@@ -158,7 +158,7 @@ class MenuShapeView: UIView {
         configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
     }
     
-    func configButton(_ button: UIButton, icon: UIImage, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
+    func configButton(_ button: UIButton, icon: UIImage, for state: UIControl.State, highlightedColor: UIColor, normalColor: UIColor) {
         button.setImage(icon.configIconColor(normalColor), for: .normal)
         button.setImage(icon.configIconColor(highlightedColor), for: state)
         stackView?.addArrangedSubview(button)
