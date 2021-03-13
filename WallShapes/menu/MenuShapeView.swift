@@ -96,70 +96,71 @@ class MenuShapeView: UIView {
         btnDelete = UIButton()
         guard let btnDelete = self.btnDelete else {return}
         btnDelete.addTarget(self, action: #selector(deleteShape(_:)), for: .touchUpInside)
-        configHighlighted(btnDelete, sfSymbol: "trash", normalColor: .red)
+        config(btnDelete, name: "trash", for: .highlighted, normalColor: .red)
     }
     
     func initBtnCircle() {
         btnCircle = UIButton()
         guard let btnCircle = self.btnCircle else {return}
         btnCircle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
-        configHighlighted(btnCircle, sfSymbol: "circle.fill")
+        config(btnCircle, sfSymbol: "circle.fill", for: .highlighted)
     }
     
     func initBtnRectangle() {
         btnRectangle = UIButton()
         guard let btnRectangle = self.btnRectangle else {return}
         btnRectangle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
-        configHighlighted(btnRectangle, sfSymbol: "square.fill")
+        config(btnRectangle, sfSymbol: "square.fill", for: .highlighted)
     }
     
     func initBtnTriangle() {
         btnTriangle = UIButton()
         guard let btnTriangle = self.btnTriangle else {return}
         btnTriangle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
-        configHighlighted(btnTriangle, sfSymbol: "triangle.fill")
+        config(btnTriangle, sfSymbol: "triangle.fill", for: .highlighted)
     }
     
     func initBtnGradient() {
         btnGradient = UIButton()
         guard let btnGradient = self.btnGradient else {return}
         btnGradient.addTarget(self, action: #selector(gradientShape(_:)), for: .touchUpInside)
-        configHighlighted(btnGradient, sfSymbol: "square")
+        config(btnGradient, name: "gradient", for: .highlighted)
     }
     
     func initBtnPlainColor() {
         btnPlainColor = UIButton()
         guard let btnPlainColor = self.btnPlainColor else {return}
         btnPlainColor.addTarget(self, action: #selector(plainColorShape(_:)), for: .touchUpInside)
-        configHighlighted(btnPlainColor, sfSymbol: "square")
+        config(btnPlainColor, name: "bucket", for: .highlighted, size: CGSize(width: 28, height: 28))
     }
     
     func initBtnShadow() {
         btnShadow = UIButton()
         guard let btnShadow = self.btnShadow else {return}
         btnShadow.addTarget(self, action: #selector(shadowShape(_:)), for: .touchUpInside)
-        configSelected(btnShadow, sfSymbol: "shadow")
+        config(btnShadow, name: "square-shadow", for: .selected)
     }
     
     func initBtnAlpha() {
         btnAlpha = UIButton()
         guard let btnAlpha = self.btnAlpha else {return}
         btnAlpha.addTarget(self, action: #selector(alphaShape(_:)), for: .touchUpInside)
-        configSelected(btnAlpha, sfSymbol: "drop.triangle.fill")
+        config(btnAlpha, name: "opacity", for: .selected)
     }
     
-    func configHighlighted(_ button: UIButton, sfSymbol: String, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
-        let icon = UIImage.configIcon(with: sfSymbol)
-        button.setImage(icon?.configIconColor(normalColor), for: .normal)
-        button.setImage(icon?.configIconColor(highlightedColor), for: .highlighted)
-        stackView?.addArrangedSubview(button)
-        buttons.append(button)
+    func config(_ button: UIButton, name: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white, size: CGSize = CGSize(width: 23, height: 23)) {
+        guard let icon = UIImage(named: name)?.resize(targetSize: size) else {return}
+        configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
     }
     
-    func configSelected(_ button: UIButton, sfSymbol: String, selectedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
-        let icon = UIImage.configIcon(with: sfSymbol)
-        button.setImage(icon?.configIconColor(normalColor), for: .normal)
-        button.setImage(icon?.configIconColor(selectedColor), for: .selected)
+    func config(_ button: UIButton, sfSymbol: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
+        guard let icon = UIImage.configIcon(with: sfSymbol) else {return}
+        configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
+    }
+    
+    func configButton(_ button: UIButton, icon: UIImage, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
+        button.setImage(icon.configIconColor(normalColor), for: .normal)
+        button.setImage(icon.configIconColor(highlightedColor), for: state)
         stackView?.addArrangedSubview(button)
         buttons.append(button)
     }
