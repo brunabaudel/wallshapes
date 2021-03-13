@@ -96,7 +96,7 @@ class MenuShapeView: UIView {
         btnDelete = UIButton()
         guard let btnDelete = self.btnDelete else {return}
         btnDelete.addTarget(self, action: #selector(deleteShape(_:)), for: .touchUpInside)
-        config(btnDelete, name: "trash", for: .highlighted, normalColor: .red)
+        config(btnDelete, sfSymbol: "trash", for: .highlighted, normalColor: .red)
     }
     
     func initBtnCircle() {
