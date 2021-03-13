@@ -29,11 +29,19 @@ class WallShapesViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshGradientItemHandle)),
-            UIBarButtonItem(barButtonSystemItem: .fastForward, target: self, action: #selector(refreshPlainColorItemHandle))]
+            configBarButtons(name: "gradient", action: #selector(refreshGradientItemHandle)),
+            configBarButtons(name: "bucket", action: #selector(refreshPlainColorItemHandle)),]
         
-        self.navigationItem.leftBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action:                                                             #selector(saveItemHandle)),
-                                                  UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(clearItemHandle))]
+        self.navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveItemHandle)),
+            UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle))]
+        
+        self.navigationController?.navigationBar.tintColor = .white
+    }
+    
+    func configBarButtons(name: String, action: Selector?) -> UIBarButtonItem {
+        guard let icon = UIImage(named: name)?.resize(targetSize: CGSize(width: 20, height: 20)) else {return UIBarButtonItem()}
+        return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
     }
     
     @objc func refreshPlainColorItemHandle() {
