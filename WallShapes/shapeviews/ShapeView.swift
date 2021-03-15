@@ -12,9 +12,10 @@ protocol ShapeViewDelegate {
 }
 
 class ShapeView: UIView {
-    var delegate: ShapeViewDelegate?
-    var shape: Shape?
-    var menuShapeView: MenuShapeView?
+    internal var delegate: ShapeViewDelegate?
+    
+    private var shape: Shape?
+    private var menuShapeView: MenuShapeView?
     
     init(frame: CGRect, menu: MenuShapeView) {
         super.init(frame: frame)
@@ -38,7 +39,7 @@ class ShapeView: UIView {
 }
 
 extension ShapeView {
-    func initShapeView() {
+    private func initShapeView() {
         let path = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: frame.origin.x + (frame.size.width)/2,
                                         y: frame.origin.y + (frame.size.height)/2),
@@ -62,7 +63,7 @@ extension ShapeView {
         self.createAlpha(1)
     }
     
-    func createPathCircle() {
+    private func createPathCircle() {
         let path = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: frame.origin.x + (frame.size.width)/2,
                                         y: frame.origin.y + (frame.size.height)/2),
@@ -71,7 +72,7 @@ extension ShapeView {
         changeShapeLayer(path, type: ShapeType.circle)
     }
     
-    func createPathRectangle() {
+    private func createPathRectangle() {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: frame.origin.x, y: frame.origin.y))
         path.addLine(to: CGPoint(x: frame.origin.x, y: frame.origin.y + frame.size.height))
@@ -81,7 +82,7 @@ extension ShapeView {
         changeShapeLayer(path, type: ShapeType.rectangle)
     }
     
-    func createPathTriangle() {
+    private func createPathTriangle() {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: frame.width/2 + frame.origin.x, y: frame.origin.y))
         path.addLine(to: CGPoint(x: frame.origin.x, y: frame.size.height + frame.origin.y))
@@ -90,7 +91,7 @@ extension ShapeView {
         changeShapeLayer(path, type: ShapeType.triangle)
     }
     
-    func changeShapeLayer(_ path: UIBezierPath, type: ShapeType) {
+    private func changeShapeLayer(_ path: UIBezierPath, type: ShapeType) {
         guard let currLayer = self.firstSublayer() else {return}
         guard let shape = self.shape, let color = shape.shapeLayerColor else {return}
         guard let shapeLayer = createShapeLayers(path, type: type, color: color) else {return}
@@ -104,11 +105,11 @@ extension ShapeView {
         }
     }
     
-    func replaceShapeLayer(_ shapeLayer: CAShapeLayer) {
+    private func replaceShapeLayer(_ shapeLayer: CAShapeLayer) {
         replaceLayer(shapeLayer)
     }
     
-    func replaceGradientLayer(_ shapeLayer: CAShapeLayer) {
+    private func replaceGradientLayer(_ shapeLayer: CAShapeLayer) {
         guard let shape = self.shape, let colors = shape.gradientLayerColors else {return}
         let gradient = CAGradientLayer()
         gradient.bounds = self.bounds
@@ -120,7 +121,7 @@ extension ShapeView {
         shape.gradientLayerColors = colors
     }
     
-    func createShapeLayers(_ path: UIBezierPath, type: ShapeType, color: CGColor) -> CAShapeLayer? {
+    private func createShapeLayers(_ path: UIBezierPath, type: ShapeType, color: CGColor) -> CAShapeLayer? {
         guard let shape = self.shape else {return nil}
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = CGRect(origin: CGPoint(x: -self.frame.minX, y: -self.frame.minY), size: self.frame.size)
@@ -134,12 +135,12 @@ extension ShapeView {
         return shapeLayer
     }
     
-    func replaceLayer(_ newLayer: CALayer) {
+    private func replaceLayer(_ newLayer: CALayer) {
         self.layer.sublayers?.removeAll()
         self.layer.addSublayer(newLayer)
     }
     
-    func createPlainColor() {
+    private func createPlainColor() {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
         let color = UIColor.random().cgColor
         shapeLayer.fillColor = color
@@ -148,7 +149,7 @@ extension ShapeView {
         shape.shapeLayerColor = color
     }
     
-    func createGradientColors() {
+    private func createGradientColors() {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
             let colors = [UIColor.random().cgColor, UIColor.random().cgColor]
@@ -162,7 +163,7 @@ extension ShapeView {
         replaceGradientLayer(shapeLayer)
     }
     
-    func createShadow(_ value: CGFloat) {
+    private func createShadow(_ value: CGFloat) {
         self.layer.shadowRadius = value * 100
         self.layer.shadowOpacity = 0.5
         self.layer.shadowOffset = .zero
@@ -172,14 +173,14 @@ extension ShapeView {
         self.shape?.shadowRadius = value
     }
     
-    func createAlpha(_ value: CGFloat) {
+    private func createAlpha(_ value: CGFloat) {
         self.alpha = value
         self.shape?.alpha = value
     }
 }
 
 extension ShapeView {
-    func selectShape() {
+    private func selectShape() {
         self.layer.borderWidth = 1.0
         self.layer.borderColor = UIColor.lightGray.cgColor
     }
@@ -235,7 +236,7 @@ extension ShapeView: MenuShapeViewDelegate {
         }
     }
     
-    func showMenuShape() {
+    public func showMenuShape() {
         self.menuShapeView?.delegate = self
         self.menuShapeView?.showMenu()
     }

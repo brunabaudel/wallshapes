@@ -13,11 +13,11 @@ protocol ShapeGesturesControlDelegate {
 }
 
 class ShapeGesturesControl {
-    var delegate: ShapeGesturesControlDelegate?
+    internal var delegate: ShapeGesturesControlDelegate?
     
-    var view: RandomGradientView //TODO: change to UIView and change the onTap function
-    var viewGesture: ShapeView?
-    var shapeLayerPath: CGPath?
+    private var view: RandomGradientView //TODO: change to UIView and change the onTap function
+    private var viewGesture: ShapeView?
+    private var shapeLayerPath: CGPath?
     
     init<T: RandomGradientView>(_ view: T) {
         self.view = view
@@ -26,7 +26,7 @@ class ShapeGesturesControl {
 }
 
 extension ShapeGesturesControl {
-    func initGestures() {
+    private func initGestures() {
         let panGR = UIPanGestureRecognizer(target: self, action: #selector(didOnPan(_:)))
         self.view.addGestureRecognizer(panGR)
         
@@ -34,19 +34,19 @@ extension ShapeGesturesControl {
         self.view.addGestureRecognizer(tapGR)
     }
     
-    @objc func didOnPan(_ recognizer: UIPanGestureRecognizer) {
+    @objc private func didOnPan(_ recognizer: UIPanGestureRecognizer) {
         didPan(recognizer)
         delegate?.didOnPan()
     }
     
-    @objc func didOnTap(_ recognizer: UITapGestureRecognizer) {
+    @objc private func didOnTap(_ recognizer: UITapGestureRecognizer) {
         didTap(recognizer)
         delegate?.didOnTap()
     }
 }
 
 extension ShapeGesturesControl {
-    func didTap(_ recognizer: UITapGestureRecognizer) {
+    private func didTap(_ recognizer: UITapGestureRecognizer) {
         let location = recognizer.location(in: self.view)
         self.findSubview(location)
         guard let viewGesture = self.viewGesture else {
@@ -60,7 +60,7 @@ extension ShapeGesturesControl {
 }
 
 extension ShapeGesturesControl {
-    func didPan(_ recognizer: UIPanGestureRecognizer) {
+    private func didPan(_ recognizer: UIPanGestureRecognizer) {
         switch (recognizer.state) {
             case .began:
                 let location = recognizer.location(in: self.view)
@@ -82,7 +82,7 @@ extension ShapeGesturesControl {
         }
     }
     
-    func updateShapeLayerFrameTranslate() {
+    private func updateShapeLayerFrameTranslate() {
         guard let viewGesture = self.viewGesture else {return}
         guard let currLayer = viewGesture.firstSublayer() else {return}
         let newFrame = self.view.convert(self.view.bounds, from: viewGesture)
@@ -94,7 +94,7 @@ extension ShapeGesturesControl {
         }
     }
     
-    func setupShapeLayer(_ newFrame: CGRect, currLayer: CAShapeLayer) {
+    private func setupShapeLayer(_ newFrame: CGRect, currLayer: CAShapeLayer) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: self.view.bounds.size)
@@ -102,7 +102,7 @@ extension ShapeGesturesControl {
         CATransaction.commit()
     }
     
-    func setupGradientLayer(_ newFrame: CGRect, currLayer: CAGradientLayer) {
+    private func setupGradientLayer(_ newFrame: CGRect, currLayer: CAGradientLayer) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         let shapeLayer = currLayer.mask as! CAShapeLayer
@@ -112,7 +112,7 @@ extension ShapeGesturesControl {
         CATransaction.commit()
     }
     
-    func findSubview(_ location: CGPoint) {
+    private func findSubview(_ location: CGPoint) {
         for subview in self.view.subviews.reversed() {
             guard let currLayer = subview.firstSublayer() else {return}
             let subviewLoc = subview.frame.contains(location)
@@ -125,7 +125,7 @@ extension ShapeGesturesControl {
         }
     }
     
-    func clearSubview() {
+    private func clearSubview() {
         self.viewGesture = nil
         self.shapeLayerPath = nil
     }

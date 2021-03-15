@@ -12,7 +12,7 @@ enum SliderType {
 }
 
 class SliderMenu: UISlider {
-    var type: SliderType?
+    public var type: SliderType?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -8,7 +8,7 @@
 import UIKit
 
 class WallShapesViewController: UIViewController {
-    var randomGradientView: RandomGradientView?
+    private var randomGradientView: RandomGradientView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,13 +16,13 @@ class WallShapesViewController: UIViewController {
         initSubviews()
     }
     
-    func initSubviews() {
+    private func initSubviews() {
         randomGradientView = RandomGradientView(frame: self.view.bounds)
         guard let randomGradientView = self.randomGradientView else {return}
         self.view.addSubview(randomGradientView)
     }
     
-    func setupNavigationController() {
+    private func setupNavigationController() {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
@@ -39,28 +39,28 @@ class WallShapesViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .white
     }
     
-    func configBarButtons(name: String, action: Selector?) -> UIBarButtonItem {
+    private func configBarButtons(name: String, action: Selector?) -> UIBarButtonItem {
         guard let icon = UIImage(named: name)?.resize(targetSize: CGSize(width: 20, height: 20)) else {return UIBarButtonItem()}
         return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
     }
     
-    @objc func refreshPlainColorItemHandle() {
+    @objc private func refreshPlainColorItemHandle() {
         randomGradientView?.chooseColor()
     }
     
-    @objc func refreshGradientItemHandle() {
+    @objc private func refreshGradientItemHandle() {
         randomGradientView?.chooseColors(2)
     }
     
-    @objc func addItemHandle() {
+    @objc private func addItemHandle() {
         randomGradientView?.addShape()
     }
     
-    @objc func clearItemHandle() {
+    @objc private func clearItemHandle() {
         randomGradientView?.clearShapes()
     }
     
-    @objc func saveItemHandle() {
+    @objc private func saveItemHandle() {
         let image = UIImage.imageWithView(self.view)
 //        guard let renderImage = image.ciblur(forRect: view.frame, with: 15) else {return}
         let imageShare: [UIImage] = [image]

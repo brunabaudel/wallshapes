@@ -8,11 +8,11 @@
 import UIKit
 
 final class RandomGradientView: UIView {
-    var gradientLayer: CAGradientLayer?
-    var menuShapeView: MenuShapeView?
-    var shapeViews: [ShapeView] = []
+    private var gradientLayer: CAGradientLayer?
+    private var menuShapeView: MenuShapeView?
+    private var shapeViews: [ShapeView] = []
     
-    var gesturesControl: ShapeGesturesControl?
+    private var gesturesControl: ShapeGesturesControl?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,7 +59,7 @@ final class RandomGradientView: UIView {
 }
 
 extension RandomGradientView {
-    func addShape() {
+    public func addShape() {
         guard let menuShapeView = self.menuShapeView else {return}
         menuShapeView.hideSlider()
         let shape = ShapeView(frame: CGRect(origin: CGPoint(x: 16, y: 100),
@@ -70,7 +70,7 @@ extension RandomGradientView {
         self.addSubview(shape)
     }
     
-    func clearShapes() {
+    public func clearShapes() {
         self.shapeViews.removeAll()
         self.subviews.forEach { $0.removeFromSuperview() }
     }
@@ -87,7 +87,7 @@ extension RandomGradientView: ShapeViewDelegate {
 //MARK: - Menu
 
 extension RandomGradientView {
-    func initMenu() {
+    private func initMenu() {
         menuShapeView = MenuShapeView()
         guard let menuShapeView = self.menuShapeView else {return}
         menuShapeView.translatesAutoresizingMaskIntoConstraints = false
@@ -102,12 +102,12 @@ extension RandomGradientView {
         menuShapeView.widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.12).isActive = true
     }
     
-    func hideMenuShape() {
+    public func hideMenuShape() {
         self.menuShapeView?.hideMenu()
         self.menuShapeView?.hideSlider()
     }
     
-    func showNavigation() {
+    private func showNavigation() {
         guard let parent = parentViewController() else {return}
         parent.navigationController?.navigationBar.isHidden = !(parent.navigationController?.navigationBar.isHidden ?? false)
     }

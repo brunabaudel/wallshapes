@@ -18,21 +18,21 @@ protocol MenuShapeViewDelegate {
 }
 
 class MenuShapeView: UIView {
-    var delegate: MenuShapeViewDelegate?
+    internal var delegate: MenuShapeViewDelegate?
     
-    var buttons: [UIButton] = []
+    private var buttons: [UIButton] = []
     
-    var stackView: UIStackView?
-    var btnDelete: UIButton?
-    var btnCircle: UIButton?
-    var btnRectangle: UIButton?
-    var btnTriangle: UIButton?
-    var btnGradient: UIButton?
-    var btnPlainColor: UIButton?
-    var btnShadow: UIButton?
-    var btnAlpha: UIButton?
+    private var stackView: UIStackView?
+    private var btnDelete: UIButton?
+    private var btnCircle: UIButton?
+    private var btnRectangle: UIButton?
+    private var btnTriangle: UIButton?
+    private var btnGradient: UIButton?
+    private var btnPlainColor: UIButton?
+    private var btnShadow: UIButton?
+    private var btnAlpha: UIButton?
     
-    var sliderView: SliderMenu?
+    private var sliderView: SliderMenu?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,7 +51,7 @@ class MenuShapeView: UIView {
         initStackView()
     }
     
-    func initLayout() {
+    private func initLayout() {
         backgroundColor = .init(white: 0.9, alpha: 0.4)
         clipsToBounds = true
         layer.cornerRadius = 10
@@ -65,7 +65,7 @@ class MenuShapeView: UIView {
         layer.masksToBounds = false
     }
     
-    func initStackView() {
+    private func initStackView() {
         stackView = StackView()
         guard let stackView = self.stackView else {return}
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +81,7 @@ class MenuShapeView: UIView {
         stackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.95).isActive = true
     }
     
-    func initAllButton() {
+    private func initAllButton() {
         initBtnDelete()
         initBtnCircle()
         initBtnRectangle()
@@ -92,80 +92,80 @@ class MenuShapeView: UIView {
         initBtnAlpha()
     }
     
-    func initBtnDelete() {
+    private func initBtnDelete() {
         btnDelete = UIButton()
         guard let btnDelete = self.btnDelete else {return}
         btnDelete.addTarget(self, action: #selector(deleteShape(_:)), for: .touchUpInside)
         config(btnDelete, sfSymbol: "trash", for: .highlighted, normalColor: .red)
     }
     
-    func initBtnCircle() {
+    private func initBtnCircle() {
         btnCircle = UIButton()
         guard let btnCircle = self.btnCircle else {return}
         btnCircle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
         config(btnCircle, sfSymbol: "circle.fill", for: .highlighted)
     }
     
-    func initBtnRectangle() {
+    private func initBtnRectangle() {
         btnRectangle = UIButton()
         guard let btnRectangle = self.btnRectangle else {return}
         btnRectangle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
         config(btnRectangle, sfSymbol: "square.fill", for: .highlighted)
     }
     
-    func initBtnTriangle() {
+    private func initBtnTriangle() {
         btnTriangle = UIButton()
         guard let btnTriangle = self.btnTriangle else {return}
         btnTriangle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
         config(btnTriangle, sfSymbol: "triangle.fill", for: .highlighted)
     }
     
-    func initBtnGradient() {
+    private func initBtnGradient() {
         btnGradient = UIButton()
         guard let btnGradient = self.btnGradient else {return}
         btnGradient.addTarget(self, action: #selector(gradientShape(_:)), for: .touchUpInside)
         config(btnGradient, name: "gradient", for: .highlighted)
     }
     
-    func initBtnPlainColor() {
+    private func initBtnPlainColor() {
         btnPlainColor = UIButton()
         guard let btnPlainColor = self.btnPlainColor else {return}
         btnPlainColor.addTarget(self, action: #selector(plainColorShape(_:)), for: .touchUpInside)
         config(btnPlainColor, name: "bucket", for: .highlighted, size: CGSize(width: 28, height: 28))
     }
     
-    func initBtnShadow() {
+    private func initBtnShadow() {
         btnShadow = UIButton()
         guard let btnShadow = self.btnShadow else {return}
         btnShadow.addTarget(self, action: #selector(shadowShape(_:)), for: .touchUpInside)
         config(btnShadow, name: "square-shadow", for: .selected)
     }
     
-    func initBtnAlpha() {
+    private func initBtnAlpha() {
         btnAlpha = UIButton()
         guard let btnAlpha = self.btnAlpha else {return}
         btnAlpha.addTarget(self, action: #selector(alphaShape(_:)), for: .touchUpInside)
         config(btnAlpha, name: "opacity", for: .selected)
     }
     
-    func config(_ button: UIButton, name: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white, size: CGSize = CGSize(width: 23, height: 23)) {
+    private func config(_ button: UIButton, name: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white, size: CGSize = CGSize(width: 23, height: 23)) {
         guard let icon = UIImage(named: name)?.resize(targetSize: size) else {return}
         configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
     }
     
-    func config(_ button: UIButton, sfSymbol: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
+    private func config(_ button: UIButton, sfSymbol: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
         guard let icon = UIImage.configIcon(with: sfSymbol) else {return}
         configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
     }
     
-    func configButton(_ button: UIButton, icon: UIImage, for state: UIControl.State, highlightedColor: UIColor, normalColor: UIColor) {
+    private func configButton(_ button: UIButton, icon: UIImage, for state: UIControl.State, highlightedColor: UIColor, normalColor: UIColor) {
         button.setImage(icon.configIconColor(normalColor), for: .normal)
         button.setImage(icon.configIconColor(highlightedColor), for: state)
         stackView?.addArrangedSubview(button)
         buttons.append(button)
     }
     
-    func initSliderOnWindow() {
+    private func initSliderOnWindow() {
         sliderView = SliderMenu()
         guard let sliderView = self.sliderView else {return}
         sliderView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,7 +187,7 @@ class MenuShapeView: UIView {
 }
 
 extension MenuShapeView {
-    @objc func changeShape(_ sender: UIButton) {
+    @objc private func changeShape(_ sender: UIButton) {
         self.hideSlider()
         self.selectButton(sender)
         switch sender {
@@ -202,35 +202,35 @@ extension MenuShapeView {
         }
     }
     
-    @objc func deleteShape(_ sender: UIButton) {
+    @objc private func deleteShape(_ sender: UIButton) {
         self.hideSlider()
         self.selectButton(sender)
         delegate?.willDeleteShape(sender)
     }
     
-    @objc func gradientShape(_ sender: UIButton) {
+    @objc private func gradientShape(_ sender: UIButton) {
         self.hideSlider()
         self.selectButton(sender)
         delegate?.willApplyGradientShape(sender)
     }
     
-    @objc func plainColorShape(_ sender: UIButton) {
+    @objc private func plainColorShape(_ sender: UIButton) {
         self.hideSlider()
         self.selectButton(sender)
         delegate?.willApplyPlainColorShape(sender)
     }
     
-    @objc func shadowShape(_ sender: UIButton) {
+    @objc private func shadowShape(_ sender: UIButton) {
         self.selectButton(sender)
         self.showSlider(.shadow)
     }
     
-    @objc func alphaShape(_ sender: UIButton) {
+    @objc private func alphaShape(_ sender: UIButton) {
         self.selectButton(sender)
         self.showSlider(.alpha)
     }
     
-    @objc func onSliderValueChanged(_ sender: SliderMenu) {
+    @objc private func onSliderValueChanged(_ sender: SliderMenu) {
         switch sender.type {
             case .shadow:
                 delegate?.willApplyShadowShape(sender)
