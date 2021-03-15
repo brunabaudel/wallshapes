@@ -27,7 +27,7 @@ class RenderIndicatorView: UIView {
     }
     
     private func initView() {
-        backgroundColor = .init(white: 0.3, alpha: 0.2)
+        backgroundColor = .init(white: 0.3, alpha: 0.5)
         layer.cornerRadius = 10
         layer.masksToBounds = true
     }
