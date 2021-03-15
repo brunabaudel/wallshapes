@@ -51,4 +51,10 @@ extension UIImage {
             self.draw(in: CGRect(origin: .zero, size: targetSize))
         }
     }
+    
+    func toPNG() -> UIImage? {
+        guard let imageData = pngData() else {return nil}
+        guard let imagePng = UIImage(data: imageData) else {return nil}
+        return imagePng
+    }
 }

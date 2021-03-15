@@ -61,12 +61,26 @@ class WallShapesViewController: UIViewController {
     }
     
     @objc private func saveItemHandle() {
-        let image = UIImage.imageWithView(self.view)
-//        guard let renderImage = image.ciblur(forRect: view.frame, with: 15) else {return}
-        let imageShare: [UIImage] = [image]
-        let activityViewController = UIActivityViewController(activityItems: imageShare, applicationActivities: nil)
-        activityViewController.modalPresentationStyle = .popover
-        activityViewController.popoverPresentationController?.sourceView = self.view
-        self.present(activityViewController, animated: true, completion: nil)
+        guard let image = UIImage.imageWithView(view).toPNG() else {return}
+        saveToPhotoLibrary(image)
+    }
+    
+    private func saveToPhotoLibrary(_ image: UIImage) {
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(finishWriteImage(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    @objc private func finishWriteImage(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if (error != nil) {
+            print("error occurred: \(String(describing: error))")
+            self.alertOK("Error", message: "Oops.. Something went wrong.")
+        } else {
+            self.alertOK("Success", message: "The Wallshape was saved on the Photo Library.")
+        }
+    }
+    
+    private func alertOK(_ title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
 }
