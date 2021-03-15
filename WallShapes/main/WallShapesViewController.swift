@@ -8,7 +8,8 @@
 import UIKit
 
 class WallShapesViewController: UIViewController {
-    private var randomGradientView: RandomGradientView?
+    private var randomGradientView: RandomGradientView!
+    private var renderindicatorView: RenderIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,7 @@ class WallShapesViewController: UIViewController {
     }
     
     private func saveToPhotoLibrary(_ image: UIImage) {
+        initRenderindicatorView("Saving Walshape...")
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(finishWriteImage(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
@@ -74,8 +76,21 @@ class WallShapesViewController: UIViewController {
             print("error occurred: \(String(describing: error))")
             self.alertOK("Error", message: "Oops.. Something went wrong.")
         } else {
-            self.alertOK("Success", message: "The Wallshape was saved on the Photo Library.")
+            renderindicatorView?.finishAnimation("Image saved.")
         }
+    }
+    
+    private func initRenderindicatorView(_ message: String) {
+        self.renderindicatorView = RenderIndicatorView(frame: view.frame, message: message)
+        guard let renderindicatorView = self.renderindicatorView else {return}
+        renderindicatorView.translatesAutoresizingMaskIntoConstraints = false
+        renderindicatorView.center = view.center
+        view.addSubview(renderindicatorView)
+        
+        renderindicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        renderindicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        renderindicatorView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15).isActive = true
+        renderindicatorView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
     }
     
     private func alertOK(_ title: String, message: String) {

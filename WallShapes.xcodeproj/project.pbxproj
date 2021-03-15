@@ -27,6 +27,7 @@
 		4CB5EF8C25F154D800193A19 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8B25F154D800193A19 /* UIView+Extension.swift */; };
 		4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8F25F1570800193A19 /* CALayer+Extension.swift */; };
 		4CB5EF9F25F670E900193A19 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF9E25F670E900193A19 /* UIApplication+Extension.swift */; };
+		4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		4CB5EF8B25F154D800193A19 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF8F25F1570800193A19 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF9E25F670E900193A19 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 		4CB5EF7F25ED8C1E00193A19 /* commonviews */ = {
 			isa = PBXGroup;
 			children = (
+				4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */,
 				4CB5EF8025ED8C3000193A19 /* StackView.swift */,
 			);
 			path = commonviews;
@@ -231,6 +234,7 @@
 				4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */,
 				4CB5EF8925F1537100193A19 /* CGPath+Extension.swift in Sources */,
 				4CB5EF6E25ED8ABB00193A19 /* ShapeView.swift in Sources */,
+				4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */,
 				4CB5EF7D25ED8BB500193A19 /* SlideMenu.swift in Sources */,
 				4CB5EF8125ED8C3000193A19 /* StackView.swift in Sources */,
 				4CB5EF7925ED8BA100193A19 /* MenuShapeView.swift in Sources */,
