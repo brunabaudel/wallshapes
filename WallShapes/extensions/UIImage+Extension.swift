@@ -31,19 +31,18 @@ extension UIImage {
         }
     }
     
-    class func configIcon(with sfSymbol: String) -> UIImage? {
-        if #available(iOS 13.0, *) {
-            let largeConfig = SymbolConfiguration(pointSize: 23, weight: .light, scale: .medium)
-            return UIImage(systemName: sfSymbol, withConfiguration: largeConfig)
-        }
-        return UIImage(named: "stop") //TODO!
-    }
-    
     func configIconColor(_ color: UIColor) -> UIImage? {
         if #available(iOS 13.0, *) {
             return withTintColor(color, renderingMode: .alwaysOriginal)
         }
-        return UIImage(named: "stop") //TODO!
+        return tinted(with: color)
+    }
+    
+    func tinted(with color: UIColor) -> UIImage? {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            color.setFill()
+            withRenderingMode(.alwaysTemplate).draw(at: .zero)
+        }
     }
     
     func resize(targetSize: CGSize) -> UIImage {

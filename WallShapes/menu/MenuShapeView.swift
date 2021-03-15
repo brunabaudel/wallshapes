@@ -96,28 +96,28 @@ class MenuShapeView: UIView {
         btnDelete = UIButton()
         guard let btnDelete = self.btnDelete else {return}
         btnDelete.addTarget(self, action: #selector(deleteShape(_:)), for: .touchUpInside)
-        config(btnDelete, sfSymbol: "trash", for: .highlighted, normalColor: .red)
+        config(btnDelete, name: "trash", for: .highlighted, normalColor: .red)
     }
     
     private func initBtnCircle() {
         btnCircle = UIButton()
         guard let btnCircle = self.btnCircle else {return}
         btnCircle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
-        config(btnCircle, sfSymbol: "circle.fill", for: .highlighted)
+        config(btnCircle, name: "circle", for: .highlighted)
     }
     
     private func initBtnRectangle() {
         btnRectangle = UIButton()
         guard let btnRectangle = self.btnRectangle else {return}
         btnRectangle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
-        config(btnRectangle, sfSymbol: "square.fill", for: .highlighted)
+        config(btnRectangle, name: "square-of-rounded-corners", for: .highlighted)
     }
     
     private func initBtnTriangle() {
         btnTriangle = UIButton()
         guard let btnTriangle = self.btnTriangle else {return}
         btnTriangle.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
-        config(btnTriangle, sfSymbol: "triangle.fill", for: .highlighted)
+        config(btnTriangle, name: "bleach", for: .highlighted)
     }
     
     private func initBtnGradient() {
@@ -150,11 +150,6 @@ class MenuShapeView: UIView {
     
     private func config(_ button: UIButton, name: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white, size: CGSize = CGSize(width: 23, height: 23)) {
         guard let icon = UIImage(named: name)?.resize(targetSize: size) else {return}
-        configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
-    }
-    
-    private func config(_ button: UIButton, sfSymbol: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
-        guard let icon = UIImage.configIcon(with: sfSymbol) else {return}
         configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
     }
     
