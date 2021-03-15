@@ -31,7 +31,7 @@ class WallShapesViewController: UIViewController {
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
             configBarButtons(name: "gradient", action: #selector(refreshGradientItemHandle)),
-            configBarButtons(name: "bucket", action: #selector(refreshPlainColorItemHandle)),]
+            configBarButtons(name: "bucket", targetSize: CGSize(width: 23, height: 23), action: #selector(refreshPlainColorItemHandle)),]
         
         self.navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveItemHandle)),
@@ -40,8 +40,8 @@ class WallShapesViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .white
     }
     
-    private func configBarButtons(name: String, action: Selector?) -> UIBarButtonItem {
-        guard let icon = UIImage(named: name)?.resize(targetSize: CGSize(width: 20, height: 20)) else {return UIBarButtonItem()}
+    private func configBarButtons(name: String, targetSize: CGSize = CGSize(width: 20, height: 20), action: Selector?) -> UIBarButtonItem {
+        guard let icon = UIImage(named: name)?.resize(targetSize: targetSize) else {return UIBarButtonItem()}
         return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
     }
     
