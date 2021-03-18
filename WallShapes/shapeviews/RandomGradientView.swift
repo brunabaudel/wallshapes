@@ -65,12 +65,14 @@ extension RandomGradientView {
         let shape = ShapeView(frame: CGRect(origin: CGPoint(x: 16, y: 100), size: initSize()), menu: menuShapeView)
         shape.delegate = self
         shapeViews.append(shape)
-        self.addSubview(shape)
+        addSubview(shape)
     }
     
     public func clearShapes() {
-        self.shapeViews.removeAll()
-        self.subviews.forEach { $0.removeFromSuperview() }
+        shapeViews.removeAll()
+        subviews.forEach { $0.removeFromSuperview() }
+    }
+    
     private func initSize() -> CGSize {
         if bounds.width > bounds.height {
             return CGSize(width: bounds.midY/2, height: bounds.midY/2)
@@ -81,7 +83,7 @@ extension RandomGradientView {
 
 extension RandomGradientView: ShapeViewDelegate {
     func deleteView(_ shapeView: ShapeView) {
-        self.shapeViews.remove(object: shapeView)
+        shapeViews.remove(object: shapeView)
         shapeView.removeFromSuperview()
         hideMenuShape()
     }
@@ -98,7 +100,6 @@ extension RandomGradientView {
         
         guard let window = UIApplication.window() else {return}
         window.addSubview(menuShapeView)
-        
         menuSizeCConstraints()
     }
     
@@ -112,9 +113,7 @@ extension RandomGradientView {
     }
     
     public func hideMenuShape() {
-        self.menuShapeView?.hideMenu()
-        self.menuShapeView?.hideSlider()
-    }
-    
+        menuShapeView?.hideMenu()
+        menuShapeView?.hideSlider()
     }
 }
