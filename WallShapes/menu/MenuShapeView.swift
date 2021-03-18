@@ -131,7 +131,7 @@ class MenuShapeView: UIView {
         btnPlainColor = UIButton()
         guard let btnPlainColor = self.btnPlainColor else {return}
         btnPlainColor.addTarget(self, action: #selector(plainColorShape(_:)), for: .touchUpInside)
-        config(btnPlainColor, name: "bucket", for: .highlighted, size: CGSize(width: 28, height: 28))
+        config(btnPlainColor, name: "bucket", for: .highlighted)
     }
     
     private func initBtnShadow() {
@@ -148,15 +148,18 @@ class MenuShapeView: UIView {
         config(btnAlpha, name: "opacity", for: .selected)
     }
     
-    private func config(_ button: UIButton, name: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white, size: CGSize = CGSize(width: 23, height: 23)) {
-        guard let icon = UIImage(named: name)?.resize(targetSize: size) else {return}
+    private func config(_ button: UIButton, name: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
+        guard let icon = UIImage(named: name) else {return}
         configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
     }
     
     private func configButton(_ button: UIButton, icon: UIImage, for state: UIControl.State, highlightedColor: UIColor, normalColor: UIColor) {
         button.setImage(icon.configIconColor(normalColor), for: .normal)
         button.setImage(icon.configIconColor(highlightedColor), for: state)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
         stackView?.addArrangedSubview(button)
+        button.heightAnchor.constraint(equalTo: stackView!.widthAnchor, multiplier: 0.4).isActive = true
         buttons.append(button)
     }
     
