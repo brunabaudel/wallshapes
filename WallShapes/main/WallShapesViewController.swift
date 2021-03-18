@@ -82,7 +82,7 @@ class WallShapesViewController: UIViewController {
     }
     
     private func saveToPhotoLibrary(_ image: UIImage) {
-        initRenderindicatorView("Saving Walshape...")
+        initRenderindicatorView("Saving...")
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(finishWriteImage(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
