@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C51FFA1260413320064CE04 /* ShapeViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51FFA0260413320064CE04 /* ShapeViewControl.swift */; };
 		4CB5EF4425ED88E800193A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4325ED88E800193A19 /* AppDelegate.swift */; };
 		4CB5EF4625ED88E800193A19 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4525ED88E800193A19 /* SceneDelegate.swift */; };
 		4CB5EF4825ED88E800193A19 /* WallShapesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4725ED88E800193A19 /* WallShapesViewController.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C51FFA0260413320064CE04 /* ShapeViewControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeViewControl.swift; sourceTree = "<group>"; };
 		4CB5EF4025ED88E800193A19 /* WallShapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WallShapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CB5EF4325ED88E800193A19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CB5EF4525ED88E800193A19 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -128,8 +130,9 @@
 			children = (
 				4CB5EF6725ED8A7200193A19 /* RandomGradientView.swift */,
 				4CB5EF8425ED9F9F00193A19 /* ShapeGesturesControl.swift */,
-				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
 				4CB5EF6A25ED8A8300193A19 /* Shape.swift */,
+				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
+				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
 			);
 			path = shapeviews;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C51FFA1260413320064CE04 /* ShapeViewControl.swift in Sources */,
 				4CB5EF4825ED88E800193A19 /* WallShapesViewController.swift in Sources */,
 				4CB5EF8C25F154D800193A19 /* UIView+Extension.swift in Sources */,
 				4CB5EF5E25ED8A0600193A19 /* Array+Extension.swift in Sources */,
