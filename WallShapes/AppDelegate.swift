@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let initialViewController = WallShapesViewController()
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = UINavigationController(rootViewController: initialViewController)
+        window?.rootViewController = WallShapesNavigationController(rootViewController: initialViewController)
         window?.makeKeyAndVisible()
         
         return true

@@ -99,7 +99,7 @@ extension RandomGradientView {
         menuShapeView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
         menuShapeView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
         menuShapeView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.5).isActive = true
-        menuShapeView.widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.12).isActive = true
+        menuShapeView.widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.1).isActive = true
     }
     
     public func hideMenuShape() {

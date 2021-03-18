@@ -7,6 +7,17 @@
 
 import UIKit
 
+class WallShapesNavigationController: UINavigationController {
+    override var shouldAutorotate: Bool {
+        if !viewControllers.isEmpty {
+            if topViewController!.isKind(of: WallShapesViewController.self) {
+                return false
+            }
+        }
+        return true
+    }
+}
+
 class WallShapesViewController: UIViewController {
     private var randomGradientView: RandomGradientView!
     private var renderindicatorView: RenderIndicatorView!
