@@ -13,7 +13,12 @@ extension UIView {
         return sublayers[0].layerByType()
     }
     
-    func parentViewController() -> UIViewController? {
+    func showNavigation() {
+        guard let parent = parentViewController() else {return}
+        parent.navigationController?.navigationBar.isHidden = !(parent.navigationController?.navigationBar.isHidden ?? false)
+    }
+    
+    private func parentViewController() -> UIViewController? {
         return sequence(first: self) { $0.next }
             .first(where: { $0 is UIViewController })
             .flatMap { $0 as? UIViewController }

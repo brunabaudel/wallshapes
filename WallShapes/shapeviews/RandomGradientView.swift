@@ -107,8 +107,5 @@ extension RandomGradientView {
         self.menuShapeView?.hideSlider()
     }
     
-    private func showNavigation() {
-        guard let parent = parentViewController() else {return}
-        parent.navigationController?.navigationBar.isHidden = !(parent.navigationController?.navigationBar.isHidden ?? false)
     }
 }
