@@ -62,9 +62,7 @@ extension RandomGradientView {
     public func addShape() {
         guard let menuShapeView = self.menuShapeView else {return}
         menuShapeView.hideSlider()
-        let shape = ShapeView(frame: CGRect(origin: CGPoint(x: 16, y: 100),
-                                            size: CGSize(width: self.bounds.midX/2, height: self.bounds.midX/2)),
-                              menu: menuShapeView)
+        let shape = ShapeView(frame: CGRect(origin: CGPoint(x: 16, y: 100), size: initSize()), menu: menuShapeView)
         shape.delegate = self
         shapeViews.append(shape)
         self.addSubview(shape)
@@ -73,6 +71,11 @@ extension RandomGradientView {
     public func clearShapes() {
         self.shapeViews.removeAll()
         self.subviews.forEach { $0.removeFromSuperview() }
+    private func initSize() -> CGSize {
+        if bounds.width > bounds.height {
+            return CGSize(width: bounds.midY/2, height: bounds.midY/2)
+        }
+        return CGSize(width: bounds.midX/2, height: bounds.midX/2)
     }
 }
 
@@ -96,10 +99,16 @@ extension RandomGradientView {
         guard let window = UIApplication.window() else {return}
         window.addSubview(menuShapeView)
         
+        menuSizeCConstraints()
+    }
+    
+    private func menuSizeCConstraints() {
+        guard let window = UIApplication.window() else {return}
+        guard let menuShapeView = self.menuShapeView else {return}
         menuShapeView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
         menuShapeView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
-        menuShapeView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.5).isActive = true
-        menuShapeView.widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.1).isActive = true
+        menuShapeView.heightAnchor.constraint(equalTo: (window.frame.width > window.frame.height) ? window.widthAnchor : window.heightAnchor, multiplier: 0.5).isActive = true
+        menuShapeView.widthAnchor.constraint(equalTo: (window.frame.width > window.frame.height) ? window.heightAnchor : window.widthAnchor, multiplier: 0.1).isActive = true
     }
     
     public func hideMenuShape() {
