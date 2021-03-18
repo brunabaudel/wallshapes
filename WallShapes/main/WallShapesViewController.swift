@@ -13,6 +13,10 @@ class WallShapesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func loadView() {
+        super.loadView()
         setupNavigationController()
         initSubviews()
     }
