@@ -71,6 +71,7 @@ extension RandomGradientView {
     public func clearShapes() {
         shapeViews.removeAll()
         subviews.forEach { $0.removeFromSuperview() }
+        hideMenuShape()
     }
     
     private func initSize() -> CGSize {
