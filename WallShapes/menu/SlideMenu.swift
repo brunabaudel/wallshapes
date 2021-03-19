@@ -8,7 +8,7 @@
 import UIKit
 
 enum SliderType {
-    case shadow, alpha
+    case shadow, alpha, polygon
 }
 
 class SliderMenu: UISlider {

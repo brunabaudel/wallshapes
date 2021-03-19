@@ -8,7 +8,7 @@
 import UIKit
 
 enum ShapeType {
-    case circle, rectangle, triangle
+    case circle, rectangle, triangle, polygon
 }
 
 class Shape {
@@ -18,6 +18,7 @@ class Shape {
     var path: CGPath?
     var shapeLayer: CAShapeLayer?
     var gradientLayer: CAGradientLayer?
-    var alpha: CGFloat?
-    var shadowRadius: CGFloat?
+    var alpha: CGFloat = 1.0
+    var shadowRadius: CGFloat = 0.0
+    var polygon: CGFloat = 0.0
 }

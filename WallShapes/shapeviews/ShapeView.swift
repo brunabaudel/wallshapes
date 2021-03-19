@@ -50,6 +50,8 @@ extension ShapeView: MenuShapeViewDelegate {
                 shapeViewControl?.createPathRectangle()
             case ShapeType.triangle:
                 shapeViewControl?.createPathTriangle()
+            case ShapeType.polygon:
+                shapeViewControl?.createPathPolygon()
         }
     }
     
@@ -67,6 +69,11 @@ extension ShapeView: MenuShapeViewDelegate {
         shapeViewControl?.createAlpha(value)
     }
     
+    func willApplyPolygonShape(_ sender: SliderMenu) {
+        let value = CGFloat(sender.value)
+        shapeViewControl?.createPolygon(value)
+    }
+    
     func onSliderValue(_ slider: SliderMenu) {
         guard let shapeViewControl = self.shapeViewControl else {return}
         switch slider.type {
@@ -74,6 +81,8 @@ extension ShapeView: MenuShapeViewDelegate {
                 slider.setValue(Float(shapeViewControl.shadow()), animated: true)
             case .alpha:
                 slider.setValue(Float(shapeViewControl.alpha()), animated: true)
+            case .polygon:
+                slider.setValue(Float(shapeViewControl.polygon()), animated: true)
             default:
                 break
         }

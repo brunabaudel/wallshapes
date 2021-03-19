@@ -35,9 +35,6 @@ class ShapeViewControl {
         self.shape?.type = ShapeType.circle
         self.shape?.shapeLayer = shapeLayer
         self.shape?.gradientLayerColors = [UIColor.random().cgColor, UIColor.random().cgColor]
-        
-        self.createShadow(0)
-        self.createAlpha(1)
     }
     
     public func createPathCircle() {
@@ -155,13 +152,53 @@ class ShapeViewControl {
         self.shape?.alpha = value
     }
     
+    public func createPolygon(_ value: CGFloat) {
+        let vUInt = UInt32(value * 10)
+        let path = regularPolygonInRect(vUInt)
+        changeShapeLayer(path, type: ShapeType.polygon)
+        self.shape?.polygon = value
+    }
+    
+    public func createPathPolygon() {
+        guard let shape = self.shape else {return}
+        let vUInt = UInt32(shape.polygon * 10)
+        let path = regularPolygonInRect(vUInt)
+        changeShapeLayer(path, type: ShapeType.polygon)
+    }
+    
+    private func pointFrom(_ angle: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
+        return CGPoint(x: radius * cos(angle) + offset.x, y: radius * sin(angle) + offset.y)
+    }
+
+    private func regularPolygonInRect(_ value: UInt32) -> UIBezierPath {
+        let degree = value % 12 + 3
+        let center = CGPoint(x: (view.frame.width/2) + view.frame.origin.x, y: (view.frame.height/2) + view.frame.origin.y)
+        var angle = -CGFloat(.pi / 2.0)
+        let angleIncrement = CGFloat(.pi * 2.0 / Double(degree))
+        let radius = view.frame.width / 2.0
+
+        let path = UIBezierPath()
+        path.move(to: pointFrom(angle, radius: radius, offset: center))
+        for _ in 1...degree - 1 {
+            angle += angleIncrement
+            path.addLine(to: pointFrom(angle, radius: radius, offset: center))
+        }
+        path.close()
+        return path
+    }
+    
     public func alpha() -> CGFloat {
-        guard let shape = self.shape, let alpha = shape.alpha else {return 0}
-        return alpha
+        guard let shape = self.shape else {return 1}
+        return shape.alpha
     }
     
     public func shadow() -> CGFloat {
-        guard let shape = self.shape, let shadowRadius = shape.shadowRadius else {return 0}
-        return shadowRadius
+        guard let shape = self.shape else {return 0}
+        return shape.shadowRadius
+    }
+    
+    public func polygon() -> CGFloat {
+        guard let shape = self.shape else {return 0}
+        return shape.polygon
     }
 }

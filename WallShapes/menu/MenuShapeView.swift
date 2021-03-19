@@ -14,6 +14,7 @@ protocol MenuShapeViewDelegate {
     func willApplyPlainColorShape(_ sender: UIButton)
     func willApplyShadowShape(_ slider: SliderMenu)
     func willApplyAlphaShape(_ slider: SliderMenu)
+    func willApplyPolygonShape(_ slider: SliderMenu)
     func onSliderValue(_ slider: SliderMenu)
 }
 
@@ -31,6 +32,7 @@ class MenuShapeView: UIView {
     private var btnPlainColor: UIButton?
     private var btnShadow: UIButton?
     private var btnAlpha: UIButton?
+    private var btnPolygon: UIButton?
     
     private var sliderView: SliderMenu?
     
@@ -86,6 +88,7 @@ class MenuShapeView: UIView {
         initBtnCircle()
         initBtnRectangle()
         initBtnTriangle()
+        initBtnPolygon()
         initBtnPlainColor()
         initBtnGradient()
         initBtnShadow()
@@ -148,6 +151,14 @@ class MenuShapeView: UIView {
         config(btnAlpha, name: "opacity", for: .selected)
     }
     
+    private func initBtnPolygon() {
+        btnPolygon = UIButton()
+        guard let btnPolygon = self.btnPolygon else {return}
+        btnPolygon.addTarget(self, action: #selector(changeShape(_:)), for: .touchUpInside)
+        btnPolygon.addTarget(self, action: #selector(polygonShape(_:)), for: .touchUpInside)
+        config(btnPolygon, name: "hexagonal", for: .selected)
+    }
+    
     private func config(_ button: UIButton, name: String, for state: UIControl.State, highlightedColor: UIColor = .lightGray, normalColor: UIColor = .white) {
         guard let icon = UIImage(named: name) else {return}
         configButton(button, icon: icon, for: state, highlightedColor: highlightedColor, normalColor: normalColor)
@@ -195,6 +206,8 @@ extension MenuShapeView {
                 delegate?.willChangeShape(sender, type: ShapeType.triangle)
             case btnRectangle:
                 delegate?.willChangeShape(sender, type: ShapeType.rectangle)
+            case btnPolygon:
+                delegate?.willChangeShape(sender, type: ShapeType.polygon)
             default:
                 delegate?.willChangeShape(sender, type: ShapeType.circle)
         }
@@ -228,12 +241,19 @@ extension MenuShapeView {
         self.showSlider(.alpha)
     }
     
+    @objc private func polygonShape(_ sender: UIButton) {
+        self.selectButton(sender)
+        self.showSlider(.polygon)
+    }
+    
     @objc private func onSliderValueChanged(_ sender: SliderMenu) {
         switch sender.type {
             case .shadow:
                 delegate?.willApplyShadowShape(sender)
             case .alpha:
                 delegate?.willApplyAlphaShape(sender)
+            case .polygon:
+                delegate?.willApplyPolygonShape(sender)
             default:
                 break
         }
@@ -277,6 +297,10 @@ extension MenuShapeView {
         
         if btnAlpha!.isSelected {
             self.showSlider(.alpha)
+        }
+        
+        if btnPolygon!.isSelected {
+            self.showSlider(.polygon)
         }
     }
 }
