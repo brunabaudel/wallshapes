@@ -8,17 +8,20 @@
 import UIKit
 
 final class RandomGradientView: UIView {
+    private var gesturesControl: ShapeGesturesControl?
     private var gradientLayer: CAGradientLayer?
     private var menuShapeView: MenuShapeView?
     private var shapeViews: [ShapeView] = []
     
-    private var gesturesControl: ShapeGesturesControl?
+    public var horizontalIndicatorView: HMiddleIndicatorView?
+    public var verticalIndicatorView: VMiddleIndicatorView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.gesturesControl = ShapeGesturesControl(self)
         
         initGradientLayer()
+        initMiddleIndicator()
         initMenu()
     }
     
@@ -55,6 +58,19 @@ final class RandomGradientView: UIView {
             }
         }
         return colors
+    }
+    
+    private func initMiddleIndicator() {
+        guard let window = UIApplication.window() else {return}
+        self.verticalIndicatorView = VMiddleIndicatorView(frame: CGRect(x: frame.midX/3, y: frame.minY,
+                                                                          width: 10, height: frame.height))
+        guard let verticalIndicatorView = self.verticalIndicatorView else {return}
+        window.addSubview(verticalIndicatorView)
+        
+        self.horizontalIndicatorView = HMiddleIndicatorView(frame: CGRect(x: frame.minX, y: frame.midY/3,
+                                                                              width: frame.width, height: 10))
+        guard let horizontalIndicatorView = self.horizontalIndicatorView else {return}
+        window.addSubview(horizontalIndicatorView)
     }
 }
 

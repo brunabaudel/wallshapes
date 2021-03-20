@@ -58,12 +58,10 @@ class MenuShapeView: UIView {
         clipsToBounds = true
         layer.cornerRadius = 10
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
-        
         layer.shadowColor = UIColor.white.cgColor
         layer.shadowOffset = CGSize.zero
         layer.shadowOpacity = 0.5
         layer.shadowRadius = 1
-        
         layer.masksToBounds = false
     }
     
