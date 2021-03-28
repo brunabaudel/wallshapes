@@ -13,6 +13,7 @@ enum ShapeType {
 
 class Shape {
     var type: ShapeType?
+    var size: CGSize = CGSize.zero
     var shapeLayerColor: CGColor?
     var gradientLayerColors: [CGColor]?
     var path: CGPath?

@@ -13,12 +13,13 @@ protocol ShapeViewDelegate {
 
 class ShapeView: UIView {
     internal var delegate: ShapeViewDelegate?
-    private var shapeViewControl: ShapeViewControl?
+    public var shapeViewControl: ShapeViewControl?
     private var menuShapeView: MenuShapeView?
     
     init(frame: CGRect, menu: MenuShapeView) {
         super.init(frame: frame)
         initShapeView(menu)
+        backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) {

@@ -10,6 +10,7 @@ import UIKit
 protocol ShapeGesturesControlDelegate {
     func didOnTap()
     func didOnPan()
+    func didOnPinch()
 }
 
 class ShapeGesturesControl {
@@ -18,6 +19,7 @@ class ShapeGesturesControl {
     private weak var view: RandomGradientView? //TODO: change to UIView and change the onTap function
     private var viewGesture: ShapeView?
     private var shapeLayerPath: CGPath?
+    private var scale: CGFloat = 0
     
     init<T: RandomGradientView>(_ view: T) {
         self.view = view
@@ -32,6 +34,9 @@ extension ShapeGesturesControl {
         
         let tapGR = UITapGestureRecognizer(target: self, action: #selector(didOnTap(_:)))
         self.view?.addGestureRecognizer(tapGR)
+        
+        let pinchGR = UIPinchGestureRecognizer(target: self, action: #selector(didOnPinch(_:)))
+        self.view?.addGestureRecognizer(pinchGR)
     }
     
     @objc private func didOnPan(_ recognizer: UIPanGestureRecognizer) {
@@ -42,6 +47,68 @@ extension ShapeGesturesControl {
     @objc private func didOnTap(_ recognizer: UITapGestureRecognizer) {
         didTap(recognizer)
         delegate?.didOnTap()
+    }
+    
+    @objc private func didOnPinch(_ recognizer: UIPinchGestureRecognizer) {
+        didPinch(recognizer)
+        delegate?.didOnPinch()
+    }
+}
+
+extension ShapeGesturesControl {
+    private func didPinch(_ recognizer: UIPinchGestureRecognizer) {
+        switch (recognizer.state) {
+            case .began:
+                let location = recognizer.location(in: self.view)
+                self.findSubview(location)
+//                self.viewGesture?.showMenuShape() //TODO hide menu
+            case .changed:
+                guard let viewGesture = self.viewGesture else {return}
+                self.scale = recognizer.scale
+                viewGesture.bounds = viewGesture.bounds.applying(viewGesture.transform.scaledBy(x: self.scale, y: self.scale))
+                self.updateShapeLayerFrameScale()
+                recognizer.scale = 1
+            case .ended, .cancelled:
+                guard let viewGesture = self.viewGesture else {return}
+                viewGesture.shapeViewControl?.shapeSize(size: viewGesture.frame.size)
+                self.clearSubview()
+                self.scale = 0
+            default:
+                break
+        }
+    }
+    
+    private func updateShapeLayerFrameScale() {
+        guard let viewGesture = self.viewGesture, let view = self.view else {return}
+        guard let currLayer = viewGesture.firstSublayer() else {return}
+        let newFrame = view.convert(view.bounds, from: viewGesture)
+        if type(of: currLayer).isEqual(CAShapeLayer.self) {
+            setupShapeLayerScale(newFrame, currLayer: currLayer as! CAShapeLayer)
+        }
+        if type(of: currLayer).isEqual(CAGradientLayer.self) {
+            setupGradientLayerScale(newFrame, currLayer: currLayer as! CAGradientLayer)
+        }
+    }
+    
+    private func setupShapeLayerScale(_ newFrame: CGRect, currLayer: CAShapeLayer) {
+        guard let viewGesture = self.viewGesture, let shapeViewControl = viewGesture.shapeViewControl else {return}
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        currLayer.path = self.shapeLayerPath?.scale(shapeViewControl.shapeSize(), toSize: viewGesture.frame.size)
+        currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
+        CATransaction.commit()
+    }
+    
+    private func setupGradientLayerScale(_ newFrame: CGRect, currLayer: CAGradientLayer) {
+        guard let viewGesture = self.viewGesture, let shapeViewControl = viewGesture.shapeViewControl else {return}
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        let shapeLayer = currLayer.mask as! CAShapeLayer
+        shapeLayer.path = self.shapeLayerPath?.scale(shapeViewControl.shapeSize(), toSize: viewGesture.frame.size)
+        shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
+        currLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: viewGesture.frame.size)
+        currLayer.mask = shapeLayer
+        CATransaction.commit()
     }
 }
 

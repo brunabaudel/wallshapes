@@ -30,6 +30,7 @@ class ShapeViewControl {
         self.view.layer.addSublayer(shapeLayer)
         
         self.shape = Shape()
+        self.shape?.size = self.view.frame.size
         self.shape?.path = path.cgPath
         self.shape?.shapeLayerColor = shapeLayer.fillColor
         self.shape?.type = ShapeType.circle
@@ -200,5 +201,15 @@ class ShapeViewControl {
     public func polygon() -> CGFloat {
         guard let shape = self.shape else {return 0}
         return shape.polygon
+    }
+    
+    public func shapeSize() -> CGSize {
+        guard let shape = self.shape else {return CGSize.zero}
+        return shape.size
+    }
+    
+    public func shapeSize(size: CGSize) {
+        guard let shape = self.shape else {return}
+        shape.size = size
     }
 }
