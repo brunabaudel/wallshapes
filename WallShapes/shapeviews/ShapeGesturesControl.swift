@@ -134,13 +134,13 @@ extension ShapeGesturesControl {
                 self.findSubview(location)
                 self.viewGesture?.showMenuShape()
             case .changed:
+                self.showMiddleView()
                 guard let viewGesture = self.viewGesture else {return}
                 var translation = recognizer.translation(in: viewGesture)
                 translation = translation.applying(viewGesture.transform)
                 viewGesture.center.x += translation.x
                 viewGesture.center.y += translation.y
                 self.shapeLayerPath = self.shapeLayerPath?.translate(translation)
-                self.showMiddleView()
                 recognizer.setTranslation(CGPoint.zero, in: viewGesture)
             case .ended, .cancelled:
                 self.updateShapeLayerFrameTranslate()
