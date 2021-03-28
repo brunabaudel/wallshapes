@@ -56,4 +56,14 @@ extension UIImage {
         guard let imagePng = UIImage(data: imageData) else {return nil}
         return imagePng
     }
+    
+    func crop(_ cropRect: CGRect, sizeView: CGSize) -> UIImage? {
+        let imageViewScale = max(self.size.width / sizeView.width, self.size.height / sizeView.height)
+
+        let cropZone = CGRect(x: cropRect.origin.x * imageViewScale, y: cropRect.origin.y * imageViewScale,
+                              width: cropRect.size.width * imageViewScale, height: cropRect.size.height * imageViewScale)
+
+        guard let cutImageRef = self.cgImage?.cropping(to: cropZone) else {return nil}
+        return UIImage(cgImage: cutImageRef)
+    }
 }

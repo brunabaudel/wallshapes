@@ -46,7 +46,8 @@ class WallShapesViewController: UIViewController {
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
             configBarButtons(name: "gradient", action: #selector(refreshGradientItemHandle)),
-            configBarButtons(name: "bucket", targetSize: CGSize(width: 23, height: 23), action: #selector(refreshPlainColorItemHandle)),]
+            configBarButtons(name: "bucket", targetSize: CGSize(width: 23, height: 23), action: #selector(refreshPlainColorItemHandle)),
+            configBarButtons(name: "crop", action: #selector(changeViewSizeHandle)),]
         
         self.navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveItemHandle)),
@@ -58,6 +59,10 @@ class WallShapesViewController: UIViewController {
     private func configBarButtons(name: String, targetSize: CGSize = CGSize(width: 20, height: 20), action: Selector?) -> UIBarButtonItem {
         guard let icon = UIImage(named: name)?.resize(targetSize: targetSize) else {return UIBarButtonItem()}
         return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
+    }
+    
+    @objc private func changeViewSizeHandle() {
+        randomGradientView?.resizeRandomBackgroundView()
     }
     
     @objc private func refreshPlainColorItemHandle() {
@@ -77,7 +82,9 @@ class WallShapesViewController: UIViewController {
     }
     
     @objc private func saveItemHandle() {
-        guard let image = UIImage.imageWithView(view).toPNG() else {return}
+        guard let randomGradientView = self.randomGradientView else {return}
+        guard var image = UIImage.imageWithView(randomGradientView).toPNG() else {return}
+        image = image.crop(randomGradientView.randomBackgroundViewFrame(), sizeView: randomGradientView.frame.size)!
         saveToPhotoLibrary(image)
     }
     

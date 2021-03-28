@@ -8,8 +8,8 @@
 import UIKit
 
 final class RandomGradientView: UIView {
+    private var randomBackgroundView: UIView?
     private var gesturesControl: ShapeGesturesControl?
-    private var gradientLayer: CAGradientLayer?
     private var menuShapeView: MenuShapeView?
     private var shapeViews: [ShapeView] = []
     
@@ -19,6 +19,7 @@ final class RandomGradientView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.gesturesControl = ShapeGesturesControl(self)
+        self.backgroundColor = .init(white: 0.15, alpha: 1)
         
         initGradientLayer()
         initMiddleIndicator()
@@ -30,23 +31,27 @@ final class RandomGradientView: UIView {
     }
     
     public func chooseColors(_ count: Int) {
-        gradientLayer?.colors = self.setGradient(count)
-        gradientLayer?.locations = nil
+        let layer = (randomBackgroundView?.layer.sublayers?[0])! as? CAGradientLayer
+        layer?.colors = self.setGradient(count)
+        layer?.locations = nil
     }
-    
+
     public func chooseColor() {
-        gradientLayer?.colors = [UIColor.random().cgColor, UIColor.white.cgColor]
-        gradientLayer?.locations = [1]
+        let layer = (randomBackgroundView?.layer.sublayers?[0])! as? CAGradientLayer
+        layer?.colors = [UIColor.random().cgColor, UIColor.white.cgColor]
+        layer?.locations = [1]
     }
 
     fileprivate func initGradientLayer() {
-        gradientLayer = CAGradientLayer()
-        guard let gradientLayer = self.gradientLayer else {return}
+        randomBackgroundView = UIView(frame: self.frame)
+        guard let randomBackgroundView = self.randomBackgroundView else {return}
+        let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.bounds
         gradientLayer.colors = setGradient()
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        self.layer.insertSublayer(gradientLayer, at: 0)
+        randomBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        addSubview(randomBackgroundView)
     }
 
     fileprivate func setGradient(_ count: Int = 2) -> [CGColor] {
@@ -71,6 +76,29 @@ final class RandomGradientView: UIView {
                                                                               width: frame.width, height: 10))
         guard let horizontalIndicatorView = self.horizontalIndicatorView else {return}
         window.addSubview(horizontalIndicatorView)
+    }
+    
+    public func resizeRandomBackgroundView() {
+        var newSize: CGRect = self.frame
+        if self.randomBackgroundView?.frame.height != self.randomBackgroundView?.frame.width {
+            newSize = CGRect(origin: CGPoint.zero, size: self.size())
+        }
+        self.randomBackgroundView?.frame.origin = CGPoint.zero
+        self.randomBackgroundView?.frame.size = newSize.size
+        self.randomBackgroundView?.center = self.center
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        self.randomBackgroundView?.layer.sublayers?[0].frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        CATransaction.commit()
+    }
+    
+    private func size() -> CGSize {
+        let frame = min(self.frame.height, self.frame.width)
+        return CGSize(width: frame/1.2, height: frame/1.2)
+    }
+    
+    public func randomBackgroundViewFrame() -> CGRect {
+        return randomBackgroundView?.frame ?? CGRect.zero
     }
 }
 
