@@ -32,8 +32,13 @@ extension ShapeGesturesControl {
         let panGR = UIPanGestureRecognizer(target: self, action: #selector(didOnPan(_:)))
         self.view?.addGestureRecognizer(panGR)
         
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(didOnTap(_:)))
-        self.view?.addGestureRecognizer(tapGR)
+        let singleTapGR = UITapGestureRecognizer(target: self, action: #selector(didOnSingleTap(_:)))
+        singleTapGR.numberOfTapsRequired = 1
+        self.view?.addGestureRecognizer(singleTapGR)
+        
+        let doubleTapGR = UITapGestureRecognizer(target: self, action: #selector(didOnDoubleTap(_:)))
+        doubleTapGR.numberOfTapsRequired = 2
+        self.view?.addGestureRecognizer(doubleTapGR)
         
         let pinchGR = UIPinchGestureRecognizer(target: self, action: #selector(didOnPinch(_:)))
         self.view?.addGestureRecognizer(pinchGR)
@@ -44,8 +49,13 @@ extension ShapeGesturesControl {
         delegate?.didOnPan()
     }
     
-    @objc private func didOnTap(_ recognizer: UITapGestureRecognizer) {
-        didTap(recognizer)
+    @objc private func didOnSingleTap(_ recognizer: UITapGestureRecognizer) {
+        didSingleTap(recognizer)
+        delegate?.didOnTap()
+    }
+    
+    @objc private func didOnDoubleTap(_ recognizer: UITapGestureRecognizer) {
+        didDoubleTap(recognizer)
         delegate?.didOnTap()
     }
     
@@ -113,15 +123,26 @@ extension ShapeGesturesControl {
 }
 
 extension ShapeGesturesControl {
-    private func didTap(_ recognizer: UITapGestureRecognizer) {
+    private func didSingleTap(_ recognizer: UITapGestureRecognizer) {
         let location = recognizer.location(in: self.view)
         self.findSubview(location)
         guard let viewGesture = self.viewGesture else {
             self.view?.hideMenuShape()
             return
         }
-        self.view?.bringSubviewToFront(viewGesture)
         viewGesture.showMenuShape()
+        self.clearSubview()
+    }
+    
+    private func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
+        let location = recognizer.location(in: self.view)
+        self.findSubview(location)
+        guard let viewGesture = self.viewGesture else {
+            self.view?.hideMenuShape()
+            return
+        }
+        viewGesture.showMenuShape()
+        self.view?.bringSubviewToFront(viewGesture)
         self.clearSubview()
     }
 }
