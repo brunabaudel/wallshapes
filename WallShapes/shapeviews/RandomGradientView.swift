@@ -38,7 +38,7 @@ final class RandomGradientView: UIView {
 
     public func chooseColor() {
         let layer = (randomBackgroundView?.layer.sublayers?[0])! as? CAGradientLayer
-        layer?.colors = [UIColor.random().cgColor, UIColor.white.cgColor]
+        layer?.colors = [UIColor.random.cgColor, UIColor.white.cgColor]
         layer?.locations = [1]
     }
 
@@ -57,7 +57,7 @@ final class RandomGradientView: UIView {
     fileprivate func setGradient(_ count: Int = 2) -> [CGColor] {
         var colors: [CGColor] = []
         for _ in 0..<count {
-            let color = UIColor.random().cgColor
+            let color = UIColor.random.cgColor
             if !colors.contains(color) {
                 colors.append(color)
             }
@@ -66,7 +66,7 @@ final class RandomGradientView: UIView {
     }
     
     private func initMiddleIndicator() {
-        guard let window = UIApplication.window() else {return}
+        guard let window = UIApplication.window else {return}
         self.verticalIndicatorView = VMiddleIndicatorView(frame: CGRect(x: frame.midX/3, y: frame.minY,
                                                                           width: 10, height: frame.height))
         guard let verticalIndicatorView = self.verticalIndicatorView else {return}
@@ -143,13 +143,13 @@ extension RandomGradientView {
         menuShapeView.translatesAutoresizingMaskIntoConstraints = false
         menuShapeView.isHidden = true
         
-        guard let window = UIApplication.window() else {return}
+        guard let window = UIApplication.window else {return}
         window.addSubview(menuShapeView)
         menuSizeCConstraints()
     }
     
     private func menuSizeCConstraints() {
-        guard let window = UIApplication.window() else {return}
+        guard let window = UIApplication.window else {return}
         guard let menuShapeView = self.menuShapeView else {return}
         menuShapeView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
         menuShapeView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true

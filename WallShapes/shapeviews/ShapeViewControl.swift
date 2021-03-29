@@ -25,7 +25,7 @@ class ShapeViewControl {
         
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = path.cgPath
-        shapeLayer.fillColor = UIColor.random().cgColor
+        shapeLayer.fillColor = UIColor.random.cgColor
         shapeLayer.frame = CGRect(origin: CGPoint(x: -self.view.frame.minX, y: -self.view.frame.minY), size: self.view.frame.size)
         self.view.layer.addSublayer(shapeLayer)
         
@@ -35,7 +35,7 @@ class ShapeViewControl {
         self.shape?.shapeLayerColor = shapeLayer.fillColor
         self.shape?.type = ShapeType.circle
         self.shape?.shapeLayer = shapeLayer
-        self.shape?.gradientLayerColors = [UIColor.random().cgColor, UIColor.random().cgColor]
+        self.shape?.gradientLayerColors = [UIColor.random.cgColor, UIColor.random.cgColor]
     }
     
     public func createPathCircle() {
@@ -67,7 +67,7 @@ class ShapeViewControl {
     }
     
     private func changeShapeLayer(_ path: UIBezierPath, type: ShapeType) {
-        guard let currLayer = self.view.firstSublayer() else {return}
+        guard let currLayer = self.view.firstSublayer else {return}
         guard let shape = self.shape, let color = shape.shapeLayerColor else {return}
         guard let shapeLayer = createShapeLayers(path, type: type, color: color) else {return}
         
@@ -117,7 +117,7 @@ class ShapeViewControl {
     
     public func createPlainColor() {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
-        let color = UIColor.random().cgColor
+        let color = UIColor.random.cgColor
         shapeLayer.fillColor = color
         self.replaceLayer(shapeLayer)
         shape.shapeLayer = shapeLayer
@@ -127,7 +127,7 @@ class ShapeViewControl {
     public func createGradientColors() {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
-            let colors = [UIColor.random().cgColor, UIColor.random().cgColor]
+            let colors = [UIColor.random.cgColor, UIColor.random.cgColor]
             gradient.colors = colors
             gradient.mask = shapeLayer
             self.replaceLayer(gradient)

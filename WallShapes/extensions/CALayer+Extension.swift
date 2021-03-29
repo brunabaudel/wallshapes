@@ -8,14 +8,15 @@
 import UIKit
 
 extension CALayer {
+    
+    internal var layerMutableCopy: CGPath? {
+        guard let path = layerPath() else {return nil}
+        return path.mutableCopy()
+    }
+    
     func contains(_ location: CGPoint) -> Bool {
         guard let path = layerPath() else {return false}
         return path.contains(location)
-    }
-    
-    func layerMutableCopy() -> CGPath? {
-        guard let path = layerPath() else {return nil}
-        return path.mutableCopy()
     }
     
     func layerPath() -> CGPath? {

@@ -183,7 +183,7 @@ class MenuShapeView: UIView {
         sliderView.isHidden = true
         sliderView.addTarget(self, action: #selector(onSliderValueChanged(_:)), for: .valueChanged)
 
-        guard let window = UIApplication.window() else {return}
+        guard let window = UIApplication.window else {return}
         window.addSubview(sliderView)
 
         sliderView.centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true

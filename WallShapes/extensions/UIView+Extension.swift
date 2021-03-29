@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIView {
-    func firstSublayer() -> CALayer? {
+    internal var firstSublayer: CALayer? {
         guard let sublayers = layer.sublayers, sublayers.count > 0 else {return nil}
         return sublayers[0].layerByType()
     }

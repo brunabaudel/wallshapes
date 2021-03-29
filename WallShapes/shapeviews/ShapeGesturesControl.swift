@@ -90,7 +90,7 @@ extension ShapeGesturesControl {
     
     private func updateShapeLayerFrameScale() {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
-        guard let currLayer = viewGesture.firstSublayer() else {return}
+        guard let currLayer = viewGesture.firstSublayer else {return}
         let newFrame = view.convert(view.bounds, from: viewGesture)
         if type(of: currLayer).isEqual(CAShapeLayer.self) {
             setupShapeLayerScale(newFrame, currLayer: currLayer as! CAShapeLayer)
@@ -174,7 +174,7 @@ extension ShapeGesturesControl {
     
     private func updateShapeLayerFrameTranslate() {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
-        guard let currLayer = viewGesture.firstSublayer() else {return}
+        guard let currLayer = viewGesture.firstSublayer else {return}
         let newFrame = view.convert(view.bounds, from: viewGesture)
         if type(of: currLayer).isEqual(CAShapeLayer.self) {
             setupShapeLayer(newFrame, currLayer: currLayer as! CAShapeLayer)
@@ -205,12 +205,12 @@ extension ShapeGesturesControl {
     private func findSubview(_ location: CGPoint) {
         guard let view = self.view else {return}
         for subview in view.subviews.reversed() {
-            guard let currLayer = subview.firstSublayer() else {return}
+            guard let currLayer = subview.firstSublayer else {return}
             let subviewLoc = subview.frame.contains(location)
             let layerLoc = currLayer.contains(location)
             if subviewLoc && layerLoc {
                 self.viewGesture = subview as? ShapeView
-                self.shapeLayerPath = currLayer.layerMutableCopy()
+                self.shapeLayerPath = currLayer.layerMutableCopy
                 break
             }
         }
