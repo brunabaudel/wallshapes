@@ -114,7 +114,7 @@ extension RandomGradientView {
     
     public func clearShapes() {
         shapeViews.removeAll()
-        subviews.forEach { $0.removeFromSuperview() }
+        subviews.forEach { if !$0.isEqual(randomBackgroundView) { $0.removeFromSuperview() } }
         hideMenuShape()
     }
     
