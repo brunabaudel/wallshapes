@@ -78,7 +78,9 @@ class WallshapesViewController: UIViewController {
     }
     
     @objc private func clearItemHandle() {
-        randomGradientView?.clearShapes()
+        self.alertView("Clear all", message: "Do you want to erase all shapes?", isCancel: true) {
+            self.randomGradientView?.clearShapes()
+        }
     }
     
     @objc private func saveItemHandle() {
@@ -96,7 +98,7 @@ class WallshapesViewController: UIViewController {
     @objc private func finishWriteImage(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
         if (error != nil) {
             print("error occurred: \(String(describing: error))")
-            self.alertOK("Error", message: "Oops.. Something went wrong.")
+            self.alertView("Error", message: "Oops.. Something went wrong.")
         } else {
             renderIndicatorView?.finishAnimation("Image saved.")
         }
@@ -115,9 +117,12 @@ class WallshapesViewController: UIViewController {
         renderindicatorView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
     }
     
-    private func alertOK(_ title: String, message: String) {
+    private func alertView(_ title: String, message: String, isCancel: Bool = false, okAction: @escaping () -> Void = {}) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        if isCancel {
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        }
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in okAction() }))
         self.present(alert, animated: true)
     }
 }
