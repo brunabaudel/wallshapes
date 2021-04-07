@@ -85,7 +85,7 @@ class WallshapesViewController: UIViewController {
         guard let randomGradientView = self.randomGradientView else {return}
         guard var image = UIImage.imageWithView(randomGradientView).toPNG() else {return}
         image = image.crop(randomGradientView.randomBackgroundViewFrame(), sizeView: randomGradientView.frame.size)!
-        saveToPhotoLibrary(image)
+        saveToPhotoLibrary(image.toPNG()!)
     }
     
     private func saveToPhotoLibrary(_ image: UIImage) {
