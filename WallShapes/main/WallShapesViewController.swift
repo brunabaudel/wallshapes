@@ -7,10 +7,10 @@
 
 import UIKit
 
-class WallShapesNavigationController: UINavigationController {
+class WallshapesNavigationController: UINavigationController {
     override var shouldAutorotate: Bool {
         if !viewControllers.isEmpty {
-            if topViewController!.isKind(of: WallShapesViewController.self) {
+            if topViewController!.isKind(of: WallshapesViewController.self) {
                 return false
             }
         }
@@ -18,9 +18,9 @@ class WallShapesNavigationController: UINavigationController {
     }
 }
 
-class WallShapesViewController: UIViewController {
+class WallshapesViewController: UIViewController {
     private var randomGradientView: RandomGradientView!
-    private var renderindicatorView: RenderIndicatorView!
+    private var renderIndicatorView: RenderIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,13 +98,13 @@ class WallShapesViewController: UIViewController {
             print("error occurred: \(String(describing: error))")
             self.alertOK("Error", message: "Oops.. Something went wrong.")
         } else {
-            renderindicatorView?.finishAnimation("Image saved.")
+            renderIndicatorView?.finishAnimation("Image saved.")
         }
     }
     
     private func initRenderindicatorView(_ message: String) {
-        self.renderindicatorView = RenderIndicatorView(frame: view.frame, message: message)
-        guard let renderindicatorView = self.renderindicatorView else {return}
+        self.renderIndicatorView = RenderIndicatorView(frame: view.frame, message: message)
+        guard let renderindicatorView = self.renderIndicatorView else {return}
         renderindicatorView.translatesAutoresizingMaskIntoConstraints = false
         renderindicatorView.center = view.center
         view.addSubview(renderindicatorView)

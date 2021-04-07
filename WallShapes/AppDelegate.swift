@@ -14,9 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let initialViewController = WallShapesViewController()
+        let initialViewController = WallshapesViewController()
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = WallShapesNavigationController(rootViewController: initialViewController)
+        window?.rootViewController = WallshapesNavigationController(rootViewController: initialViewController)
         window?.makeKeyAndVisible()
         
         return true
