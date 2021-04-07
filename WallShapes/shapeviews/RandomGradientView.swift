@@ -8,7 +8,7 @@
 import UIKit
 
 final class RandomGradientView: UIView {
-    private var randomBackgroundView: UIView?
+    private var randomBackgroundView: UIView!
     private var gesturesControl: ShapeGesturesControl?
     private var menuShapeView: MenuShapeView?
     private var shapeViews: [ShapeView] = []
@@ -31,20 +31,19 @@ final class RandomGradientView: UIView {
     }
     
     public func chooseColors(_ count: Int) {
-        let layer = (randomBackgroundView?.layer.sublayers?[0])! as? CAGradientLayer
+        let layer = (randomBackgroundView.layer.sublayers?[0]) as? CAGradientLayer
         layer?.colors = self.setGradient(count)
         layer?.locations = nil
     }
 
     public func chooseColor() {
-        let layer = (randomBackgroundView?.layer.sublayers?[0])! as? CAGradientLayer
+        let layer = (randomBackgroundView.layer.sublayers?[0]) as? CAGradientLayer
         layer?.colors = [UIColor.random.cgColor, UIColor.white.cgColor]
         layer?.locations = [1]
     }
 
     fileprivate func initGradientLayer() {
         randomBackgroundView = UIView(frame: self.frame)
-        guard let randomBackgroundView = self.randomBackgroundView else {return}
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.bounds
         gradientLayer.colors = setGradient()
@@ -80,15 +79,15 @@ final class RandomGradientView: UIView {
     
     public func resizeRandomBackgroundView() {
         var newSize: CGRect = self.frame
-        if self.randomBackgroundView?.frame.height != self.randomBackgroundView?.frame.width {
+        if self.randomBackgroundView.frame.height != self.randomBackgroundView.frame.width {
             newSize = CGRect(origin: CGPoint.zero, size: self.size())
         }
-        self.randomBackgroundView?.frame.origin = CGPoint.zero
-        self.randomBackgroundView?.frame.size = newSize.size
-        self.randomBackgroundView?.center = self.center
+        self.randomBackgroundView.frame.origin = CGPoint.zero
+        self.randomBackgroundView.frame.size = newSize.size
+        self.randomBackgroundView.center = self.center
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        self.randomBackgroundView?.layer.sublayers?[0].frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        self.randomBackgroundView.layer.sublayers?[0].frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         CATransaction.commit()
     }
     
@@ -98,7 +97,7 @@ final class RandomGradientView: UIView {
     }
     
     public func randomBackgroundViewFrame() -> CGRect {
-        return randomBackgroundView?.frame ?? CGRect.zero
+        return randomBackgroundView.frame
     }
 }
 
