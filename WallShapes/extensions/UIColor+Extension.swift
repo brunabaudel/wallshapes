@@ -9,19 +9,19 @@ import UIKit
 
 extension UIColor {
     internal var hue: CGFloat {
-        return getHSBAComponents(self).0
+        return getHSBAComponents(self).hue
     }
     
     internal var saturation: CGFloat {
-        return getHSBAComponents(self).1
+        return getHSBAComponents(self).saturation
     }
     
     internal var brightness: CGFloat {
-        return getHSBAComponents(self).2
+        return getHSBAComponents(self).brightness
     }
     
     internal var alpha: CGFloat {
-        return getHSBAComponents(self).3
+        return getHSBAComponents(self).alpha
     }
     
     internal class var random: Self {
@@ -32,8 +32,8 @@ extension UIColor {
         return Self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
     
-    fileprivate func getHSBAComponents(_ color: UIColor) -> (CGFloat, CGFloat, CGFloat, CGFloat) {
-        var hue, saturation, brightness, alpha : CGFloat
+    fileprivate func getHSBAComponents(_ color: UIColor) -> (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
+        var hue, saturation, brightness, alpha: CGFloat
         (hue, saturation, brightness, alpha) = (0.0, 0.0, 0.0, 0.0)
         color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
         return (hue, saturation, brightness, alpha)
