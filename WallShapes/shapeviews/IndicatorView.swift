@@ -1,6 +1,6 @@
 //
-//  MiddleIndicatorView.swift
-//  WallShapes
+//  IndicatorView.swift
+//  Wallshapes
 //
 //  Created by Bruna Baudel on 3/19/21.
 //
@@ -10,26 +10,6 @@ import UIKit
 enum IndicatorViewType {
     case vertical, horizontal
 }
-
-//class HMiddleIndicatorView: MiddleIndicatorView {
-//    override func initIndicatorView() {
-//        let path = UIBezierPath()
-//        path.move(to: CGPoint(x: frame.minX, y: frame.midY))
-//        path.addLine(to: CGPoint(x: frame.maxX, y: frame.midY))
-//        path.close()
-//        addShapeLayer(path)
-//    }
-//}
-//
-//class VMiddleIndicatorView: MiddleIndicatorView {
-//    override func initIndicatorView() {
-//        let path = UIBezierPath()
-//        path.move(to: CGPoint(x: frame.midX, y: frame.minY))
-//        path.addLine(to: CGPoint(x: frame.midX, y: frame.maxY))
-//        path.close()
-//        addShapeLayer(path)
-//    }
-//}
 
 class IndicatorView: UIView {
     init(frame: CGRect, type: IndicatorViewType) {
