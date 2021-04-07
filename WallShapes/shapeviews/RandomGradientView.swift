@@ -13,8 +13,8 @@ final class RandomGradientView: UIView {
     private var menuShapeView: MenuShapeView?
     private var shapeViews: [ShapeView] = []
     
-    public var horizontalIndicatorView: HMiddleIndicatorView?
-    public var verticalIndicatorView: VMiddleIndicatorView?
+    public var horizontalIndicatorView: IndicatorView!
+    public var verticalIndicatorView: IndicatorView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +22,7 @@ final class RandomGradientView: UIView {
         self.backgroundColor = .init(white: 0.15, alpha: 1)
         
         initGradientLayer()
-        initMiddleIndicator()
+        initIndicator()
         initMenu()
     }
     
@@ -64,30 +64,34 @@ final class RandomGradientView: UIView {
         return colors
     }
     
-    private func initMiddleIndicator() {
+    private func initIndicator() {
         guard let window = UIApplication.window else {return}
-        self.verticalIndicatorView = VMiddleIndicatorView(frame: CGRect(x: frame.midX/3, y: frame.minY,
-                                                                          width: 10, height: frame.height))
-        guard let verticalIndicatorView = self.verticalIndicatorView else {return}
-        window.addSubview(verticalIndicatorView)
+        self.verticalIndicatorView = IndicatorView(frame: CGRect(x: frame.midX/3,
+                                                                 y: frame.minY,
+                                                                 width: 10,
+                                                                 height: frame.height),
+                                                   type: IndicatorViewType.vertical)
         
-        self.horizontalIndicatorView = HMiddleIndicatorView(frame: CGRect(x: frame.minX, y: frame.midY/3,
-                                                                              width: frame.width, height: 10))
-        guard let horizontalIndicatorView = self.horizontalIndicatorView else {return}
+        self.horizontalIndicatorView = IndicatorView(frame: CGRect(x: frame.minX,
+                                                                   y: frame.midY/3,
+                                                                   width: frame.width,
+                                                                   height: 10),
+                                                     type: IndicatorViewType.horizontal)
+        window.addSubview(verticalIndicatorView)
         window.addSubview(horizontalIndicatorView)
     }
     
     public func resizeRandomBackgroundView() {
         var newSize: CGRect = self.frame
-        if self.randomBackgroundView.frame.height != self.randomBackgroundView.frame.width {
+        if randomBackgroundView.frame.height != randomBackgroundView.frame.width {
             newSize = CGRect(origin: CGPoint.zero, size: self.size())
         }
-        self.randomBackgroundView.frame.origin = CGPoint.zero
-        self.randomBackgroundView.frame.size = newSize.size
-        self.randomBackgroundView.center = self.center
+        randomBackgroundView.frame.origin = CGPoint.zero
+        randomBackgroundView.frame.size = newSize.size
+        randomBackgroundView.center = self.center
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        self.randomBackgroundView.layer.sublayers?[0].frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        randomBackgroundView.layer.sublayers?[0].frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         CATransaction.commit()
     }
     
