@@ -42,6 +42,7 @@ class WallshapesViewController: UIViewController {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.tintColor = .white
         
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
@@ -53,7 +54,6 @@ class WallshapesViewController: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveItemHandle)),
             UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle))]
         
-        self.navigationController?.navigationBar.tintColor = .white
     }
     
     private func configBarButtons(name: String, targetSize: CGSize = CGSize(width: 20, height: 20), action: Selector?) -> UIBarButtonItem {
