@@ -1,6 +1,6 @@
 //
-//  WallShapesViewController.swift
-//  WallShapes
+//  WallshapesViewController.swift
+//  Wallshapes
 //
 //  Created by Bruna Baudel on 3/1/21.
 //

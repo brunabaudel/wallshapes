@@ -1,6 +1,6 @@
 //
 //  RenderIndicatorView.swift
-//  WallShapes
+//  Wallshapes
 //
 //  Created by Bruna Baudel on 3/15/21.
 //

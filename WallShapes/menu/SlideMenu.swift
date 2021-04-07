@@ -1,6 +1,6 @@
 //
 //  SlideMenu.swift
-//  WallShapes
+//  Wallshapes
 //
 //  Created by Bruna Baudel on 3/1/21.
 //

@@ -35,7 +35,7 @@
 /* Begin PBXFileReference section */
 		4C51FFA0260413320064CE04 /* ShapeViewControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeViewControl.swift; sourceTree = "<group>"; };
 		4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddleIndicatorView.swift; sourceTree = "<group>"; };
-		4CB5EF4025ED88E800193A19 /* WallShapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WallShapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CB5EF4025ED88E800193A19 /* Wallshapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wallshapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CB5EF4325ED88E800193A19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CB5EF4525ED88E800193A19 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		4CB5EF4725ED88E800193A19 /* WallshapesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapesViewController.swift; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 		4CB5EF3725ED88E800193A19 = {
 			isa = PBXGroup;
 			children = (
-				4CB5EF4225ED88E800193A19 /* WallShapes */,
+				4CB5EF4225ED88E800193A19 /* Wallshapes */,
 				4CB5EF4125ED88E800193A19 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -82,12 +82,12 @@
 		4CB5EF4125ED88E800193A19 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4CB5EF4025ED88E800193A19 /* WallShapes.app */,
+				4CB5EF4025ED88E800193A19 /* Wallshapes.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4CB5EF4225ED88E800193A19 /* WallShapes */ = {
+		4CB5EF4225ED88E800193A19 /* Wallshapes */ = {
 			isa = PBXGroup;
 			children = (
 				4CB5EF7F25ED8C1E00193A19 /* commonviews */,
@@ -102,7 +102,7 @@
 				4CB5EF4E25ED88EA00193A19 /* LaunchScreen.storyboard */,
 				4CB5EF5125ED88EA00193A19 /* Info.plist */,
 			);
-			path = WallShapes;
+			path = Wallshapes;
 			sourceTree = "<group>";
 		};
 		4CB5EF5A25ED89C100193A19 /* main */ = {
@@ -161,9 +161,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4CB5EF3F25ED88E800193A19 /* WallShapes */ = {
+		4CB5EF3F25ED88E800193A19 /* Wallshapes */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4CB5EF5425ED88EA00193A19 /* Build configuration list for PBXNativeTarget "WallShapes" */;
+			buildConfigurationList = 4CB5EF5425ED88EA00193A19 /* Build configuration list for PBXNativeTarget "Wallshapes" */;
 			buildPhases = (
 				4CB5EF3C25ED88E800193A19 /* Sources */,
 				4CB5EF3D25ED88E800193A19 /* Frameworks */,
@@ -173,9 +173,9 @@
 			);
 			dependencies = (
 			);
-			name = WallShapes;
+			name = Wallshapes;
 			productName = WallShapes;
-			productReference = 4CB5EF4025ED88E800193A19 /* WallShapes.app */;
+			productReference = 4CB5EF4025ED88E800193A19 /* Wallshapes.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -192,7 +192,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4CB5EF3B25ED88E800193A19 /* Build configuration list for PBXProject "WallShapes" */;
+			buildConfigurationList = 4CB5EF3B25ED88E800193A19 /* Build configuration list for PBXProject "Wallshapes" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -205,7 +205,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4CB5EF3F25ED88E800193A19 /* WallShapes */,
+				4CB5EF3F25ED88E800193A19 /* Wallshapes */,
 			);
 		};
 /* End PBXProject section */
@@ -430,7 +430,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4CB5EF3B25ED88E800193A19 /* Build configuration list for PBXProject "WallShapes" */ = {
+		4CB5EF3B25ED88E800193A19 /* Build configuration list for PBXProject "Wallshapes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4CB5EF5225ED88EA00193A19 /* Debug */,
@@ -439,7 +439,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4CB5EF5425ED88EA00193A19 /* Build configuration list for PBXNativeTarget "WallShapes" */ = {
+		4CB5EF5425ED88EA00193A19 /* Build configuration list for PBXNativeTarget "Wallshapes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4CB5EF5525ED88EA00193A19 /* Debug */,

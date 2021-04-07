@@ -1,6 +1,6 @@
 //
 //  UIApplication+Extension.swift
-//  WallShapes
+//  Wallshapes
 //
 //  Created by Bruna Baudel on 3/8/21.
 //
