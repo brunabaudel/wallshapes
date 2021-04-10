@@ -10,7 +10,7 @@ import UIKit
 extension UIView {
     internal var firstSublayer: CALayer? {
         guard let sublayers = layer.sublayers, sublayers.count > 0 else {return nil}
-        return sublayers[0].layerByType()
+        return sublayers.first?.layerByType()
     }
     
     func showNavigation() {

@@ -31,13 +31,13 @@ final class RandomGradientView: UIView {
     }
     
     public func chooseColors(_ count: Int) {
-        let layer = (randomBackgroundView.layer.sublayers?[0]) as? CAGradientLayer
+        let layer = (randomBackgroundView.layer.sublayers?.first) as? CAGradientLayer
         layer?.colors = self.setGradient(count)
         layer?.locations = nil
     }
 
     public func chooseColor() {
-        let layer = (randomBackgroundView.layer.sublayers?[0]) as? CAGradientLayer
+        let layer = (randomBackgroundView.layer.sublayers?.first) as? CAGradientLayer
         layer?.colors = [UIColor.random.cgColor, UIColor.white.cgColor]
         layer?.locations = [1]
     }
@@ -91,7 +91,7 @@ final class RandomGradientView: UIView {
         randomBackgroundView.center = self.center
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        randomBackgroundView.layer.sublayers?[0].frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        randomBackgroundView.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         CATransaction.commit()
     }
     
@@ -142,10 +142,10 @@ extension RandomGradientView {
         
         guard let window = UIApplication.window else {return}
         window.addSubview(menuShapeView)
-        menuSizeCConstraints()
+        menuSizeConstraints()
     }
     
-    private func menuSizeCConstraints() {
+    private func menuSizeConstraints() {
         guard let window = UIApplication.window else {return}
         guard let menuShapeView = self.menuShapeView else {return}
         menuShapeView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
