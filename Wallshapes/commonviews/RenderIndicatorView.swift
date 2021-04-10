@@ -27,9 +27,17 @@ class RenderIndicatorView: UIView {
     }
     
     private func initView() {
+        guard let window = UIApplication.window else {return}
+        translatesAutoresizingMaskIntoConstraints = false
+        center = window.center
         backgroundColor = .init(white: 0.3, alpha: 0.5)
         layer.cornerRadius = 10
         layer.masksToBounds = true
+        
+        centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true
+        centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
+        heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.15).isActive = true
+        widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.5).isActive = true
     }
     
     private func initSpinner(with message: String) {
