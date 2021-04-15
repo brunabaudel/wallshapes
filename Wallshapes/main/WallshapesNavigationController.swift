@@ -29,7 +29,12 @@ class WallshapesNavigationController: UINavigationController {
     }
     
     override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
+        if #available(iOS 13.0, *) {
+            super.init(rootViewController: rootViewController)
+        } else {
+            super.init(nibName: nil, bundle: nil)
+            self.viewControllers = [rootViewController]
+        }
         setupNavigationController()
     }
     
