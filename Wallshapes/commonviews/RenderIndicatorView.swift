@@ -28,16 +28,18 @@ class RenderIndicatorView: UIView {
     
     private func initView() {
         guard let window = UIApplication.window else {return}
-        translatesAutoresizingMaskIntoConstraints = false
-        center = window.center
-        backgroundColor = .init(white: 0.3, alpha: 0.5)
-        layer.cornerRadius = 10
-        layer.masksToBounds = true
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.center = window.center
+        self.backgroundColor = .init(white: 0.3, alpha: 0.5)
+        self.layer.cornerRadius = 10
+        self.layer.masksToBounds = true
         
-        centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true
-        centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
-        heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.15).isActive = true
-        widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.5).isActive = true
+        window.addSubview(self)
+        
+        self.centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true
+        self.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
+        self.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.15).isActive = true
+        self.widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.5).isActive = true
     }
     
     private func initSpinner(with message: String) {
@@ -73,9 +75,12 @@ class RenderIndicatorView: UIView {
     }
     
     public func finishAnimation(_ message: String) {
-        spinner.removeFromSuperview()
-        labelSpinner.removeFromSuperview()
-        initFinishLabel(with: message)
+        DispatchQueue.main.async {
+            self.spinner.removeFromSuperview()
+            self.labelSpinner.removeFromSuperview()
+            self.initFinishLabel(with: message)
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.removeFromSuperview()
         }

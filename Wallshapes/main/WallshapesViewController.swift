@@ -51,5 +51,6 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     }
 
     func saveItemHandle() {
+        SaveImage().save("Saving...", view: self.randomGradientView)
     }
 }

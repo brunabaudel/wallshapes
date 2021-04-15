@@ -66,17 +66,14 @@ final class RandomGradientView: UIView {
     
     private func initIndicator() {
         guard let window = UIApplication.window else {return}
-        self.verticalIndicatorView = IndicatorView(frame: CGRect(x: frame.midX/3,
-                                                                 y: frame.minY,
-                                                                 width: 10,
-                                                                 height: frame.height),
-                                                   type: IndicatorViewType.vertical)
+        self.verticalIndicatorView = IndicatorView(
+            frame: CGRect(x: frame.midX/3, y: frame.minY, width: 10, height: frame.height),
+            type: IndicatorViewType.vertical)
         
-        self.horizontalIndicatorView = IndicatorView(frame: CGRect(x: frame.minX,
-                                                                   y: frame.midY/3,
-                                                                   width: frame.width,
-                                                                   height: 10),
-                                                     type: IndicatorViewType.horizontal)
+        self.horizontalIndicatorView = IndicatorView(
+            frame: CGRect(x: frame.minX, y: frame.midY/3, width: frame.width, height: 10),
+            type: IndicatorViewType.horizontal)
+        
         window.addSubview(verticalIndicatorView)
         window.addSubview(horizontalIndicatorView)
     }
@@ -100,8 +97,8 @@ final class RandomGradientView: UIView {
         return CGSize(width: frame/1.2, height: frame/1.2)
     }
     
-    public func randomBackgroundViewFrame() -> CGRect {
-        return randomBackgroundView.frame
+    public func randomBackground() -> UIView {
+        return randomBackgroundView
     }
 }
 
