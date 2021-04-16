@@ -8,11 +8,13 @@
 import UIKit
 
 class WallshapesViewController: UIViewController {
-    private var randomGradientView: RandomGradientView!
+    private var wallshapeView: WallshapeView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         (self.navigationController as! WallshapesNavigationController).wallshapesDelegate = self
+        
+        
     }
     
     override func loadView() {
@@ -21,36 +23,36 @@ class WallshapesViewController: UIViewController {
     }
     
     private func initSubviews() {
-        randomGradientView = RandomGradientView(frame: self.view.bounds)
-        guard let randomGradientView = self.randomGradientView else {return}
-        self.view.addSubview(randomGradientView)
+        wallshapeView = WallshapeView(frame: self.view.bounds)
+        guard let wallshapeView = self.wallshapeView else {return}
+        self.view.addSubview(wallshapeView)
     }
 }
 
 extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     func changeViewSizeHandle() {
-        randomGradientView?.resizeRandomBackgroundView()
+        wallshapeView?.resizeContentView()
     }
 
     func refreshPlainColorItemHandle() {
-        randomGradientView?.chooseColor()
+        wallshapeView?.chooseColor()
     }
     
     func refreshGradientItemHandle() {
-        randomGradientView?.chooseColors(2)
+        wallshapeView?.chooseColors(2)
     }
     
     func addItemHandle() {
-        randomGradientView?.addShape()
+        wallshapeView?.addShape()
     }
     
     func clearItemHandle() {
         UIAlertController.alertView("Clear all", message: "Do you want to erase all shapes?", isCancel: true) {
-            self.randomGradientView?.clearShapes()
+            self.wallshapeView?.clearShapes()
         }.showAlert(self)
     }
 
     func saveItemHandle() {
-        SaveImage().save("Saving...", view: self.randomGradientView)
+        SaveImage().save("Saving...", view: self.wallshapeView)
     }
 }

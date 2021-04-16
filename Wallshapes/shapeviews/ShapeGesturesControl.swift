@@ -16,12 +16,12 @@ protocol ShapeGesturesControlDelegate {
 class ShapeGesturesControl {
     internal var delegate: ShapeGesturesControlDelegate?
     
-    private weak var view: RandomGradientView? //TODO: change to UIView and change the onTap function
+    private weak var view: WallshapeView? //TODO: change to UIView and change the onTap function
     private var viewGesture: ShapeView?
     private var shapeLayerPath: CGPath?
     private var scale: CGFloat = 0
     
-    init<T: RandomGradientView>(_ view: T) {
+    init<T: WallshapeView>(_ view: T) {
         self.view = view
         initGestures()
     }

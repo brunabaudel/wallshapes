@@ -18,7 +18,7 @@
 		4CB5EF5025ED88EA00193A19 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4E25ED88EA00193A19 /* LaunchScreen.storyboard */; };
 		4CB5EF5E25ED8A0600193A19 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF5D25ED8A0600193A19 /* Array+Extension.swift */; };
 		4CB5EF6325ED8A2900193A19 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6225ED8A2900193A19 /* UIImage+Extension.swift */; };
-		4CB5EF6825ED8A7200193A19 /* RandomGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6725ED8A7200193A19 /* RandomGradientView.swift */; };
+		4CB5EF6825ED8A7200193A19 /* WallshapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */; };
 		4CB5EF6B25ED8A8300193A19 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6A25ED8A8300193A19 /* Shape.swift */; };
 		4CB5EF6E25ED8ABB00193A19 /* ShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */; };
 		4CB5EF7425ED8B4E00193A19 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF7325ED8B4E00193A19 /* UIColor+Extension.swift */; };
@@ -51,7 +51,7 @@
 		4CB5EF5125ED88EA00193A19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CB5EF5D25ED8A0600193A19 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF6225ED8A2900193A19 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
-		4CB5EF6725ED8A7200193A19 /* RandomGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomGradientView.swift; sourceTree = "<group>"; };
+		4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeView.swift; sourceTree = "<group>"; };
 		4CB5EF6A25ED8A8300193A19 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeView.swift; sourceTree = "<group>"; };
 		4CB5EF7325ED8B4E00193A19 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -143,7 +143,7 @@
 		4CB5EF6625ED8A6100193A19 /* shapeviews */ = {
 			isa = PBXGroup;
 			children = (
-				4CB5EF6725ED8A7200193A19 /* RandomGradientView.swift */,
+				4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */,
 				4CB5EF8425ED9F9F00193A19 /* ShapeGesturesControl.swift */,
 				4CB5EF6A25ED8A8300193A19 /* Shape.swift */,
 				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
@@ -258,7 +258,7 @@
 				4CB5EF6325ED8A2900193A19 /* UIImage+Extension.swift in Sources */,
 				4CF48BD82621F380009822DA /* SaveImageControl.swift in Sources */,
 				4CB5EF6B25ED8A8300193A19 /* Shape.swift in Sources */,
-				4CB5EF6825ED8A7200193A19 /* RandomGradientView.swift in Sources */,
+				4CB5EF6825ED8A7200193A19 /* WallshapeView.swift in Sources */,
 				4CB5EF9F25F670E900193A19 /* UIApplication+Extension.swift in Sources */,
 				4CF48BF12624FB90009822DA /* AuthorizationAssests.swift in Sources */,
 				4CB5EF8525ED9F9F00193A19 /* ShapeGesturesControl.swift in Sources */,

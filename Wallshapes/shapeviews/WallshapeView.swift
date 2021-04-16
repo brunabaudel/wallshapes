@@ -1,5 +1,5 @@
 //
-//  RandomGradientView.swift
+//  WallshapeView.swift
 //  Wallshapes
 //
 //  Created by Bruna Baudel on 3/1/21.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-final class RandomGradientView: UIView {
-    private var randomBackgroundView: UIView!
+final class WallshapeView: UIView {
+    private var contentView: UIView!
     private var gesturesControl: ShapeGesturesControl?
     private var menuShapeView: MenuShapeView?
     private var shapeViews: [ShapeView] = []
@@ -31,26 +31,26 @@ final class RandomGradientView: UIView {
     }
     
     public func chooseColors(_ count: Int) {
-        let layer = (randomBackgroundView.layer.sublayers?.first) as? CAGradientLayer
+        let layer = (contentView.layer.sublayers?.first) as? CAGradientLayer
         layer?.colors = self.setGradient(count)
         layer?.locations = nil
     }
 
     public func chooseColor() {
-        let layer = (randomBackgroundView.layer.sublayers?.first) as? CAGradientLayer
+        let layer = (contentView.layer.sublayers?.first) as? CAGradientLayer
         layer?.colors = [UIColor.random.cgColor, UIColor.white.cgColor]
         layer?.locations = [1]
     }
 
     fileprivate func initGradientLayer() {
-        randomBackgroundView = UIView(frame: self.frame)
+        contentView = UIView(frame: self.frame)
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.bounds
         gradientLayer.colors = setGradient()
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-        randomBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
-        addSubview(randomBackgroundView)
+        contentView.layer.insertSublayer(gradientLayer, at: 0)
+        addSubview(contentView)
     }
 
     fileprivate func setGradient(_ count: Int = 2) -> [CGColor] {
@@ -78,35 +78,39 @@ final class RandomGradientView: UIView {
         window.addSubview(horizontalIndicatorView)
     }
     
-    public func resizeRandomBackgroundView() {
+    public func resizeContentView() {
         var newSize: CGRect = self.frame
-        if randomBackgroundView.frame.height != randomBackgroundView.frame.width {
+        if contentView.frame.height != contentView.frame.width {
             newSize = CGRect(origin: CGPoint.zero, size: self.size())
         }
-        randomBackgroundView.frame.origin = CGPoint.zero
-        randomBackgroundView.frame.size = newSize.size
-        randomBackgroundView.center = self.center
+        contentView.frame.origin = CGPoint.zero
+        contentView.frame.size = newSize.size
+        contentView.center = self.center
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        randomBackgroundView.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        contentView.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         CATransaction.commit()
     }
     
+    // Bruna n~ao sabe onde isso 'e usado.
     private func size() -> CGSize {
         let frame = min(self.frame.height, self.frame.width)
+        // Bruna n~ao sabe de onde vem esses n'umeros m'agicos.
         return CGSize(width: frame/1.2, height: frame/1.2)
     }
     
-    public func randomBackground() -> UIView {
-        return randomBackgroundView
+    public func content() -> UIView {
+        return contentView
     }
 }
 
-extension RandomGradientView {
+extension WallshapeView {
     public func addShape() {
         guard let menuShapeView = self.menuShapeView else {return}
         menuShapeView.hideSlider()
+        // 2??????
         let size = bounds.width > bounds.height ? bounds.midY/2 : bounds.midX/2
+        // 1.75?????????????????????????????????????????????????????????
         let shape = ShapeView(frame: CGRect(x: size*1.75, y: size, width: size, height: size), menu: menuShapeView)
         shape.delegate = self
         shapeViews.append(shape)
@@ -115,12 +119,12 @@ extension RandomGradientView {
     
     public func clearShapes() {
         shapeViews.removeAll()
-        subviews.forEach { if !$0.isEqual(randomBackgroundView) { $0.removeFromSuperview() } }
+        subviews.forEach { if !$0.isEqual(contentView) { $0.removeFromSuperview() } }
         hideMenuShape()
     }
 }
 
-extension RandomGradientView: ShapeViewDelegate {
+extension WallshapeView: ShapeViewDelegate {
     func deleteView(_ shapeView: ShapeView) {
         shapeViews.remove(object: shapeView)
         shapeView.removeFromSuperview()
@@ -130,7 +134,7 @@ extension RandomGradientView: ShapeViewDelegate {
 
 //MARK: - Menu
 
-extension RandomGradientView {
+extension WallshapeView {
     private func initMenu() {
         menuShapeView = MenuShapeView()
         guard let menuShapeView = self.menuShapeView else {return}

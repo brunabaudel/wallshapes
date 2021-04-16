@@ -10,11 +10,11 @@ import UIKit
 class SaveImage: NSObject {
     private var renderIndicatorView: RenderIndicatorView!
     
-    func save(_ title: String, view: RandomGradientView) {
+    func save(_ title: String, view: WallshapeView) {
         AuthorizationAssests().authorization() { authorized in
             if authorized {
                 DispatchQueue.main.async {
-                    let frame = view.randomBackground().frame
+                    let frame = view.content().frame
                     self.willSaveImage(title, view: view, rect: frame)
                 }
             } else {
