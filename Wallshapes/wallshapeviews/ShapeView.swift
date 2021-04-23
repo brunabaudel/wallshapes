@@ -13,13 +13,19 @@ protocol ShapeViewDelegate {
 
 class ShapeView: UIView {
     internal var delegate: ShapeViewDelegate?
-    public var shapeViewControl: ShapeViewControl?
+    private(set) var shapeViewControl: ShapeViewControl?
     private var menuShapeView: MenuShapeView?
     
+    //Load shape
+    init(frame: CGRect, menu: MenuShapeView, shape: Shape) {
+        super.init(frame: frame)
+        initLoadShapeView(menu, shape: shape)
+    }
+    
+    //Add shape
     init(frame: CGRect, menu: MenuShapeView) {
         super.init(frame: frame)
         initShapeView(menu)
-        backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) {
@@ -28,6 +34,13 @@ class ShapeView: UIView {
     
     private func initShapeView(_ menu: MenuShapeView) {
         shapeViewControl = ShapeViewControl(self)
+        menuShapeView = menu
+        menuShapeView?.delegate = self
+        backgroundColor = .clear
+    }
+    
+    private func initLoadShapeView(_ menu: MenuShapeView, shape: Shape) {
+        shapeViewControl = ShapeViewControl(self, shape: shape)
         menuShapeView = menu
         menuShapeView?.delegate = self
         backgroundColor = .clear
@@ -44,16 +57,7 @@ extension ShapeView: MenuShapeViewDelegate {
     }
     
     func willChangeShape(_ sender: UIButton, type: ShapeType) {
-        switch type {
-            case ShapeType.circle:
-                shapeViewControl?.createPathCircle()
-            case ShapeType.rectangle:
-                shapeViewControl?.createPathRectangle()
-            case ShapeType.triangle:
-                shapeViewControl?.createPathTriangle()
-            case ShapeType.polygon:
-                shapeViewControl?.createPathPolygon()
-        }
+        shapeViewControl?.createPath(by: type)
     }
     
     func willApplyGradientShape(_ sender: UIButton) {
@@ -76,21 +80,11 @@ extension ShapeView: MenuShapeViewDelegate {
     }
     
     func onSliderValue(_ slider: SliderMenu) {
-        guard let shapeViewControl = self.shapeViewControl else {return}
-        switch slider.type {
-            case .shadow:
-                slider.setValue(Float(shapeViewControl.shadow()), animated: true)
-            case .alpha:
-                slider.setValue(Float(shapeViewControl.alpha()), animated: true)
-            case .polygon:
-                slider.setValue(Float(shapeViewControl.polygon()), animated: true)
-            default:
-                break
-        }
+        shapeViewControl?.changeSliderValue(slider)
     }
     
     public func showMenuShape() {
-        self.menuShapeView?.delegate = self
-        self.menuShapeView?.showMenu()
+        menuShapeView?.delegate = self
+        menuShapeView?.showMenu()
     }
 }

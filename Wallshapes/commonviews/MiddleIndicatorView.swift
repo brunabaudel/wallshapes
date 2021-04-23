@@ -7,12 +7,12 @@
 
 import UIKit
 
-enum IndicatorViewType {
+enum MiddleIndicatorViewType {
     case vertical, horizontal
 }
 
-class IndicatorView: UIView {
-    init(frame: CGRect, type: IndicatorViewType) {
+class MiddleIndicatorView: UIView {
+    init(frame: CGRect, type: MiddleIndicatorViewType) {
         super.init(frame: frame)
         backgroundColor = .clear
         isHidden = true
@@ -35,7 +35,7 @@ class IndicatorView: UIView {
         self.isHidden = !isHidden
     }
     
-    private func initIndicatorView(type: IndicatorViewType) {
+    private func initIndicatorView(type: MiddleIndicatorViewType) {
         switch type {
         case .vertical:
             self.initVerticalIndicatorView()
@@ -47,7 +47,7 @@ class IndicatorView: UIView {
     private func initVerticalIndicatorView() {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: frame.midX, y: frame.minY))
-        path.addLine(to: CGPoint(x: frame.midX, y: frame.maxY))
+        path.addLine(to: CGPoint(x: frame.midX, y: frame.maxY*2))
         path.close()
         addShapeLayer(path)
     }
@@ -55,15 +55,14 @@ class IndicatorView: UIView {
     private func initHorizontalIndicatorView() {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: frame.minX, y: frame.midY))
-        path.addLine(to: CGPoint(x: frame.maxX, y: frame.midY))
+        path.addLine(to: CGPoint(x: frame.maxX*2, y: frame.midY))
         path.close()
         addShapeLayer(path)
     }
     
     private func addShapeLayer(_ path: UIBezierPath) {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.bounds = self.bounds
-        shapeLayer.position = self.center
+        shapeLayer.bounds = frame
         shapeLayer.strokeColor = UIColor.yellow.cgColor
         shapeLayer.lineDashPattern = [2,5]
         shapeLayer.lineWidth = 3

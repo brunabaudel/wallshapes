@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C0F7831262B9F10001C26A5 /* FileControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F7830262B9F10001C26A5 /* FileControl.swift */; };
 		4C50EEF7261F50920096D630 /* WallshapesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C50EEF6261F50920096D630 /* WallshapesViewController.swift */; };
 		4C51FFA1260413320064CE04 /* ShapeViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51FFA0260413320064CE04 /* ShapeViewControl.swift */; };
-		4C51FFA92605214F0064CE04 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51FFA82605214F0064CE04 /* IndicatorView.swift */; };
+		4C51FFA92605214F0064CE04 /* MiddleIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */; };
 		4C5E8AA72627A62A00247C9F /* SaveImageHandlerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AA62627A62A00247C9F /* SaveImageHandlerError.swift */; };
+		4C5E8AAF2629AFEE00247C9F /* JsonControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AAE2629AFEE00247C9F /* JsonControl.swift */; };
+		4C5E8AB32629B02400247C9F /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AB22629B02400247C9F /* Codable+Extension.swift */; };
+		4C5E8AB62629B05600247C9F /* WallshapeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AB52629B05600247C9F /* WallshapeData.swift */; };
+		4C5E8ABE2629BD2800247C9F /* wallshape.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E8AAD2629AF3D00247C9F /* wallshape.json */; };
+		4C5E8AC22629C25200247C9F /* WallshapeModelHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AC12629C25200247C9F /* WallshapeModelHandler.swift */; };
+		4C90E1B626308D0B0043696C /* ModelControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C90E1B526308D0B0043696C /* ModelControl.swift */; };
 		4CB5EF4425ED88E800193A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4325ED88E800193A19 /* AppDelegate.swift */; };
 		4CB5EF4625ED88E800193A19 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4525ED88E800193A19 /* SceneDelegate.swift */; };
 		4CB5EF4B25ED88E800193A19 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4925ED88E800193A19 /* Main.storyboard */; };
@@ -19,7 +26,7 @@
 		4CB5EF5E25ED8A0600193A19 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF5D25ED8A0600193A19 /* Array+Extension.swift */; };
 		4CB5EF6325ED8A2900193A19 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6225ED8A2900193A19 /* UIImage+Extension.swift */; };
 		4CB5EF6825ED8A7200193A19 /* WallshapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */; };
-		4CB5EF6B25ED8A8300193A19 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6A25ED8A8300193A19 /* Shape.swift */; };
+		4CB5EF6B25ED8A8300193A19 /* WallshapeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6A25ED8A8300193A19 /* WallshapeModel.swift */; };
 		4CB5EF6E25ED8ABB00193A19 /* ShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */; };
 		4CB5EF7425ED8B4E00193A19 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF7325ED8B4E00193A19 /* UIColor+Extension.swift */; };
 		4CB5EF7925ED8BA100193A19 /* MenuShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF7825ED8BA100193A19 /* MenuShapeView.swift */; };
@@ -38,10 +45,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C0F7830262B9F10001C26A5 /* FileControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileControl.swift; sourceTree = "<group>"; };
 		4C50EEF6261F50920096D630 /* WallshapesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallshapesViewController.swift; sourceTree = "<group>"; };
 		4C51FFA0260413320064CE04 /* ShapeViewControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeViewControl.swift; sourceTree = "<group>"; };
-		4C51FFA82605214F0064CE04 /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
+		4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddleIndicatorView.swift; sourceTree = "<group>"; };
 		4C5E8AA62627A62A00247C9F /* SaveImageHandlerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImageHandlerError.swift; sourceTree = "<group>"; };
+		4C5E8AAD2629AF3D00247C9F /* wallshape.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = wallshape.json; sourceTree = "<group>"; };
+		4C5E8AAE2629AFEE00247C9F /* JsonControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonControl.swift; sourceTree = "<group>"; };
+		4C5E8AB22629B02400247C9F /* Codable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Extension.swift"; sourceTree = "<group>"; };
+		4C5E8AB52629B05600247C9F /* WallshapeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeData.swift; sourceTree = "<group>"; };
+		4C5E8AC12629C25200247C9F /* WallshapeModelHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeModelHandler.swift; sourceTree = "<group>"; };
+		4C90E1B526308D0B0043696C /* ModelControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelControl.swift; sourceTree = "<group>"; };
 		4CB5EF4025ED88E800193A19 /* Wallshapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wallshapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CB5EF4325ED88E800193A19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CB5EF4525ED88E800193A19 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,7 +66,7 @@
 		4CB5EF5D25ED8A0600193A19 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF6225ED8A2900193A19 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeView.swift; sourceTree = "<group>"; };
-		4CB5EF6A25ED8A8300193A19 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
+		4CB5EF6A25ED8A8300193A19 /* WallshapeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeModel.swift; sourceTree = "<group>"; };
 		4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeView.swift; sourceTree = "<group>"; };
 		4CB5EF7325ED8B4E00193A19 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF7825ED8BA100193A19 /* MenuShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuShapeView.swift; sourceTree = "<group>"; };
@@ -81,6 +95,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C1340CA262B32E60070F7DC /* wallshapesjson */ = {
+			isa = PBXGroup;
+			children = (
+				4C5E8AAD2629AF3D00247C9F /* wallshape.json */,
+			);
+			path = wallshapesjson;
+			sourceTree = "<group>";
+		};
+		4C5E8AAC2629AF0300247C9F /* wallshapemodel */ = {
+			isa = PBXGroup;
+			children = (
+				4C5E8AAE2629AFEE00247C9F /* JsonControl.swift */,
+				4C0F7830262B9F10001C26A5 /* FileControl.swift */,
+				4C5E8AB52629B05600247C9F /* WallshapeData.swift */,
+				4CB5EF6A25ED8A8300193A19 /* WallshapeModel.swift */,
+				4C5E8AC12629C25200247C9F /* WallshapeModelHandler.swift */,
+				4C90E1B526308D0B0043696C /* ModelControl.swift */,
+			);
+			path = wallshapemodel;
+			sourceTree = "<group>";
+		};
 		4CB5EF3725ED88E800193A19 = {
 			isa = PBXGroup;
 			children = (
@@ -100,11 +135,13 @@
 		4CB5EF4225ED88E800193A19 /* Wallshapes */ = {
 			isa = PBXGroup;
 			children = (
+				4C1340CA262B32E60070F7DC /* wallshapesjson */,
+				4C5E8AAC2629AF0300247C9F /* wallshapemodel */,
 				4CF48BEC2624BE05009822DA /* saveimages */,
 				4CB5EF7F25ED8C1E00193A19 /* commonviews */,
 				4CB5EF5C25ED89FB00193A19 /* extensions */,
 				4CB5EF7725ED8B8800193A19 /* menu */,
-				4CB5EF6625ED8A6100193A19 /* shapeviews */,
+				4CB5EF6625ED8A6100193A19 /* wallshapeviews */,
 				4CB5EF5A25ED89C100193A19 /* main */,
 				4CB5EF4325ED88E800193A19 /* AppDelegate.swift */,
 				4CB5EF4525ED88E800193A19 /* SceneDelegate.swift */,
@@ -136,21 +173,20 @@
 				4CB5EF8F25F1570800193A19 /* CALayer+Extension.swift */,
 				4CB5EF9E25F670E900193A19 /* UIApplication+Extension.swift */,
 				4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */,
+				4C5E8AB22629B02400247C9F /* Codable+Extension.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
 		};
-		4CB5EF6625ED8A6100193A19 /* shapeviews */ = {
+		4CB5EF6625ED8A6100193A19 /* wallshapeviews */ = {
 			isa = PBXGroup;
 			children = (
 				4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */,
 				4CB5EF8425ED9F9F00193A19 /* ShapeGesturesControl.swift */,
-				4CB5EF6A25ED8A8300193A19 /* Shape.swift */,
 				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
 				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
-				4C51FFA82605214F0064CE04 /* IndicatorView.swift */,
 			);
-			path = shapeviews;
+			path = wallshapeviews;
 			sourceTree = "<group>";
 		};
 		4CB5EF7725ED8B8800193A19 /* menu */ = {
@@ -165,6 +201,7 @@
 		4CB5EF7F25ED8C1E00193A19 /* commonviews */ = {
 			isa = PBXGroup;
 			children = (
+				4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */,
 				4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */,
 				4CB5EF8025ED8C3000193A19 /* StackView.swift */,
 			);
@@ -238,6 +275,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C5E8ABE2629BD2800247C9F /* wallshape.json in Resources */,
 				4CB5EF5025ED88EA00193A19 /* LaunchScreen.storyboard in Resources */,
 				4CB5EF4D25ED88EA00193A19 /* Assets.xcassets in Resources */,
 				4CB5EF4B25ED88E800193A19 /* Main.storyboard in Resources */,
@@ -252,28 +290,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C51FFA1260413320064CE04 /* ShapeViewControl.swift in Sources */,
+				4C90E1B626308D0B0043696C /* ModelControl.swift in Sources */,
 				4C50EEF7261F50920096D630 /* WallshapesViewController.swift in Sources */,
 				4CB5EF8C25F154D800193A19 /* UIView+Extension.swift in Sources */,
 				4CB5EF5E25ED8A0600193A19 /* Array+Extension.swift in Sources */,
 				4CB5EF6325ED8A2900193A19 /* UIImage+Extension.swift in Sources */,
 				4CF48BD82621F380009822DA /* SaveImageControl.swift in Sources */,
-				4CB5EF6B25ED8A8300193A19 /* Shape.swift in Sources */,
+				4CB5EF6B25ED8A8300193A19 /* WallshapeModel.swift in Sources */,
 				4CB5EF6825ED8A7200193A19 /* WallshapeView.swift in Sources */,
+				4C5E8AAF2629AFEE00247C9F /* JsonControl.swift in Sources */,
 				4CB5EF9F25F670E900193A19 /* UIApplication+Extension.swift in Sources */,
 				4CF48BF12624FB90009822DA /* AuthorizationAssests.swift in Sources */,
 				4CB5EF8525ED9F9F00193A19 /* ShapeGesturesControl.swift in Sources */,
-				4C51FFA92605214F0064CE04 /* IndicatorView.swift in Sources */,
+				4C5E8AB32629B02400247C9F /* Codable+Extension.swift in Sources */,
+				4C51FFA92605214F0064CE04 /* MiddleIndicatorView.swift in Sources */,
 				4CB5EF4425ED88E800193A19 /* AppDelegate.swift in Sources */,
+				4C5E8AB62629B05600247C9F /* WallshapeData.swift in Sources */,
 				4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */,
 				4CB5EF8925F1537100193A19 /* CGPath+Extension.swift in Sources */,
 				4CB5EF6E25ED8ABB00193A19 /* ShapeView.swift in Sources */,
 				4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */,
 				4CB5EF7D25ED8BB500193A19 /* SlideMenu.swift in Sources */,
+				4C0F7831262B9F10001C26A5 /* FileControl.swift in Sources */,
 				4CB5EF8125ED8C3000193A19 /* StackView.swift in Sources */,
 				4CB5EF7925ED8BA100193A19 /* MenuShapeView.swift in Sources */,
 				4CF48BDB26221FE5009822DA /* WallshapesNavigationController.swift in Sources */,
 				4CB5EF4625ED88E800193A19 /* SceneDelegate.swift in Sources */,
 				4C5E8AA72627A62A00247C9F /* SaveImageHandlerError.swift in Sources */,
+				4C5E8AC22629C25200247C9F /* WallshapeModelHandler.swift in Sources */,
 				4CF48BDF26222504009822DA /* UIAlertController+Extenison.swift in Sources */,
 				4CB5EF7425ED8B4E00193A19 /* UIColor+Extension.swift in Sources */,
 			);

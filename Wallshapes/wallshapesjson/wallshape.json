@@ -1,0 +1,19 @@
+{
+    "name": "wallshape",
+    "size": "small",
+    "backgroundColor": [
+        {
+            "hue": 0.8,
+            "saturation": 1,
+            "brightness": 1,
+            "alpha": 1,
+        },
+        {
+            "hue": 0.6,
+            "saturation": 1,
+            "brightness": 1,
+            "alpha": 1,
+        }
+    ],
+    "shapes": []
+}

@@ -31,18 +31,10 @@ extension CALayer {
         }
     }
     
-    func layerByType() -> CALayer? {
-        switch type(of: self) {
-        case is CAShapeLayer.Type:
-            return self as! CAShapeLayer
-        case is CAGradientLayer.Type:
-            return self as! CAGradientLayer
-        default:
-            return nil
+    func isEqualTo(type layer: CALayer.Type) -> Bool {
+        if Self.self == layer {
+            return true
         }
-    }
-    
-    func typeOfLayer() -> CALayer.Type {
-        return type(of: self)
+        return false
     }
 }

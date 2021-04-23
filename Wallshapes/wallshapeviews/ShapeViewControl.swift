@@ -9,83 +9,94 @@ import UIKit
 
 class ShapeViewControl {
     private var view: UIView
-    private var shape: Shape?
+    private(set) var shape: Shape?
     
+    //Load shape
+    init(_ view: UIView, shape: Shape) {
+        self.view = view
+        initLoadShapeView(shape: shape)
+    }
+    
+    //Add shape
     init(_ view: UIView) {
         self.view = view
         initShapeView()
     }
     
+    private func initLoadShapeView(shape: Shape) {
+        self.shape = shape
+        guard let type = shape.type else { return }
+        self.createPath(by: type)
+        self.createAlpha(shape.alpha)
+        self.createShadow(shape.shadowRadius)
+    }
+    
     private func initShapeView() {
-        let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: view.frame.origin.x + (view.frame.size.width)/2,
-                                        y: view.frame.origin.y + (view.frame.size.height)/2),
-                    radius: view.frame.size.width/2, startAngle: 0, endAngle: .pi*2, clockwise: true)
-        path.close()
-        
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = path.cgPath
-        shapeLayer.fillColor = UIColor.random.cgColor
-        shapeLayer.frame = CGRect(origin: CGPoint(x: -self.view.frame.minX, y: -self.view.frame.minY), size: self.view.frame.size)
-        self.view.layer.addSublayer(shapeLayer)
-        
         self.shape = Shape()
-        self.shape?.size = self.view.frame.size
-        self.shape?.path = path.cgPath
-        self.shape?.shapeLayerColor = shapeLayer.fillColor
-        self.shape?.type = ShapeType.circle
-        self.shape?.shapeLayer = shapeLayer
-        self.shape?.gradientLayerColors = [UIColor.random.cgColor, UIColor.random.cgColor]
+        self.shape?.layerColors?.append(UIColor.random.cgColor)
+        self.shape?.layerColors?.append(UIColor.random.cgColor)
+        self.createPath(by: ShapeType.circle)
     }
     
-    public func createPathCircle() {
+    public func createPath(by type: ShapeType) {
+        self.shape?.type = type
+        switch type {
+            case ShapeType.circle:
+                self.createPathCircle()
+            case ShapeType.rectangle:
+                self.createPathRectangle()
+            case ShapeType.triangle:
+                self.createPathTriangle()
+            case ShapeType.polygon:
+                self.createPathPolygon()
+        }
+    }
+    
+    private func createPathCircle() {
         let path = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: view.frame.origin.x + (view.frame.size.width)/2,
                                         y: view.frame.origin.y + (view.frame.size.height)/2),
                     radius: view.frame.size.width/2, startAngle: 0, endAngle: .pi*2, clockwise: true)
         path.close()
-        changeShapeLayer(path, type: ShapeType.circle)
+        changeShapeLayer(path)
     }
     
-    public func createPathRectangle() {
+    private func createPathRectangle() {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: view.frame.origin.x, y: view.frame.origin.y))
         path.addLine(to: CGPoint(x: view.frame.origin.x, y: view.frame.origin.y + view.frame.size.height))
         path.addLine(to: CGPoint(x: view.frame.origin.x + view.frame.size.width, y: view.frame.origin.y + view.frame.size.height))
         path.addLine(to: CGPoint(x: view.frame.origin.x + view.frame.size.width, y: view.frame.origin.y))
         path.close()
-        changeShapeLayer(path, type: ShapeType.rectangle)
+        changeShapeLayer(path)
     }
     
-    public func createPathTriangle() {
+    private func createPathTriangle() {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: view.frame.width/2 + view.frame.origin.x, y: view.frame.origin.y))
         path.addLine(to: CGPoint(x: view.frame.origin.x, y: view.frame.size.height + view.frame.origin.y))
         path.addLine(to: CGPoint(x: view.frame.size.width + view.frame.origin.x, y: view.frame.size.height + view.frame.origin.y))
         path.close()
-        changeShapeLayer(path, type: ShapeType.triangle)
+        changeShapeLayer(path)
     }
     
-    private func changeShapeLayer(_ path: UIBezierPath, type: ShapeType) {
-        guard let currLayer = self.view.firstSublayer else {return}
-        guard let shape = self.shape, let color = shape.shapeLayerColor else {return}
-        guard let shapeLayer = createShapeLayers(path, type: type, color: color) else {return}
-        
-        if currLayer.typeOfLayer().isEqual(CAShapeLayer.self) {
+    private func changeShapeLayer(_ path: UIBezierPath) {
+        guard let shape = self.shape, let color = shape.layerColors?.first else {return}
+        guard let shapeLayer = createShapeLayers(path, color: color) else {return}
+        if shape.layerType.isEqual(CAShapeLayer.self) {
             replaceShapeLayer(shapeLayer)
         }
-        
-        if currLayer.typeOfLayer().isEqual(CAGradientLayer.self) {
+        if shape.layerType.isEqual(CAGradientLayer.self) {
             replaceGradientLayer(shapeLayer)
         }
     }
     
     private func replaceShapeLayer(_ shapeLayer: CAShapeLayer) {
-        replaceLayer(shapeLayer)
+        self.replaceLayer(shapeLayer)
     }
     
     private func replaceGradientLayer(_ shapeLayer: CAShapeLayer) {
-        guard let shape = self.shape, let colors = shape.gradientLayerColors else {return}
+        guard let shape = self.shape, let colors = shape.layerColors else {return}
         let gradient = CAGradientLayer()
         gradient.bounds = self.view.bounds
         gradient.position = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
@@ -93,18 +104,18 @@ class ShapeViewControl {
         gradient.mask = shapeLayer
         self.replaceLayer(gradient)
         shape.gradientLayer = gradient
-        shape.gradientLayerColors = colors
+        shape.layerColors = colors
+        shape.layerType = CAGradientLayer.self
     }
     
-    private func createShapeLayers(_ path: UIBezierPath, type: ShapeType, color: CGColor) -> CAShapeLayer? {
+    private func createShapeLayers(_ path: UIBezierPath, color: CGColor) -> CAShapeLayer? {
         guard let shape = self.shape else {return nil}
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = CGRect(origin: CGPoint(x: -self.view.frame.minX, y: -self.view.frame.minY), size: self.view.frame.size)
         shapeLayer.path = path.cgPath
         shapeLayer.fillColor = color
         shapeLayer.mask = nil
-        shape.type = type
-        shape.shapeLayerColor = color
+        shape.layerColors?[0] = color
         shape.shapeLayer = shapeLayer
         shape.gradientLayer = nil
         return shapeLayer
@@ -121,7 +132,8 @@ class ShapeViewControl {
         shapeLayer.fillColor = color
         self.replaceLayer(shapeLayer)
         shape.shapeLayer = shapeLayer
-        shape.shapeLayerColor = color
+        shape.layerColors?[0] = color
+        shape.layerType = CAShapeLayer.self
     }
     
     public func createGradientColors() {
@@ -132,7 +144,8 @@ class ShapeViewControl {
             gradient.mask = shapeLayer
             self.replaceLayer(gradient)
             shape.gradientLayer = gradient
-            shape.gradientLayerColors = colors
+            shape.layerColors = colors
+            shape.layerType = CAGradientLayer.self
             return
         }
         replaceGradientLayer(shapeLayer)
@@ -156,15 +169,15 @@ class ShapeViewControl {
     public func createPolygon(_ value: CGFloat) {
         let vUInt = UInt32(value * 10)
         let path = regularPolygonInRect(vUInt)
-        changeShapeLayer(path, type: ShapeType.polygon)
+        changeShapeLayer(path)
         self.shape?.polygon = value
     }
     
-    public func createPathPolygon() {
+    private func createPathPolygon() {
         guard let shape = self.shape else {return}
         let vUInt = UInt32(shape.polygon * 10)
         let path = regularPolygonInRect(vUInt)
-        changeShapeLayer(path, type: ShapeType.polygon)
+        changeShapeLayer(path)
     }
     
     private func pointFrom(_ angle: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
@@ -188,28 +201,16 @@ class ShapeViewControl {
         return path
     }
     
-    public func alpha() -> CGFloat {
-        guard let shape = self.shape else {return 1}
-        return shape.alpha
-    }
-    
-    public func shadow() -> CGFloat {
-        guard let shape = self.shape else {return 0}
-        return shape.shadowRadius
-    }
-    
-    public func polygon() -> CGFloat {
-        guard let shape = self.shape else {return 0}
-        return shape.polygon
-    }
-    
-    public func shapeSize() -> CGSize {
-        guard let shape = self.shape else {return CGSize.zero}
-        return shape.size
-    }
-    
-    public func shapeSize(size: CGSize) {
-        guard let shape = self.shape else {return}
-        shape.size = size
+    public func changeSliderValue(_ slider: SliderMenu) {
+        switch slider.type {
+            case .shadow:
+                slider.setValue(Float(shape?.shadowRadius ?? 0), animated: true)
+            case .alpha:
+                slider.setValue(Float(shape?.alpha ?? 1), animated: true)
+            case .polygon:
+                slider.setValue(Float(shape?.polygon ?? 0), animated: true)
+            default:
+                break
+        }
     }
 }

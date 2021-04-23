@@ -21,6 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FileControl.copyToDocuments(fileName: "wallshape", ext: "json")
+        return true
+    }
 }
 
 // MARK: UISceneSession Lifecycle

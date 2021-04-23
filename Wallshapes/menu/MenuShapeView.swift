@@ -53,6 +53,15 @@ class MenuShapeView: UIView {
         initStackView()
     }
     
+    public func initMenu() {
+        translatesAutoresizingMaskIntoConstraints = false
+        isHidden = true
+
+        guard let window = UIApplication.window else {return}
+        window.addSubview(self)
+        menuSizeConstraints()
+    }
+    
     private func initLayout() {
         backgroundColor = .init(white: 0.9, alpha: 0.4)
         clipsToBounds = true
@@ -190,6 +199,17 @@ class MenuShapeView: UIView {
         sliderView.bottomAnchor.constraint(equalTo: window.bottomAnchor, constant: -32).isActive = true
         sliderView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.05).isActive = true
         sliderView.widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.6).isActive = true
+    }
+    
+    private func menuSizeConstraints() {
+        guard let window = UIApplication.window else { return }
+        let height = (window.frame.width > window.frame.height) ? window.widthAnchor : window.heightAnchor
+        let width = (window.frame.width > window.frame.height) ? window.heightAnchor : window.widthAnchor
+        
+        trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
+        centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
+        heightAnchor.constraint(equalTo: height, multiplier: 0.5).isActive = true
+        widthAnchor.constraint(equalTo: width, multiplier: 0.1).isActive = true
     }
 }
 

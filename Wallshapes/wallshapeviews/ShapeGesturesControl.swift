@@ -7,22 +7,19 @@
 
 import UIKit
 
-protocol ShapeGesturesControlDelegate {
-    func didOnTap()
-    func didOnPan()
-    func didOnPinch()
-}
-
 class ShapeGesturesControl {
-    internal var delegate: ShapeGesturesControlDelegate?
-    
     private weak var view: WallshapeView? //TODO: change to UIView and change the onTap function
     private var viewGesture: ShapeView?
     private var shapeLayerPath: CGPath?
     private var scale: CGFloat = 0
+    private var size: CGSize = CGSize.zero
+    
+    private var horizontalIndicatorView: MiddleIndicatorView!
+    private var verticalIndicatorView: MiddleIndicatorView!
     
     init<T: WallshapeView>(_ view: T) {
         self.view = view
+        initMiddleIndicators()
         initGestures()
     }
 }
@@ -46,22 +43,18 @@ extension ShapeGesturesControl {
     
     @objc private func didOnPan(_ recognizer: UIPanGestureRecognizer) {
         didPan(recognizer)
-        delegate?.didOnPan()
     }
     
     @objc private func didOnSingleTap(_ recognizer: UITapGestureRecognizer) {
         didSingleTap(recognizer)
-        delegate?.didOnTap()
     }
     
     @objc private func didOnDoubleTap(_ recognizer: UITapGestureRecognizer) {
         didDoubleTap(recognizer)
-        delegate?.didOnTap()
     }
     
     @objc private func didOnPinch(_ recognizer: UIPinchGestureRecognizer) {
         didPinch(recognizer)
-        delegate?.didOnPinch()
     }
 }
 
@@ -71,16 +64,19 @@ extension ShapeGesturesControl {
             case .began:
                 let location = recognizer.location(in: self.view)
                 self.findSubview(location)
+                guard let viewGesture = self.viewGesture else {return}
+                self.size = viewGesture.frame.size
 //                self.viewGesture?.showMenuShape() //TODO hide menu
             case .changed:
                 guard let viewGesture = self.viewGesture else {return}
                 self.scale = recognizer.scale
-                viewGesture.bounds = viewGesture.bounds.applying(viewGesture.transform.scaledBy(x: self.scale, y: self.scale))
+                viewGesture.bounds = viewGesture.bounds
+                                        .applying(viewGesture.transform.scaledBy(x: self.scale, y: self.scale))
                 self.updateShapeLayerFrameScale()
                 recognizer.scale = 1
             case .ended, .cancelled:
                 guard let viewGesture = self.viewGesture else {return}
-                viewGesture.shapeViewControl?.shapeSize(size: viewGesture.frame.size)
+                self.size = viewGesture.frame.size
                 self.clearSubview()
                 self.scale = 0
             default:
@@ -92,29 +88,29 @@ extension ShapeGesturesControl {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
         guard let currLayer = viewGesture.firstSublayer else {return}
         let newFrame = view.convert(view.bounds, from: viewGesture)
-        if type(of: currLayer).isEqual(CAShapeLayer.self) {
+        if currLayer.isEqualTo(type: CAShapeLayer.self) {
             setupShapeLayerScale(newFrame, currLayer: currLayer as! CAShapeLayer)
         }
-        if type(of: currLayer).isEqual(CAGradientLayer.self) {
+        if currLayer.isEqualTo(type: CAGradientLayer.self) {
             setupGradientLayerScale(newFrame, currLayer: currLayer as! CAGradientLayer)
         }
     }
     
     private func setupShapeLayerScale(_ newFrame: CGRect, currLayer: CAShapeLayer) {
-        guard let viewGesture = self.viewGesture, let shapeViewControl = viewGesture.shapeViewControl else {return}
+        guard let viewGesture = self.viewGesture else {return}
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        currLayer.path = self.shapeLayerPath?.scale(shapeViewControl.shapeSize(), toSize: viewGesture.frame.size)
+        currLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
         currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
         CATransaction.commit()
     }
     
     private func setupGradientLayerScale(_ newFrame: CGRect, currLayer: CAGradientLayer) {
-        guard let viewGesture = self.viewGesture, let shapeViewControl = viewGesture.shapeViewControl else {return}
+        guard let viewGesture = self.viewGesture else {return}
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         let shapeLayer = currLayer.mask as! CAShapeLayer
-        shapeLayer.path = self.shapeLayerPath?.scale(shapeViewControl.shapeSize(), toSize: viewGesture.frame.size)
+        shapeLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
         shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
         currLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: viewGesture.frame.size)
         currLayer.mask = shapeLayer
@@ -155,7 +151,7 @@ extension ShapeGesturesControl {
                 self.findSubview(location)
                 self.viewGesture?.showMenuShape()
             case .changed:
-                self.showMiddleView()
+                self.showMiddleIndicators()
                 guard let viewGesture = self.viewGesture else {return}
                 var translation = recognizer.translation(in: viewGesture)
                 translation = translation.applying(viewGesture.transform)
@@ -166,7 +162,7 @@ extension ShapeGesturesControl {
             case .ended, .cancelled:
                 self.updateShapeLayerFrameTranslate()
                 self.clearSubview()
-                self.clearMiddleView()
+                self.clearMiddleIndicators()
             default:
                 break
         }
@@ -176,10 +172,10 @@ extension ShapeGesturesControl {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
         guard let currLayer = viewGesture.firstSublayer else {return}
         let newFrame = view.convert(view.bounds, from: viewGesture)
-        if type(of: currLayer).isEqual(CAShapeLayer.self) {
+        if currLayer.isEqualTo(type: CAShapeLayer.self) {
             setupShapeLayer(newFrame, currLayer: currLayer as! CAShapeLayer)
         }
-        if type(of: currLayer).isEqual(CAGradientLayer.self) {
+        if currLayer.isEqualTo(type: CAGradientLayer.self) {
             setupGradientLayer(newFrame, currLayer: currLayer as! CAGradientLayer)
         }
     }
@@ -216,25 +212,43 @@ extension ShapeGesturesControl {
         }
     }
     
-    private func showMiddleView() {
+    private func clearSubview() {
+        self.viewGesture = nil
+        self.shapeLayerPath = nil
+    }
+}
+
+//MARK: - Middle Indicators
+
+extension ShapeGesturesControl {
+    private func initMiddleIndicators() {
+        guard let window = UIApplication.window else { return }
+        self.verticalIndicatorView = MiddleIndicatorView(
+            frame: CGRect(x: window.frame.midX, y: window.frame.minY, width: 10, height: window.frame.height),
+            type: MiddleIndicatorViewType.vertical)
+        
+        self.horizontalIndicatorView = MiddleIndicatorView(
+            frame: CGRect(x: window.frame.minX, y: window.frame.midY, width: window.frame.width, height: 10),
+            type: MiddleIndicatorViewType.horizontal)
+        
+        window.addSubview(verticalIndicatorView)
+        window.addSubview(horizontalIndicatorView)
+    }
+    
+    private func showMiddleIndicators() {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
         let vert = (viewGesture.center.x > view.frame.midX-1 && viewGesture.center.x < view.frame.midX+1) &&
             (viewGesture.center.y > 0 && viewGesture.center.y < view.frame.maxY)
         let hor = (viewGesture.center.y > view.frame.midY-1 && viewGesture.center.y < view.frame.midY+1) &&
             (viewGesture.center.x > 0 && viewGesture.center.x < view.frame.maxX)
-        view.verticalIndicatorView?.toggle(vert)
-        view.horizontalIndicatorView?.toggle(hor)
+        self.verticalIndicatorView?.toggle(vert)
+        self.horizontalIndicatorView?.toggle(hor)
     }
     
-    private func clearMiddleView() {
+    private func clearMiddleIndicators() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.view?.verticalIndicatorView?.toggle(false)
-            self.view?.horizontalIndicatorView?.toggle(false)
+            self.verticalIndicatorView?.toggle(false)
+            self.horizontalIndicatorView?.toggle(false)
         }
-    }
-    
-    private func clearSubview() {
-        self.viewGesture = nil
-        self.shapeLayerPath = nil
     }
 }
