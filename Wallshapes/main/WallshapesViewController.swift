@@ -51,7 +51,11 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     }
 
     func saveItemHandle() {
-        wallshapeView?.saveFile()
+        saveFileHandle()
         SaveImage().save("Saving...", view: self.wallshapeView)
+    }
+    
+    func saveFileHandle() {
+        wallshapeView?.saveFile()
     }
 }

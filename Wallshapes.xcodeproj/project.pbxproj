@@ -11,6 +11,7 @@
 		4C50EEF7261F50920096D630 /* WallshapesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C50EEF6261F50920096D630 /* WallshapesViewController.swift */; };
 		4C51FFA1260413320064CE04 /* ShapeViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51FFA0260413320064CE04 /* ShapeViewControl.swift */; };
 		4C51FFA92605214F0064CE04 /* MiddleIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */; };
+		4C570DBA262F369300FF2AF8 /* WallshapeViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C570DB9262F369300FF2AF8 /* WallshapeViewControl.swift */; };
 		4C5E8AA72627A62A00247C9F /* SaveImageHandlerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AA62627A62A00247C9F /* SaveImageHandlerError.swift */; };
 		4C5E8AAF2629AFEE00247C9F /* JsonControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AAE2629AFEE00247C9F /* JsonControl.swift */; };
 		4C5E8AB32629B02400247C9F /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AB22629B02400247C9F /* Codable+Extension.swift */; };
@@ -49,6 +50,7 @@
 		4C50EEF6261F50920096D630 /* WallshapesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallshapesViewController.swift; sourceTree = "<group>"; };
 		4C51FFA0260413320064CE04 /* ShapeViewControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeViewControl.swift; sourceTree = "<group>"; };
 		4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddleIndicatorView.swift; sourceTree = "<group>"; };
+		4C570DB9262F369300FF2AF8 /* WallshapeViewControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeViewControl.swift; sourceTree = "<group>"; };
 		4C5E8AA62627A62A00247C9F /* SaveImageHandlerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImageHandlerError.swift; sourceTree = "<group>"; };
 		4C5E8AAD2629AF3D00247C9F /* wallshape.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = wallshape.json; sourceTree = "<group>"; };
 		4C5E8AAE2629AFEE00247C9F /* JsonControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonControl.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */,
+				4C570DB9262F369300FF2AF8 /* WallshapeViewControl.swift */,
 				4CB5EF8425ED9F9F00193A19 /* ShapeGesturesControl.swift */,
 				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
 				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
@@ -297,6 +300,7 @@
 				4CB5EF6325ED8A2900193A19 /* UIImage+Extension.swift in Sources */,
 				4CF48BD82621F380009822DA /* SaveImageControl.swift in Sources */,
 				4CB5EF6B25ED8A8300193A19 /* WallshapeModel.swift in Sources */,
+				4C570DBA262F369300FF2AF8 /* WallshapeViewControl.swift in Sources */,
 				4CB5EF6825ED8A7200193A19 /* WallshapeView.swift in Sources */,
 				4C5E8AAF2629AFEE00247C9F /* JsonControl.swift in Sources */,
 				4CB5EF9F25F670E900193A19 /* UIApplication+Extension.swift in Sources */,

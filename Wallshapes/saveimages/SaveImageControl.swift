@@ -14,7 +14,7 @@ class SaveImage: NSObject {
         AuthorizationAssests().authorization() { authorized in
             if authorized {
                 DispatchQueue.main.async {
-                    let frame = view.contentView.frame
+                    let frame = view.contentViewFrame()
                     self.willSaveImage(title, view: view, rect: frame)
                 }
             } else {
