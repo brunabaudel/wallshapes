@@ -52,9 +52,10 @@ extension UIImage {
     }
     
     func toPNG() -> UIImage? {
-        guard let imageData = pngData() else {return nil}
-        guard let imagePng = UIImage(data: imageData) else {return nil}
-        return imagePng
+        if let imageData = self.pngData() {
+            return UIImage(data: imageData)
+        }
+        return nil
     }
     
     func crop(_ cropRect: CGRect, sizeView: CGSize) -> UIImage? {

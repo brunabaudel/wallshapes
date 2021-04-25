@@ -65,7 +65,7 @@ class MiddleIndicatorView: UIView {
         shapeLayer.bounds = frame
         shapeLayer.strokeColor = UIColor.yellow.cgColor
         shapeLayer.lineDashPattern = [2,5]
-        shapeLayer.lineWidth = 3
+        shapeLayer.lineWidth = 2
         shapeLayer.path = path.cgPath
         self.layer.addSublayer(shapeLayer)
     }

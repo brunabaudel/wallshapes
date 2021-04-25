@@ -246,7 +246,7 @@ extension ShapeGesturesControl {
     }
     
     private func clearMiddleIndicators() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.verticalIndicatorView?.toggle(false)
             self.horizontalIndicatorView?.toggle(false)
         }

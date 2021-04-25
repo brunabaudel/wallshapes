@@ -8,7 +8,7 @@
 import UIKit
 
 class WallshapesViewController: UIViewController {
-    private var wallshapeView: WallshapeView!
+    private var wallshapeView: WallshapeView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +52,8 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
 
     func saveItemHandle() {
         saveFileHandle()
-        SaveImage().save("Saving...", view: self.wallshapeView)
+        guard let wallshapeView = self.wallshapeView else { return }
+        SaveImage().save("Saving...", view: wallshapeView)
     }
     
     func saveFileHandle() {

@@ -11,7 +11,7 @@ final class WallshapeViewControl {
     private var modelControl: ModelControl?
     private weak var view: WallshapeView?
     
-    private var contentView: UIView!
+    private var contentView: UIView?
     private var menuShapeView: MenuShapeView?
     
     init(_ view: WallshapeView) {
@@ -38,6 +38,7 @@ final class WallshapeViewControl {
     public func initContentView(with colors: [CGColor], size: WallshapeSize) {
         guard let view = self.view else { return }
         contentView = UIView(frame: view.frame)
+        guard let contentView = self.contentView else { return }
         if colors.count == 1 {
             contentView.backgroundColor = UIColor(cgColor: colors.first!)
         } else {
@@ -66,7 +67,7 @@ final class WallshapeViewControl {
     
     public func chooseColors(_ count: Int) {
         let colors = self.randomColors(2)
-        guard let gradientLayer = (contentView.layer.sublayers?.first) as? CAGradientLayer else {
+        guard let gradientLayer = (contentView?.layer.sublayers?.first) as? CAGradientLayer else {
             addGradientLayer(with: colors)
             return
         }
@@ -75,19 +76,19 @@ final class WallshapeViewControl {
     
     public func chooseColor() {
         let color = UIColor.random
-        contentView.layer.sublayers?.removeAll()
-        contentView.backgroundColor = color
+        contentView?.layer.sublayers?.removeAll()
+        contentView?.backgroundColor = color
     }
     
     private func addGradientLayer(with colors: [CGColor]) {
         let gradientLayer = initGradientLayer(colors)
-        contentView.layer.sublayers?.removeAll()
-        contentView.layer.insertSublayer(gradientLayer, at: 0)
+        contentView?.layer.sublayers?.removeAll()
+        contentView?.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     private func initGradientLayer(_ colors: [CGColor]) -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = contentView.bounds
+        gradientLayer.frame = contentView?.bounds ?? CGRect.zero
         gradientLayer.colors = colors
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
@@ -110,15 +111,15 @@ final class WallshapeViewControl {
     public func resizeContentView() {
         guard let view = self.view else { return }
         var newSize: CGRect = view.frame
-        if contentView.frame.height != contentView.frame.width {
+        if contentView?.frame.height != contentView?.frame.width {
             newSize = CGRect(origin: CGPoint.zero, size: self.squaredSize())
         }
-        contentView.frame.origin = CGPoint.zero
-        contentView.frame.size = newSize.size
-        contentView.center = view.center
+        contentView?.frame.origin = CGPoint.zero
+        contentView?.frame.size = newSize.size
+        contentView?.center = view.center
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        contentView.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        contentView?.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         CATransaction.commit()
     }
     
@@ -145,7 +146,7 @@ final class WallshapeViewControl {
     }
     
     public func contentViewFrame() -> CGRect {
-        return self.contentView.frame
+        return self.contentView?.frame ?? CGRect.zero
     }
     
     //MARK: - Save file
@@ -159,7 +160,7 @@ final class WallshapeViewControl {
     
     private func contentViewSize() -> WallshapeSize {
         guard let view = self.view else { return .normal }
-        if contentView.frame.height < view.frame.height {
+        if contentView?.frame.height ?? 0 < view.frame.height {
             return .small
         }
         return .normal
@@ -171,14 +172,14 @@ final class WallshapeViewControl {
     }
     
     private func backgroundCGColors() -> [CGColor] {
-        if let sublayer = contentView.firstSublayer {
+        if let sublayer = contentView?.firstSublayer {
             if let colors = (sublayer as? CAGradientLayer)?.colors,
                let cgColors = colors as? [CGColor],
                sublayer.isEqualTo(type: CAGradientLayer.self) {
                 return cgColors
             }
         } else {
-            if let cgColors = contentView.backgroundColor?.cgColor {
+            if let cgColors = contentView?.backgroundColor?.cgColor {
                 return [cgColors]
             }
         }

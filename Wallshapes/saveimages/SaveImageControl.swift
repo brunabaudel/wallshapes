@@ -8,28 +8,30 @@
 import UIKit
 
 class SaveImage: NSObject {
-    private var renderIndicatorView: RenderIndicatorView!
+    private var renderIndicatorView: RenderIndicatorView?
     
     func save(_ title: String, view: WallshapeView) {
-        AuthorizationAssests().authorization() { authorized in
-            if authorized {
-                DispatchQueue.main.async {
-                    let frame = view.contentViewFrame()
-                    self.willSaveImage(title, view: view, rect: frame)
+        if #available(iOS 14.0, *) {
+            AuthorizationAssests().authorization() { authorized in
+                if authorized {
+                    DispatchQueue.main.async {
+                        let frame = view.contentViewFrame()
+                        self.willSaveImage(title, view: view, rect: frame)
+                    }
+                    return
                 }
-            } else {
-                AuthorizationAssests().openAppSettings(
-                    "Permission required",
-                    message: "You have to give permission to ssave on Photo Library.",
-                    titleOK: "Go to settings")
+                self.showAppSettingsDialog()
             }
+        } else {
+            let frame = view.contentViewFrame()
+            self.willSaveImage(title, view: view, rect: frame)
         }
     }
     
     private func willSaveImage(_ title: String, view: UIView, rect: CGRect) {
         self.showIndicator(with: title)
         guard let image = self.willPrepareImage(view, rect: rect) else {
-            self.renderIndicatorView.finishAnimation(SaveImageHandlerError.failed.message)
+            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message)
             return
         }
         self.writeToPhotoAlbum(image)
@@ -40,11 +42,13 @@ class SaveImage: NSObject {
    }
 
     @objc private func writeToPhotoAlbumHandler(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if error != nil {
-            self.renderIndicatorView.finishAnimation(SaveImageHandlerError.failed.message)
+        if let error = error {
+            NSLog(error.localizedDescription)
+            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message)
+            self.showAppSettingsDialog()
             return
         }
-        self.renderIndicatorView.finishAnimation(SaveImageHandlerError.success.message)
+        self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.success.message)
     }
     
     private func willPrepareImage(_ view: UIView, rect: CGRect) -> UIImage? {
@@ -59,5 +63,13 @@ class SaveImage: NSObject {
             guard let window = UIApplication.window else { return }
             self.renderIndicatorView = RenderIndicatorView(frame: window.frame, message: message)
         }
+    }
+    
+    private func showAppSettingsDialog() {
+        AuthorizationAssests().openAppSettings(
+            "Allow Access to Your Photos",
+            message: "This lets you save your Wallshapes arts into Photos.",
+            titleOK: "Open Settings"
+        )
     }
 }
