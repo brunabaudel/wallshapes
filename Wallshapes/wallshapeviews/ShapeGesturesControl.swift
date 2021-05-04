@@ -199,12 +199,10 @@ extension ShapeGesturesControl {
     }
     
     private func findSubview(_ location: CGPoint) {
-        guard let view = self.view else {return}
+        guard let view = self.view else { return }
         for subview in view.subviews.reversed() {
-            guard let currLayer = subview.firstSublayer else {return}
-            let subviewLoc = subview.frame.contains(location)
-            let layerLoc = currLayer.contains(location)
-            if subviewLoc && layerLoc {
+            guard let currLayer = subview.firstSublayer else { return }
+            if currLayer.contains(location) {
                 self.viewGesture = subview as? ShapeView
                 self.shapeLayerPath = currLayer.layerMutableCopy
                 break
