@@ -133,6 +133,7 @@ class ShapeViewControl {
         self.replaceLayer(shapeLayer)
         shape.shapeLayer = shapeLayer
         shape.layerColors?[0] = color
+        shape.gradientLayer = nil
         shape.layerType = CAShapeLayer.self
     }
     
