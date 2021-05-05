@@ -131,7 +131,7 @@ final class WallshapeViewControl {
     
     public func addShape() {
         guard let view = self.view, let menuShapeView = self.menuShapeView else { return }
-        menuShapeView.hideSlider()
+        menuShapeView.showMenu()
         let size = view.bounds.width > view.bounds.height ? view.bounds.midY/2 : view.bounds.midX/2
         let frame = CGRect(x: size*1.75, y: size, width: size, height: size)
         let shapeView = ShapeView(frame: frame, menu: menuShapeView)
