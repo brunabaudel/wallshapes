@@ -75,10 +75,7 @@ extension ShapeGesturesControl {
                 self.updateShapeLayerFrameScale()
                 recognizer.scale = 1
             case .ended, .cancelled:
-                guard let viewGesture = self.viewGesture else {return}
-                self.size = viewGesture.frame.size
                 self.clearSubview()
-                self.scale = 0
             default:
                 break
         }
@@ -213,6 +210,8 @@ extension ShapeGesturesControl {
     private func clearSubview() {
         self.viewGesture = nil
         self.shapeLayerPath = nil
+        self.scale = 0
+        self.size = CGSize.zero
     }
 }
 
