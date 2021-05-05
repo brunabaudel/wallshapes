@@ -61,10 +61,10 @@ extension WallshapeModelHandler {
                 shapeType: s.type?.rawValue ?? "",
                 layerType: calayerToString(layerType: s.layerType),
                 z: s.zPosition,
-                x: Float(s.origin.x),
-                y: Float(s.origin.y),
-                height: Float(s.size.width),
-                width: Float(s.size.height),
+                x: Float(s.frame.origin.x),
+                y: Float(s.frame.origin.y),
+                height: Float(s.frame.size.width),
+                width: Float(s.frame.size.height),
                 layerColors: cgcolorToColordata(s.layerColors),
                 alpha: Float(s.alpha),
                 shadowRadius: Float(s.shadowRadius),
@@ -107,8 +107,7 @@ extension WallshapeModelHandler {
             let shape = Shape()
             shape.zPosition = s.z
             shape.type = ShapeType(rawValue: s.shapeType)
-            shape.origin = CGPoint(x: CGFloat(s.x), y: CGFloat(s.y))
-            shape.size = CGSize(width: CGFloat(s.width), height: CGFloat(s.height))
+            shape.frame = CGRect(x: CGFloat(s.x), y: CGFloat(s.y), width: CGFloat(s.width), height: CGFloat(s.height))
             shape.layerColors = colordataToCGColor(s.layerColors)
             shape.alpha = CGFloat(s.alpha ?? 1)
             shape.shadowRadius = CGFloat(s.shadowRadius ?? 0)

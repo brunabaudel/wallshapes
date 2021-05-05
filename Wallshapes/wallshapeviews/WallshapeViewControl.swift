@@ -28,7 +28,7 @@ final class WallshapeViewControl {
         guard let view = self.view, let menuShapeView = self.menuShapeView else { return }
         menuShapeView.hideSlider()
         for shape in shapes {
-            let frame = CGRect(origin: shape.origin, size: shape.size)
+            let frame = shape.frame
             let shapeView = ShapeView(frame: frame, menu: menuShapeView, shape: shape)
             shapeView.delegate = self
             view.addSubview(shapeView)

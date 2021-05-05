@@ -35,8 +35,7 @@ class Wallshape {
 class Shape {
     var zPosition: Int = 0 //TODO: use this property in future!
     var type: ShapeType?
-    var size: CGSize = CGSize.zero
-    var origin: CGPoint = CGPoint.zero
+    var frame: CGRect = CGRect.zero
     var layerColors: [CGColor]? = []
     var layerType: CALayer.Type = CAShapeLayer.self
     var shapeLayer: CAShapeLayer?
