@@ -148,14 +148,14 @@ class MenuShapeView: UIView {
         btnShadow = UIButton()
         guard let btnShadow = self.btnShadow else {return}
         btnShadow.addTarget(self, action: #selector(shadowShape(_:)), for: .touchUpInside)
-        config(btnShadow, name: "square-shadow", for: .selected)
+        config(btnShadow, name: "shadow", for: .selected)
     }
     
     private func initBtnAlpha() {
         btnAlpha = UIButton()
         guard let btnAlpha = self.btnAlpha else {return}
         btnAlpha.addTarget(self, action: #selector(alphaShape(_:)), for: .touchUpInside)
-        config(btnAlpha, name: "opacity", for: .selected)
+        config(btnAlpha, name: "transparency", for: .selected)
     }
     
     private func initBtnPolygon() {
