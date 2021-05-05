@@ -28,7 +28,7 @@ class ShapeViewControl {
         guard let type = shape.type else { return }
         self.createPath(by: type)
         self.createAlpha(shape.alpha)
-        self.createShadow(shape.shadowRadius)
+        if shape.shadowRadius > 0 { self.createShadow(shape.shadowRadius) }
     }
     
     private func initShapeView() {

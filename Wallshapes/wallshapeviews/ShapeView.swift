@@ -9,6 +9,7 @@ import UIKit
 
 protocol ShapeViewDelegate {
     func deleteView(_ shapeView: ShapeView)
+    func cloneView(_ shapeView: ShapeView)
 }
 
 class ShapeView: UIView {
@@ -48,16 +49,20 @@ class ShapeView: UIView {
 }
 
 extension ShapeView: MenuShapeViewDelegate {
-    func willApplyPlainColorShape(_ sender: UIButton) {
-        shapeViewControl?.createPlainColor()
-    }
-    
     func willDeleteShape(_ sender: UIButton) {
         delegate?.deleteView(self)
     }
     
+    func willApplyCloneShape(_ sender: UIButton) {
+        delegate?.cloneView(self)
+    }
+    
     func willChangeShape(_ sender: UIButton, type: ShapeType) {
         shapeViewControl?.createPath(by: type)
+    }
+    
+    func willApplyPlainColorShape(_ sender: UIButton) {
+        shapeViewControl?.createPlainColor()
     }
     
     func willApplyGradientShape(_ sender: UIButton) {

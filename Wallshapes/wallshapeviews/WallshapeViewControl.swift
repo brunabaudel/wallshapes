@@ -192,4 +192,21 @@ extension WallshapeViewControl: ShapeViewDelegate {
         shapeView.removeFromSuperview()
         hideMenuShape()
     }
+    
+    func cloneView(_ shapeView: ShapeView) {
+        guard let view = self.view, let menuShapeView = self.menuShapeView,
+              let shape = shapeView.shapeViewControl?.shape else { return }
+        let frame = shapeView.frame
+        let clonedShape = Shape()
+        clonedShape.alpha = shape.alpha
+        clonedShape.layerColors = shape.layerColors
+        clonedShape.layerType = shape.layerType
+        clonedShape.polygon = shape.polygon
+        clonedShape.shadowRadius = shape.shadowRadius
+        clonedShape.frame = shape.frame
+        clonedShape.type = shape.type
+        let clonedShapeView = ShapeView(frame: frame, menu: menuShapeView, shape: clonedShape)
+        clonedShapeView.delegate = self
+        view.addSubview(clonedShapeView)
+    }
 }

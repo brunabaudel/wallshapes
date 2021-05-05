@@ -8,8 +8,9 @@
 import UIKit
 
 protocol MenuShapeViewDelegate {
-    func willChangeShape(_ sender: UIButton, type: ShapeType)
     func willDeleteShape(_ sender: UIButton)
+    func willApplyCloneShape(_ sender: UIButton)
+    func willChangeShape(_ sender: UIButton, type: ShapeType)
     func willApplyGradientShape(_ sender: UIButton)
     func willApplyPlainColorShape(_ sender: UIButton)
     func willApplyShadowShape(_ slider: SliderMenu)
@@ -33,6 +34,7 @@ class MenuShapeView: UIView {
     private var btnShadow: UIButton?
     private var btnAlpha: UIButton?
     private var btnPolygon: UIButton?
+    private var btnClone: UIButton?
     
     private var sliderView: SliderMenu?
     
@@ -92,6 +94,7 @@ class MenuShapeView: UIView {
     
     private func initAllButton() {
         initBtnDelete()
+        initBtnClone()
         initBtnCircle()
         initBtnRectangle()
         initBtnTriangle()
@@ -107,6 +110,13 @@ class MenuShapeView: UIView {
         guard let btnDelete = self.btnDelete else {return}
         btnDelete.addTarget(self, action: #selector(deleteShape(_:)), for: .touchUpInside)
         config(btnDelete, name: "trash", for: .highlighted, normalColor: .red)
+    }
+    
+    private func initBtnClone() {
+        btnClone = UIButton()
+        guard let btnClone = self.btnClone else {return}
+        btnClone.addTarget(self, action: #selector(cloneShape(_:)), for: .touchUpInside)
+        config(btnClone, name: "copy", for: .highlighted)
     }
     
     private func initBtnCircle() {
@@ -235,6 +245,12 @@ extension MenuShapeView {
         self.hideSlider()
         self.selectButton(sender)
         delegate?.willDeleteShape(sender)
+    }
+    
+    @objc private func cloneShape(_ sender: UIButton) {
+        self.hideSlider()
+        self.selectButton(sender)
+        delegate?.willApplyCloneShape(sender)
     }
     
     @objc private func gradientShape(_ sender: UIButton) {
