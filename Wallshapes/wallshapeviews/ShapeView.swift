@@ -8,7 +8,6 @@
 import UIKit
 
 protocol ShapeViewDelegate {
-    func deleteView(_ shapeView: ShapeView)
     func cloneView(_ shapeView: ShapeView)
 }
 
@@ -49,10 +48,6 @@ class ShapeView: UIView {
 }
 
 extension ShapeView: MenuShapeViewDelegate {
-    func willDeleteShape(_ sender: UIButton) {
-        delegate?.deleteView(self)
-    }
-    
     func willApplyCloneShape(_ sender: UIButton) {
         delegate?.cloneView(self)
     }

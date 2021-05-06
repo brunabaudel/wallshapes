@@ -188,11 +188,6 @@ final class WallshapeViewControl {
 }
 
 extension WallshapeViewControl: ShapeViewDelegate {
-    func deleteView(_ shapeView: ShapeView) {
-        shapeView.removeFromSuperview()
-        hideMenuShape()
-    }
-    
     func cloneView(_ shapeView: ShapeView) {
         guard let view = self.view, let menuShapeView = self.menuShapeView,
               let shape = shapeView.shapeViewControl?.shape else { return }

@@ -38,6 +38,8 @@
 		4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8F25F1570800193A19 /* CALayer+Extension.swift */; };
 		4CB5EF9F25F670E900193A19 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF9E25F670E900193A19 /* UIApplication+Extension.swift */; };
 		4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */; };
+		4CE30AA52642C034002AC429 /* DeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE30AA42642C034002AC429 /* DeleteView.swift */; };
+		4CE30AA726442AD7002AC429 /* DarkBackgroundDeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE30AA626442AD7002AC429 /* DarkBackgroundDeleteView.swift */; };
 		4CF48BD82621F380009822DA /* SaveImageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BD72621F380009822DA /* SaveImageControl.swift */; };
 		4CF48BDB26221FE5009822DA /* WallshapesNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BDA26221FE5009822DA /* WallshapesNavigationController.swift */; };
 		4CF48BDF26222504009822DA /* UIAlertController+Extenison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */; };
@@ -78,6 +80,8 @@
 		4CB5EF8F25F1570800193A19 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF9E25F670E900193A19 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderIndicatorView.swift; sourceTree = "<group>"; };
+		4CE30AA42642C034002AC429 /* DeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteView.swift; sourceTree = "<group>"; };
+		4CE30AA626442AD7002AC429 /* DarkBackgroundDeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkBackgroundDeleteView.swift; sourceTree = "<group>"; };
 		4CF48BD72621F380009822DA /* SaveImageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImageControl.swift; sourceTree = "<group>"; };
 		4CF48BDA26221FE5009822DA /* WallshapesNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapesNavigationController.swift; sourceTree = "<group>"; };
 		4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extenison.swift"; sourceTree = "<group>"; };
@@ -204,6 +208,8 @@
 				4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */,
 				4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */,
 				4CB5EF8025ED8C3000193A19 /* StackView.swift */,
+				4CE30AA42642C034002AC429 /* DeleteView.swift */,
+				4CE30AA626442AD7002AC429 /* DarkBackgroundDeleteView.swift */,
 			);
 			path = commonviews;
 			sourceTree = "<group>";
@@ -305,6 +311,7 @@
 				4C5E8AB32629B02400247C9F /* Codable+Extension.swift in Sources */,
 				4C51FFA92605214F0064CE04 /* MiddleIndicatorView.swift in Sources */,
 				4CB5EF4425ED88E800193A19 /* AppDelegate.swift in Sources */,
+				4CE30AA726442AD7002AC429 /* DarkBackgroundDeleteView.swift in Sources */,
 				4C5E8AB62629B05600247C9F /* WallshapeData.swift in Sources */,
 				4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */,
 				4CB5EF8925F1537100193A19 /* CGPath+Extension.swift in Sources */,
@@ -318,6 +325,7 @@
 				4CB5EF4625ED88E800193A19 /* SceneDelegate.swift in Sources */,
 				4C5E8AA72627A62A00247C9F /* SaveImageHandlerError.swift in Sources */,
 				4C5E8AC22629C25200247C9F /* WallshapeModelHandler.swift in Sources */,
+				4CE30AA52642C034002AC429 /* DeleteView.swift in Sources */,
 				4CF48BDF26222504009822DA /* UIAlertController+Extenison.swift in Sources */,
 				4CB5EF7425ED8B4E00193A19 /* UIColor+Extension.swift in Sources */,
 			);

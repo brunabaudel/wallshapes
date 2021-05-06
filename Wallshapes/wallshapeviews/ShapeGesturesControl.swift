@@ -13,13 +13,17 @@ class ShapeGesturesControl {
     private var shapeLayerPath: CGPath?
     private var scale: CGFloat = 0
     private var size: CGSize = CGSize.zero
+    private var isLongPress: Bool = false
     
     private var horizontalIndicatorView: MiddleIndicatorView!
     private var verticalIndicatorView: MiddleIndicatorView!
+    private var deleteView: DeleteView!
+    private var darkBackgroundDeleteView: DarkBackgroundDeleteView?
     
     init<T: WallshapeView>(_ view: T) {
         self.view = view
         initMiddleIndicators()
+        initDeleteView()
         initGestures()
     }
 }
@@ -27,6 +31,7 @@ class ShapeGesturesControl {
 extension ShapeGesturesControl {
     private func initGestures() {
         let panGR = UIPanGestureRecognizer(target: self, action: #selector(didOnPan(_:)))
+        panGR.delegate = self.view
         self.view?.addGestureRecognizer(panGR)
         
         let singleTapGR = UITapGestureRecognizer(target: self, action: #selector(didOnSingleTap(_:)))
@@ -39,6 +44,11 @@ extension ShapeGesturesControl {
         
         let pinchGR = UIPinchGestureRecognizer(target: self, action: #selector(didOnPinch(_:)))
         self.view?.addGestureRecognizer(pinchGR)
+        
+        let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(didOnLongPress(_:)))
+        longPressGR.delegate = self.view
+        longPressGR.minimumPressDuration = 1
+        self.view?.addGestureRecognizer(longPressGR)
     }
     
     @objc private func didOnPan(_ recognizer: UIPanGestureRecognizer) {
@@ -55,6 +65,10 @@ extension ShapeGesturesControl {
     
     @objc private func didOnPinch(_ recognizer: UIPinchGestureRecognizer) {
         didPinch(recognizer)
+    }
+    
+    @objc private func didOnLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        didLongPress(recognizer)
     }
 }
 
@@ -146,9 +160,9 @@ extension ShapeGesturesControl {
             case .began:
                 let location = recognizer.location(in: self.view)
                 self.findSubview(location)
-                self.viewGesture?.showMenuShape()
+//                self.viewGesture?.showMenuShape()
             case .changed:
-                self.showMiddleIndicators()
+                if !self.isLongPress { self.showMiddleIndicators() }
                 guard let viewGesture = self.viewGesture else {return}
                 var translation = recognizer.translation(in: viewGesture)
                 translation = translation.applying(viewGesture.transform)
@@ -158,8 +172,12 @@ extension ShapeGesturesControl {
                 recognizer.setTranslation(CGPoint.zero, in: viewGesture)
             case .ended, .cancelled:
                 self.updateShapeLayerFrameTranslate()
-                self.clearSubview()
                 self.clearMiddleIndicators()
+                if !isLongPress {
+                    guard let viewGesture = self.viewGesture else {return}
+                    viewGesture.showMenuShape()
+                    self.clearSubview()
+                }
             default:
                 break
         }
@@ -215,6 +233,39 @@ extension ShapeGesturesControl {
     }
 }
 
+extension ShapeGesturesControl {
+    private func didLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        switch (recognizer.state) {
+            case .began:
+                self.isLongPress = true
+                let location = recognizer.location(in: self.view)
+                self.findSubview(location)
+                if let _ = self.viewGesture {
+                    self.view?.hideMenuShape()
+                    self.insertDarkDeleteView()
+                    self.deleteView.toggle(true)
+                }
+            case .ended, .cancelled:
+                self.deleteViewGesture()
+                self.isLongPress = false
+            default:
+                break
+        }
+    }
+    
+    private func deleteViewGesture() {
+        guard let viewGesture = self.viewGesture else {return}
+        if viewGesture.frame.intersects(deleteView.frame) {
+            self.viewGesture = nil
+            viewGesture.fadeOut(0.3) { _ in
+                viewGesture.removeFromSuperview()
+            }
+        }
+        self.removeDarkDeleteView()
+        self.deleteView.toggle(false)
+    }
+}
+
 //MARK: - Middle Indicators
 
 extension ShapeGesturesControl {
@@ -246,6 +297,39 @@ extension ShapeGesturesControl {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.verticalIndicatorView?.toggle(false)
             self.horizontalIndicatorView?.toggle(false)
+        }
+    }
+}
+
+//MARK: - Delete
+
+extension ShapeGesturesControl {
+    private func initDeleteView() {
+        guard let window = UIApplication.window else { return }
+        self.deleteView = DeleteView(frame: CGRect(x: window.frame.midX - 25, y: window.frame.maxY - 100,
+                                                   width: 50, height: 50))
+        self.darkBackgroundDeleteView = DarkBackgroundDeleteView(frame: window.frame)
+        window.addSubview(self.deleteView)
+    }
+    
+    private func insertDarkDeleteView() {
+        guard let view = self.view, let viewGesture = self.viewGesture,
+              let darkBackgroundDeleteView = self.darkBackgroundDeleteView,
+              let viewGestureIndex = view.subviews.firstIndex(of: viewGesture) else { return }
+        darkBackgroundDeleteView.index = viewGestureIndex
+        view.bringSubviewToFront(viewGesture)
+        view.insertSubview(darkBackgroundDeleteView, belowSubview: viewGesture)
+        darkBackgroundDeleteView.toggle(true)
+    }
+    
+    private func removeDarkDeleteView() {
+        guard let view = self.view,
+              let darkBackgroundDeleteView = self.darkBackgroundDeleteView else { return }
+        darkBackgroundDeleteView.toggle(false) { _ in
+            if let viewGesture = self.viewGesture {
+                view.insertSubview(viewGesture, at: darkBackgroundDeleteView.index)
+            }
+            darkBackgroundDeleteView.removeFromSuperview()
         }
     }
 }

@@ -54,3 +54,11 @@ final class WallshapeView: UIView {
         wallshapeViewControl?.hideMenuShape()
     }
 }
+
+extension WallshapeView: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
+            -> Bool {
+        return true
+    }
+}
