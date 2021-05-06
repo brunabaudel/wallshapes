@@ -10,6 +10,10 @@ import UIKit
 class WallshapesViewController: UIViewController {
     private var wallshapeView: WallshapeView?
     
+    override var prefersStatusBarHidden: Bool {
+      return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         (self.navigationController as! WallshapesNavigationController).wallshapesDelegate = self
