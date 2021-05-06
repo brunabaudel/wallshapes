@@ -307,7 +307,7 @@ extension ShapeGesturesControl {
     private func initDeleteView() {
         guard let window = UIApplication.window else { return }
         self.deleteView = DeleteView(frame: CGRect(x: window.frame.midX - 25, y: window.frame.maxY - 100,
-                                                   width: 50, height: 50))
+                                                   width: 45, height: 45))
         self.darkBackgroundDeleteView = DarkBackgroundDeleteView(frame: window.frame)
         window.addSubview(self.deleteView)
     }
