@@ -234,25 +234,22 @@ extension ShapeGesturesControl {
 
 extension ShapeGesturesControl {
     private func didLongPress(_ recognizer: UILongPressGestureRecognizer) {
-        switch (recognizer.state) {
-            case .began:
-                self.isLongPress = true
-                let location = recognizer.location(in: self.view)
-                self.findSubview(location)
-                self.setupLongPress()
-            case .changed:
-                NSLog("changed")
-            case .ended, .cancelled, .failed, .possible:
-                guard let _ = self.viewGesture else {
-                    self.resetLongPress()
-                    return
-                }
-                self.deleteViewGesture()
+        if recognizer.state == .began {
+            self.isLongPress = true
+            let location = recognizer.location(in: self.view)
+            self.findSubview(location)
+            self.setupLongPress()
+        }
+        
+        if recognizer.state == .ended || recognizer.state == .cancelled ||
+            recognizer.state == .failed || recognizer.state == .possible {
+            guard let _ = self.viewGesture else {
                 self.resetLongPress()
-                self.isLongPress = false
-            @unknown default:
-                self.resetLongPress()
-                self.isLongPress = false
+                return
+            }
+            self.deleteViewGesture()
+            self.resetLongPress()
+            self.isLongPress = false
         }
     }
     
