@@ -80,7 +80,6 @@ extension ShapeGesturesControl {
                 self.findSubview(location)
                 guard let viewGesture = self.viewGesture else {return}
                 self.size = viewGesture.frame.size
-//                self.viewGesture?.showMenuShape() //TODO hide menu
             case .changed:
                 guard let viewGesture = self.viewGesture else {return}
                 self.scale = recognizer.scale
@@ -160,10 +159,10 @@ extension ShapeGesturesControl {
             case .began:
                 let location = recognizer.location(in: self.view)
                 self.findSubview(location)
-//                self.viewGesture?.showMenuShape()
             case .changed:
                 if !self.isLongPress { self.showMiddleIndicators() }
                 guard let viewGesture = self.viewGesture else {return}
+                if self.isLongPress { self.hoverDeleteView() }
                 var translation = recognizer.translation(in: viewGesture)
                 translation = translation.applying(viewGesture.transform)
                 viewGesture.center.x += translation.x
@@ -240,17 +239,35 @@ extension ShapeGesturesControl {
                 self.isLongPress = true
                 let location = recognizer.location(in: self.view)
                 self.findSubview(location)
-                if let _ = self.viewGesture {
-                    self.view?.hideMenuShape()
-                    self.insertDarkDeleteView()
-                    self.deleteView.toggle(true)
+                self.setupLongPress()
+            case .changed:
+                NSLog("changed")
+            case .ended, .cancelled, .failed, .possible:
+                guard let _ = self.viewGesture else {
+                    self.resetLongPress()
+                    return
                 }
-            case .ended, .cancelled:
                 self.deleteViewGesture()
+                self.resetLongPress()
                 self.isLongPress = false
-            default:
-                break
+            @unknown default:
+                self.resetLongPress()
+                self.isLongPress = false
         }
+    }
+    
+    private func setupLongPress() {
+        guard let _ = self.viewGesture else {return}
+        self.view?.hideMenuShape()
+        self.insertDarkDeleteView()
+        self.deleteView.toggle(true)
+    }
+    
+    private func resetLongPress() {
+        self.view?.hideMenuShape()
+        self.removeDarkDeleteView()
+        self.deleteView.toggle(false)
+        self.deleteView.hover(false)
     }
     
     private func deleteViewGesture() {
@@ -261,8 +278,15 @@ extension ShapeGesturesControl {
                 viewGesture.removeFromSuperview()
             }
         }
-        self.removeDarkDeleteView()
-        self.deleteView.toggle(false)
+    }
+    
+    private func hoverDeleteView() {
+        guard let viewGesture = self.viewGesture else {return}
+        if viewGesture.frame.intersects(deleteView.frame) {
+            deleteView.hover(true)
+        } else {
+            deleteView.hover(false)
+        }
     }
 }
 

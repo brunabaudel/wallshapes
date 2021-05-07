@@ -31,4 +31,12 @@ class DeleteView: UIView {
             self.fadeIn(0.4, completion)
         }
     }
+    
+    public func hover(_ isHover: Bool, completion: ((Bool) -> Void)? = nil) {
+        if isHover {
+            self.sizeIn(0.2, completion)
+        } else {
+            self.sizeOut(0.2, completion)
+        }
+    }
 }
