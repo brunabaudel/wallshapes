@@ -33,9 +33,10 @@ final class FileControl {
             NSLog("Source File not found.")
             return
         }
-        
         do {
-            try FileManager.default.copyItem(at: sourceURL, to: documentsURL)
+            if !FileManager.default.fileExists(atPath: documentsURL.path) {
+                try FileManager.default.copyItem(at: sourceURL, to: documentsURL)
+            }
         } catch {
             NSLog("Unable to copy file")
         }
