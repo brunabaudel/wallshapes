@@ -28,7 +28,7 @@ class ShapeViewControl {
         guard let type = shape.type else { return }
         self.createPath(by: type)
         self.createAlpha(shape.alpha)
-        if shape.shadowRadius > 0 { self.createShadow(shape.shadowRadius) }
+        self.createShadow(shape.shadowRadius)
     }
     
     private func initShapeView() {
@@ -159,6 +159,7 @@ class ShapeViewControl {
         self.view.layer.shadowColor = UIColor.black.cgColor
         self.view.layer.shouldRasterize = true
         self.view.layer.rasterizationScale = UIScreen.main.scale
+        if value == 0 { self.view.layer.shadowColor = UIColor.clear.cgColor }
         self.shape?.shadowRadius = value
     }
     
