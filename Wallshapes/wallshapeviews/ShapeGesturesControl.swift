@@ -219,6 +219,7 @@ extension ShapeGesturesControl {
             let location = recognizer.location(in: self.view)
             self.findSubview(location)
             self.setupLongPress()
+            self.hoverDeleteView()
         }
         
         if recognizer.state == .ended || recognizer.state == .cancelled ||

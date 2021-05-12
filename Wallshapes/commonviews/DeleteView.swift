@@ -21,7 +21,6 @@ class DeleteView: UIView {
     private func initView() {
         backgroundColor = .clear
         alpha = 0.0
-        layer.contents = UIImage(named: "trash")?.cgImage
     }
     
     public func toggle(_ isHidden: Bool, completion: ((Bool) -> Void)? = nil) {
@@ -34,8 +33,10 @@ class DeleteView: UIView {
     
     public func hover(_ isHover: Bool, completion: ((Bool) -> Void)? = nil) {
         if isHover {
+            layer.contents = UIImage(named: "trash-open")?.cgImage
             self.sizeIn(0.2, completion)
         } else {
+            layer.contents = UIImage(named: "trash")?.cgImage
             self.sizeOut(0.2, completion)
         }
     }
