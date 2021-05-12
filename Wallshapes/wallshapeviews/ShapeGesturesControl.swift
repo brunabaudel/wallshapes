@@ -38,10 +38,6 @@ extension ShapeGesturesControl {
         singleTapGR.numberOfTapsRequired = 1
         self.view?.addGestureRecognizer(singleTapGR)
         
-        let doubleTapGR = UITapGestureRecognizer(target: self, action: #selector(didOnDoubleTap(_:)))
-        doubleTapGR.numberOfTapsRequired = 2
-        self.view?.addGestureRecognizer(doubleTapGR)
-        
         let pinchGR = UIPinchGestureRecognizer(target: self, action: #selector(didOnPinch(_:)))
         self.view?.addGestureRecognizer(pinchGR)
         
@@ -57,10 +53,6 @@ extension ShapeGesturesControl {
     
     @objc private func didOnSingleTap(_ recognizer: UITapGestureRecognizer) {
         didSingleTap(recognizer)
-    }
-    
-    @objc private func didOnDoubleTap(_ recognizer: UITapGestureRecognizer) {
-        didDoubleTap(recognizer)
     }
     
     @objc private func didOnPinch(_ recognizer: UIPinchGestureRecognizer) {
@@ -137,18 +129,6 @@ extension ShapeGesturesControl {
             return
         }
         viewGesture.showMenuShape()
-        self.clearSubview()
-    }
-    
-    private func didDoubleTap(_ recognizer: UITapGestureRecognizer) {
-        let location = recognizer.location(in: self.view)
-        self.findSubview(location)
-        guard let viewGesture = self.viewGesture else {
-            self.view?.hideMenuShape()
-            return
-        }
-        viewGesture.showMenuShape()
-        self.view?.bringSubviewToFront(viewGesture)
         self.clearSubview()
     }
 }
