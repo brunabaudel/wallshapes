@@ -10,6 +10,7 @@ import UIKit
 protocol MenuShapeControlDelegate {
     func onSliderMenu(_ sender: SliderMenu)
     func onMainMenu(_ sender: TypeButton<MenuMainView>)
+    func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>)
 }
 
 final class MenuShapeControl {
@@ -17,10 +18,12 @@ final class MenuShapeControl {
 
     private var sliderView: SliderMenu?
     private var mainMenuView: CustomMenuView<MenuMainView>?
-    
+    private var menuArrangeView: CustomMenuView<ArrangeMenuView>?
+
     init() {
         initSliderOnWindow()
         initMainMenuOnWindow()
+        initArrangeMenuOnWindow()
     }
 
     private func initSliderOnWindow() {
@@ -47,7 +50,7 @@ final class MenuShapeControl {
         mainMenuView = CustomMenuView<MenuMainView>(frame: CGRect.zero)
         guard let mainMenuView = self.mainMenuView else {return}
         mainMenuView.translatesAutoresizingMaskIntoConstraints = false
-        mainMenuView.isHidden = false
+        mainMenuView.isHidden = true
         mainMenuView.delegate = self
 
         guard let window = UIApplication.window else {return}
@@ -62,14 +65,47 @@ final class MenuShapeControl {
         mainMenuView.widthAnchor.constraint(equalTo: width, multiplier: 0.1).isActive = true
     }
 
+    private func initArrangeMenuOnWindow() {
+        menuArrangeView = CustomMenuView<ArrangeMenuView>(frame: CGRect.zero)
+        guard let menuArrangeView = self.menuArrangeView, let mainMenuView = self.mainMenuView else {return}
+        menuArrangeView.translatesAutoresizingMaskIntoConstraints = false
+        menuArrangeView.isHidden = true
+        menuArrangeView.delegate = self
+
+        guard let window = UIApplication.window else {return}
+        window.addSubview(menuArrangeView)
+        
+        menuArrangeView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
+        menuArrangeView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
+        menuArrangeView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.5).isActive = true
+        menuArrangeView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
+    }
+
     public func showMenuShape() {
         mainMenuView?.isHidden = false
     }
 
     public func hideMenuShape() {
         mainMenuView?.isHidden = true
+        menuArrangeView?.isHidden = true
         mainMenuView?.unselectAllButtons()
+        menuArrangeView?.unselectAllButtons()
         hideSlider()
+    }
+}
+
+// MARK: - Arrange methods
+
+extension MenuShapeControl {
+    public func showArrangeMenu() {
+        guard let menuArrangeView = self.menuArrangeView else {return}
+        menuArrangeView.isHidden = !menuArrangeView.isHidden
+
+    }
+
+    func hideMenuArrange() {
+        guard let menuArrangeView = self.menuArrangeView else {return}
+        menuArrangeView.isHidden = true
     }
 }
 
@@ -114,6 +150,8 @@ extension MenuShapeControl {
 extension MenuShapeControl: CustomMenuViewDelegate {
     func onClickMenu(_ sender: UIButton) {
         switch sender {
+        case is TypeButton<ArrangeMenuView>:
+            delegate?.onArrangeMenu(sender as! TypeButton<ArrangeMenuView>)
         case is TypeButton<MenuMainView>:
             delegate?.onMainMenu(sender as! TypeButton<MenuMainView>)
         default:
