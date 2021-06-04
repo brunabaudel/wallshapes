@@ -10,11 +10,14 @@ import UIKit
 final class WallshapeView: UIView {
     private var wallshapeViewControl: WallshapeViewControl?
     private var gesturesControl: ShapeGesturesControl?
+    private var menuShapeControl: MenuShapeControl?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.wallshapeViewControl = WallshapeViewControl(self)
+        self.menuShapeControl = MenuShapeControl()
+        self.wallshapeViewControl = WallshapeViewControl(self, menuControl: menuShapeControl)
         self.gesturesControl = ShapeGesturesControl(self)
+        
         self.backgroundColor = .init(white: 0.15, alpha: 1)
     }
     
@@ -50,8 +53,8 @@ final class WallshapeView: UIView {
         wallshapeViewControl?.saveFile()
     }
     
-    public func hideMenuShape() {
-        wallshapeViewControl?.hideMenuShape()
+    public func hideMenu() {
+        menuShapeControl?.hideMenuShape()
     }
 }
 

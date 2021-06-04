@@ -8,83 +8,74 @@
 import UIKit
 
 protocol ShapeViewDelegate {
-    func cloneView(_ shapeView: ShapeView)
+    func mainView(_ shapeView: ShapeView, _ sender: TypeButton<MenuMainView>)
+    func sliderView(_ shapeView: ShapeView, _ sender: SliderMenu)
 }
 
-class ShapeView: UIView {
+final class ShapeView: UIView {
     internal var delegate: ShapeViewDelegate?
     private(set) var shapeViewControl: ShapeViewControl?
-    private var menuShapeView: MenuShapeView?
-    
-    //Load shape
-    init(frame: CGRect, menu: MenuShapeView, shape: Shape) {
+    private var menuShapeControl: MenuShapeControl?
+
+    // Load shape
+    init(frame: CGRect, menu: MenuShapeControl, shape: Shape) {
         super.init(frame: frame)
         initLoadShapeView(menu, shape: shape)
     }
-    
-    //Add shape
-    init(frame: CGRect, menu: MenuShapeView) {
+
+    // Add shape
+    init(frame: CGRect, menu: MenuShapeControl) {
         super.init(frame: frame)
         initShapeView(menu)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
-    private func initShapeView(_ menu: MenuShapeView) {
+
+    private func initShapeView(_ menu: MenuShapeControl) {
         shapeViewControl = ShapeViewControl(self)
-        menuShapeView = menu
-        menuShapeView?.delegate = self
-        backgroundColor = .clear
+        menuShapeControl = menu
+        refMenuShape()
     }
-    
-    private func initLoadShapeView(_ menu: MenuShapeView, shape: Shape) {
+
+    private func initLoadShapeView(_ menu: MenuShapeControl, shape: Shape) {
         shapeViewControl = ShapeViewControl(self, shape: shape)
-        menuShapeView = menu
-        menuShapeView?.delegate = self
-        backgroundColor = .clear
+        menuShapeControl = menu
+        refMenuShape()
     }
 }
 
-extension ShapeView: MenuShapeViewDelegate {
-    func willApplyCloneShape(_ sender: UIButton) {
-        delegate?.cloneView(self)
+extension ShapeView {
+    public func refMenuShape() {
+        delegateMenuShape()
+        setupSliderMenuShape()
+        menuShapeControl?.showMenuShape()
     }
-    
-    func willChangeShape(_ sender: UIButton, type: ShapeType) {
-        shapeViewControl?.createPath(by: type)
+
+    private func delegateMenuShape() {
+        menuShapeControl?.delegate = self
     }
-    
-    func willApplyPlainColorShape(_ sender: UIButton) {
-        shapeViewControl?.createPlainColor()
+
+    private func setupSliderMenuShape() {
+        guard let type = menuShapeControl?.typeSlider() else {return}
+        switch type {
+        case .shadow:
+            menuShapeControl?.setupSlider(value: Float(shapeViewControl?.shape?.shadowRadius ?? 0))
+        case .alpha:
+            menuShapeControl?.setupSlider(value: Float(shapeViewControl?.shape?.alpha ?? 1))
+        case .polygon:
+            menuShapeControl?.setupSlider(value: Float(shapeViewControl?.shape?.polygon ?? 0))
+        }
     }
-    
-    func willApplyGradientShape(_ sender: UIButton) {
-        shapeViewControl?.createGradientColors()
+}
+
+extension ShapeView: MenuShapeControlDelegate {
+    func onMainMenu(_ sender: TypeButton<MenuMainView>) {
+        delegate?.mainView(self, sender)
     }
-    
-    func willApplyShadowShape(_ sender: SliderMenu) {
-        let value = CGFloat(sender.value)
-        shapeViewControl?.createShadow(value)
-    }
-    
-    func willApplyAlphaShape(_ sender: SliderMenu) {
-        let value = CGFloat(sender.value)
-        shapeViewControl?.createAlpha(value)
-    }
-    
-    func willApplyPolygonShape(_ sender: SliderMenu) {
-        let value = CGFloat(sender.value)
-        shapeViewControl?.createPolygon(value)
-    }
-    
-    func onSliderValue(_ slider: SliderMenu) {
-        shapeViewControl?.changeSliderValue(slider)
-    }
-    
-    public func showMenuShape() {
-        menuShapeView?.delegate = self
-        menuShapeView?.showMenu()
+
+    func onSliderMenu(_ slider: SliderMenu) {
+        delegate?.sliderView(self, slider)
     }
 }

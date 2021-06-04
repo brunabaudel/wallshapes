@@ -11,7 +11,7 @@ enum SliderType {
     case shadow, alpha, polygon
 }
 
-class SliderMenu: UISlider {
+final class SliderMenu: UISlider {
     public var type: SliderType?
     
     override init(frame: CGRect) {

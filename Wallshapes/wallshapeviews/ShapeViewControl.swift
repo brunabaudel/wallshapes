@@ -7,22 +7,104 @@
 
 import UIKit
 
-class ShapeViewControl {
-    private var view: UIView
+final class ShapeViewControl {
+    private var view: ShapeView
     private(set) var shape: Shape?
     
-    //Load shape
-    init(_ view: UIView, shape: Shape) {
+    // Load shape
+    init(_ view: ShapeView, shape: Shape) {
         self.view = view
         initLoadShapeView(shape: shape)
     }
     
-    //Add shape
-    init(_ view: UIView) {
+    // Add shape
+    init(_ view: ShapeView) {
         self.view = view
         initShapeView()
     }
     
+    public func createPath(by type: ShapeType) {
+        self.shape?.polygon = 0
+        self.shape?.type = type
+        switch type {
+        case ShapeType.circle:
+            self.createPathCircle()
+        case ShapeType.rectangle:
+            self.createPathRectangle()
+        case ShapeType.triangle:
+            self.createPathTriangle()
+        case ShapeType.polygon:
+            self.createPathPolygon()
+        }
+    }
+    
+    public func createPlainColor() {
+        guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
+        let color = UIColor.random.cgColor
+        shapeLayer.fillColor = color
+        self.replaceLayer(shapeLayer)
+        shape.shapeLayer = shapeLayer
+        shape.layerColors?[0] = color
+        shape.gradientLayer = nil
+        shape.layerType = CAShapeLayer.self
+    }
+
+    public func createGradientColors() {
+        guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
+        if let gradient = shape.gradientLayer {
+            let colors = [UIColor.random.cgColor, UIColor.random.cgColor]
+            gradient.colors = colors
+            gradient.mask = shapeLayer
+            self.replaceLayer(gradient)
+            shape.gradientLayer = gradient
+            shape.layerColors = colors
+            shape.layerType = CAGradientLayer.self
+            return
+        }
+        replaceGradientLayer(shapeLayer)
+    }
+
+    public func createShadow(_ value: CGFloat) {
+        self.view.layer.shadowRadius = value * 100
+        self.view.layer.shadowOpacity = 0.5
+        self.view.layer.shadowOffset = .zero
+        self.view.layer.shadowColor = UIColor.black.cgColor
+        self.view.layer.shouldRasterize = true
+        self.view.layer.rasterizationScale = UIScreen.main.scale
+        if value == 0 { self.view.layer.shadowColor = UIColor.clear.cgColor }
+        self.shape?.shadowRadius = value
+    }
+    
+    public func createAlpha(_ value: CGFloat) {
+        self.view.alpha = value
+        self.shape?.alpha = value
+    }
+    
+    public func createPolygon(_ value: CGFloat) {
+        let vUInt = UInt32(value * 10)
+        let path = regularPolygonInRect(vUInt)
+        changeShapeLayer(path)
+        self.shape?.polygon = value
+    }
+
+    public func clone(_ menuShapeView: MenuShapeControl?) -> ShapeView? {
+        guard let menuShapeView = menuShapeView, let shape = self.shape else { return nil }
+        let frame = view.frame
+        let clonedShape = Shape()
+        clonedShape.alpha = shape.alpha
+        clonedShape.layerColors = shape.layerColors
+        clonedShape.layerType = shape.layerType
+        clonedShape.polygon = shape.polygon
+        clonedShape.shadowRadius = shape.shadowRadius
+        clonedShape.frame = shape.frame
+        clonedShape.type = shape.type
+        return ShapeView(frame: frame, menu: menuShapeView, shape: clonedShape)
+    }
+}
+
+// MARK: - Class methods
+
+extension ShapeViewControl {
     private func initLoadShapeView(shape: Shape) {
         self.shape = shape
         guard let type = shape.type else { return }
@@ -36,20 +118,6 @@ class ShapeViewControl {
         self.shape?.layerColors?.append(UIColor.random.cgColor)
         self.shape?.layerColors?.append(UIColor.random.cgColor)
         self.createPath(by: ShapeType.circle)
-    }
-    
-    public func createPath(by type: ShapeType) {
-        self.shape?.type = type
-        switch type {
-            case ShapeType.circle:
-                self.createPathCircle()
-            case ShapeType.rectangle:
-                self.createPathRectangle()
-            case ShapeType.triangle:
-                self.createPathTriangle()
-            case ShapeType.polygon:
-                self.createPathPolygon()
-        }
     }
     
     private func createPathCircle() {
@@ -126,55 +194,6 @@ class ShapeViewControl {
         self.view.layer.addSublayer(newLayer)
     }
     
-    public func createPlainColor() {
-        guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
-        let color = UIColor.random.cgColor
-        shapeLayer.fillColor = color
-        self.replaceLayer(shapeLayer)
-        shape.shapeLayer = shapeLayer
-        shape.layerColors?[0] = color
-        shape.gradientLayer = nil
-        shape.layerType = CAShapeLayer.self
-    }
-    
-    public func createGradientColors() {
-        guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
-        if let gradient = shape.gradientLayer {
-            let colors = [UIColor.random.cgColor, UIColor.random.cgColor]
-            gradient.colors = colors
-            gradient.mask = shapeLayer
-            self.replaceLayer(gradient)
-            shape.gradientLayer = gradient
-            shape.layerColors = colors
-            shape.layerType = CAGradientLayer.self
-            return
-        }
-        replaceGradientLayer(shapeLayer)
-    }
-    
-    public func createShadow(_ value: CGFloat) {
-        self.view.layer.shadowRadius = value * 100
-        self.view.layer.shadowOpacity = 0.5
-        self.view.layer.shadowOffset = .zero
-        self.view.layer.shadowColor = UIColor.black.cgColor
-        self.view.layer.shouldRasterize = true
-        self.view.layer.rasterizationScale = UIScreen.main.scale
-        if value == 0 { self.view.layer.shadowColor = UIColor.clear.cgColor }
-        self.shape?.shadowRadius = value
-    }
-    
-    public func createAlpha(_ value: CGFloat) {
-        self.view.alpha = value
-        self.shape?.alpha = value
-    }
-    
-    public func createPolygon(_ value: CGFloat) {
-        let vUInt = UInt32(value * 10)
-        let path = regularPolygonInRect(vUInt)
-        changeShapeLayer(path)
-        self.shape?.polygon = value
-    }
-    
     private func createPathPolygon() {
         guard let shape = self.shape else {return}
         let vUInt = UInt32(shape.polygon * 10)
@@ -201,18 +220,5 @@ class ShapeViewControl {
         }
         path.close()
         return path
-    }
-    
-    public func changeSliderValue(_ slider: SliderMenu) {
-        switch slider.type {
-            case .shadow:
-                slider.setValue(Float(shape?.shadowRadius ?? 0), animated: true)
-            case .alpha:
-                slider.setValue(Float(shape?.alpha ?? 1), animated: true)
-            case .polygon:
-                slider.setValue(Float(shape?.polygon ?? 0), animated: true)
-            default:
-                break
-        }
     }
 }

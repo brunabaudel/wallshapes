@@ -125,10 +125,10 @@ extension ShapeGesturesControl {
         let location = recognizer.location(in: self.view)
         self.findSubview(location)
         guard let viewGesture = self.viewGesture else {
-            self.view?.hideMenuShape()
+            self.view?.hideMenu()
             return
         }
-        viewGesture.showMenuShape()
+        viewGesture.refMenuShape()
         self.clearSubview()
     }
 }
@@ -137,6 +137,7 @@ extension ShapeGesturesControl {
     private func didPan(_ recognizer: UIPanGestureRecognizer) {
         switch (recognizer.state) {
             case .began:
+                self.view?.hideMenu()
                 let location = recognizer.location(in: self.view)
                 self.findSubview(location)
             case .changed:
@@ -154,7 +155,7 @@ extension ShapeGesturesControl {
                 self.clearMiddleIndicators()
                 if !isLongPress {
                     guard let viewGesture = self.viewGesture else {return}
-                    viewGesture.showMenuShape()
+                    viewGesture.refMenuShape()
                     self.clearSubview()
                 }
             default:
@@ -236,13 +237,13 @@ extension ShapeGesturesControl {
     
     private func setupLongPress() {
         guard let _ = self.viewGesture else {return}
-        self.view?.hideMenuShape()
+        self.view?.hideMenu()
         self.insertDarkDeleteView()
         self.deleteView.toggle(true)
     }
     
     private func resetLongPress() {
-        self.view?.hideMenuShape()
+        self.view?.hideMenu()
         self.removeDarkDeleteView()
         self.deleteView.toggle(false)
         self.deleteView.hover(false)
