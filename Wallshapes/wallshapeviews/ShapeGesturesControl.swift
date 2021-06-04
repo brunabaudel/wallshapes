@@ -43,7 +43,7 @@ extension ShapeGesturesControl {
         
         let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(didOnLongPress(_:)))
         longPressGR.delegate = self.view
-        longPressGR.minimumPressDuration = 1
+        longPressGR.minimumPressDuration = 0.4
         self.view?.addGestureRecognizer(longPressGR)
     }
     
