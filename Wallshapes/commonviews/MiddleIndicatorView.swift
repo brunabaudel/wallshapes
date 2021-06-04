@@ -11,7 +11,7 @@ enum MiddleIndicatorViewType {
     case vertical, horizontal
 }
 
-class MiddleIndicatorView: UIView {
+final class MiddleIndicatorView: UIView {
     init(frame: CGRect, type: MiddleIndicatorViewType) {
         super.init(frame: frame)
         backgroundColor = .clear

@@ -15,7 +15,7 @@ enum WallshapeSize: String {
     case small, medium, normal
 }
 
-class Wallshape {
+final class Wallshape {
     var size: WallshapeSize = .normal
     var backgroundColors: [CGColor] = []
     var shapes: [Shape] = []
@@ -27,7 +27,7 @@ class Wallshape {
     }
 }
 
-class Shape {
+final class Shape {
     var zPosition: Int = 0
     var type: ShapeType?
     var frame: CGRect = CGRect.zero

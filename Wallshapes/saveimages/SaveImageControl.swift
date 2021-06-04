@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SaveImage: NSObject {
+final class SaveImage: NSObject {
     private var renderIndicatorView: RenderIndicatorView?
 
     func save(_ title: String, view: WallshapeView) {
