@@ -10,7 +10,7 @@ import UIKit
 final class WallshapeModelHandler {
     static private let dirName = "wallshape"
     static private let dirExt = "json"
-    
+
     static public func store(wallshape: Wallshape) {
         let size = wallshape.size.rawValue
         let backgroundColor = cgcolorToColordata(wallshape.backgroundColors)
@@ -21,7 +21,7 @@ final class WallshapeModelHandler {
         let url = FileControl.findURL(fileName: dirName, ext: dirExt)
         FileControl.write(url: url, content: string)
     }
-    
+
     static public func restore() -> Wallshape? {
         let url = FileControl.findURL(fileName: dirName, ext: dirExt)
         guard let wallshapeData = JsonControl.decodeParse(url: url, type: WallshapeData.self) else { return nil }
@@ -34,14 +34,14 @@ final class WallshapeModelHandler {
 }
 
 extension WallshapeModelHandler {
-    
-    //MARK: - Write to JSON
-    
+
+    // MARK: - Write to JSON
+
     static private func cgcolorToColordata(_ cgColors: [CGColor]?) -> [ColorData] {
         guard let cgColors = cgColors else { return [] }
         var colorsData: [ColorData] = []
-        for c in cgColors {
-            let uicolor = UIColor(cgColor: c).getHSBAComponents()
+        for clr in cgColors {
+            let uicolor = UIColor(cgColor: clr).getHSBAComponents()
             let color = ColorData(
                 hue: Float(uicolor.hue),
                 saturation: Float(uicolor.saturation),
@@ -52,29 +52,29 @@ extension WallshapeModelHandler {
         }
         return colorsData
     }
-    
+
     static private func shapeToShapedata(_ shapes: [Shape]?) -> [ShapeData] {
         guard let shapes = shapes else { return [] }
         var shapesData: [ShapeData] = []
-        for s in shapes {
+        for shp in shapes {
             let shape = ShapeData(
-                shapeType: s.type?.rawValue ?? "",
-                layerType: calayerToString(layerType: s.layerType),
-                z: s.zPosition,
-                x: Float(s.frame.origin.x),
-                y: Float(s.frame.origin.y),
-                height: Float(s.frame.size.width),
-                width: Float(s.frame.size.height),
-                layerColors: cgcolorToColordata(s.layerColors),
-                alpha: Float(s.alpha),
-                shadowRadius: Float(s.shadowRadius),
-                polygonSides: Float(s.polygon)
+                shapeType: shp.type?.rawValue ?? "",
+                layerType: calayerToString(layerType: shp.layerType),
+                z: shp.zPosition,
+                x: Float(shp.frame.origin.x),
+                y: Float(shp.frame.origin.y),
+                height: Float(shp.frame.size.width),
+                width: Float(shp.frame.size.height),
+                layerColors: cgcolorToColordata(shp.layerColors),
+                alpha: Float(shp.alpha),
+                shadowRadius: Float(shp.shadowRadius),
+                polygonSides: Float(shp.polygon)
             )
             shapesData.append(shape)
         }
         return shapesData
     }
-    
+
     // "gradientLayer" or "shapelayer"
     static private func calayerToString(layerType: CALayer.Type) -> String {
         if layerType == CAGradientLayer.self {
@@ -82,42 +82,43 @@ extension WallshapeModelHandler {
         }
         return "shapelayer"
     }
-    
-    //MARK: - Restore from JSON
-    
+
+    // MARK: - Restore from JSON
+
     static private func colordataToCGColor(_ colors: [ColorData]?) -> [CGColor] {
         guard let colors = colors else {return [] }
         var cgColors: [CGColor] = []
-        for c in colors {
+        for clr in colors {
             let color = UIColor(
-                hue: CGFloat(c.hue),
-                saturation: CGFloat(c.saturation),
-                brightness: CGFloat(c.brightness),
-                alpha: CGFloat(c.alpha)
+                hue: CGFloat(clr.hue),
+                saturation: CGFloat(clr.saturation),
+                brightness: CGFloat(clr.brightness),
+                alpha: CGFloat(clr.alpha)
             )
             cgColors.append(color.cgColor)
         }
         return cgColors
     }
-    
+
     static private func shapedataToShape(_ shapesData: [ShapeData]?) -> [Shape] {
         guard let shapesData = shapesData else { return [] }
         var shapes: [Shape] = []
-        for s in shapesData {
+        for sdt in shapesData {
             let shape = Shape()
-            shape.zPosition = s.z
-            shape.type = ShapeType(rawValue: s.shapeType)
-            shape.frame = CGRect(x: CGFloat(s.x), y: CGFloat(s.y), width: CGFloat(s.width), height: CGFloat(s.height))
-            shape.layerColors = colordataToCGColor(s.layerColors)
-            shape.alpha = CGFloat(s.alpha ?? 1)
-            shape.shadowRadius = CGFloat(s.shadowRadius ?? 0)
-            shape.polygon = CGFloat(s.polygonSides ?? 0)
-            shape.layerType = stringToCALayer(layerType: s.layerType)
+            shape.zPosition = sdt.z
+            shape.type = ShapeType(rawValue: sdt.shapeType)
+            shape.frame = CGRect(x: CGFloat(sdt.x), y: CGFloat(sdt.y),
+                                 width: CGFloat(sdt.width), height: CGFloat(sdt.height))
+            shape.layerColors = colordataToCGColor(sdt.layerColors)
+            shape.alpha = CGFloat(sdt.alpha ?? 1)
+            shape.shadowRadius = CGFloat(sdt.shadowRadius ?? 0)
+            shape.polygon = CGFloat(sdt.polygonSides ?? 0)
+            shape.layerType = stringToCALayer(layerType: sdt.layerType)
             shapes.append(shape)
         }
         return shapes
     }
-    
+
     // "gradientLayer" or "shapelayer"
     static private func stringToCALayer(layerType: String) -> CALayer.Type {
         if layerType == "gradientlayer" {

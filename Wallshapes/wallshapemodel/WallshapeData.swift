@@ -17,9 +17,9 @@ struct WallshapeData: Codable {
 struct ShapeData: Codable {
     var shapeType: String
     var layerType: String
-    var z: Int
-    var x: Float
-    var y: Float
+    var z: Int // swiftlint:disable:this identifier_name
+    var x: Float // swiftlint:disable:this identifier_name
+    var y: Float // swiftlint:disable:this identifier_name
     var height: Float
     var width: Float
     var layerColors: [ColorData]

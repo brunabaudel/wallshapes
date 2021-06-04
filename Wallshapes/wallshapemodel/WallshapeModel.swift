@@ -8,23 +8,18 @@
 import UIKit
 
 enum ShapeType: String {
-    case circle = "circle"
-    case rectangle = "rectangle"
-    case triangle = "triangle"
-    case polygon = "polygon"
+    case circle, rectangle, triangle, polygon
 }
 
 enum WallshapeSize: String {
-    case small = "small"
-    case medium = "medium"
-    case normal = "normal"
+    case small, medium, normal
 }
 
 class Wallshape {
     var size: WallshapeSize = .normal
     var backgroundColors: [CGColor] = []
     var shapes: [Shape] = []
-    
+
     init(backgroundColors: [CGColor], shapes: [Shape], size: WallshapeSize) {
         self.size = size
         self.backgroundColors = backgroundColors
@@ -33,7 +28,7 @@ class Wallshape {
 }
 
 class Shape {
-    var zPosition: Int = 0 //TODO: use this property in future!
+    var zPosition: Int = 0
     var type: ShapeType?
     var frame: CGRect = CGRect.zero
     var layerColors: [CGColor]? = []

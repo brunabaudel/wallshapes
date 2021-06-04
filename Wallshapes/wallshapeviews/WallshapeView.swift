@@ -11,24 +11,24 @@ final class WallshapeView: UIView {
     private var wallshapeViewControl: WallshapeViewControl?
     private var gesturesControl: ShapeGesturesControl?
     private var menuShapeControl: MenuShapeControl?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.menuShapeControl = MenuShapeControl()
         self.wallshapeViewControl = WallshapeViewControl(self, menuControl: menuShapeControl)
         self.gesturesControl = ShapeGesturesControl(self)
-        
+
         self.backgroundColor = .init(white: 0.15, alpha: 1)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     public func contentViewFrame() -> CGRect {
         return wallshapeViewControl?.contentViewFrame() ?? CGRect.zero
     }
-    
+
     public func chooseColors(_ count: Int) {
         wallshapeViewControl?.chooseColors(count)
     }
@@ -36,7 +36,7 @@ final class WallshapeView: UIView {
     public func chooseColor() {
         wallshapeViewControl?.chooseColor()
     }
-    
+
     public func resizeContentView() {
         wallshapeViewControl?.resizeContentView()
     }
@@ -48,11 +48,11 @@ final class WallshapeView: UIView {
     public func clearShapes() {
         wallshapeViewControl?.clearShapes()
     }
-    
+
     public func saveFile() {
         wallshapeViewControl?.saveFile()
     }
-    
+
     public func hideMenu() {
         menuShapeControl?.hideMenuShape()
     }
@@ -60,8 +60,8 @@ final class WallshapeView: UIView {
 
 extension WallshapeView: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
-            -> Bool {
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer)
+                            -> Bool {
         if gestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer is UIPanGestureRecognizer {
             return true
         }

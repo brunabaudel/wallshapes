@@ -12,12 +12,13 @@ extension UIView {
         guard let sublayers = layer.sublayers, sublayers.count > 0 else {return nil}
         return sublayers.first
     }
-    
+
     func showNavigation() {
         guard let parent = parentViewController() else {return}
-        parent.navigationController?.navigationBar.isHidden = !(parent.navigationController?.navigationBar.isHidden ?? false)
+        parent.navigationController?.navigationBar.isHidden =
+            !(parent.navigationController?.navigationBar.isHidden ?? false)
     }
-    
+
     private func parentViewController() -> UIViewController? {
         return sequence(first: self) { $0.next }
             .first(where: { $0 is UIViewController })
@@ -29,19 +30,19 @@ extension UIView {
             self.alpha = 1.0
         }, completion: completionHandler)
     }
-    
+
     func fadeOut(_ duration: TimeInterval, _ completionHandler: ((Bool) -> Void)? = nil) {
         Self.animate(withDuration: duration, delay: 0.0, options: .curveEaseOut, animations: {
             self.alpha = 0.0
         }, completion: completionHandler)
     }
-    
+
     func sizeIn(_ duration: TimeInterval, _ completionHandler: ((Bool) -> Void)? = nil) {
         Self.animate(withDuration: duration, delay: 0.0, options: .curveEaseIn, animations: {
             self.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }, completion: completionHandler)
     }
-    
+
     func sizeOut(_ duration: TimeInterval, _ completionHandler: ((Bool) -> Void)? = nil) {
         Self.animate(withDuration: duration, delay: 0.0, options: .curveEaseOut, animations: {
             self.transform = CGAffineTransform.identity

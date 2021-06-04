@@ -13,7 +13,7 @@ enum ArrangeMenuTypeEnum: Int, IntegerProtocol {
 
 final class ArrangeMenuView: CustomMenuDelegate {
     typealias EnumType = ArrangeMenuTypeEnum
-    
+
     static private let typeImage = [EnumType.bringToFront: "bring-front",
                                     .sendToBack: "send-back",
                                     .bringForward: "bring-forward",
@@ -21,7 +21,7 @@ final class ArrangeMenuView: CustomMenuDelegate {
                                     ]
 
     static func allCases() -> [EnumType] {
-        return (typeImage.map {$0.key}).sorted { o, i in o.rawValue < i.rawValue }
+        return (typeImage.map {$0.key}).sorted { $0.rawValue < $1.rawValue }
     }
 
     static func imageNameBy(_ type: EnumType) -> String {

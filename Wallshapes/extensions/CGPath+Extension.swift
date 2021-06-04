@@ -14,7 +14,7 @@ extension CGPath {
         bezierPath.apply(CGAffineTransform(translationX: point.x, y: point.y))
         return bezierPath.cgPath
     }
-    
+
     func scale(_ fromSize: CGSize, toSize: CGSize) -> CGPath? {
         let bezierPath = UIBezierPath()
         bezierPath.cgPath = self
@@ -26,11 +26,11 @@ extension CGPath {
 extension UIBezierPath {
     func scaleAroundCenter(_ fromSize: CGSize, toSize: CGSize) {
         let beforeCenter = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-        
+
         let scaleWidth = (toSize.width / fromSize.width)
         let scaleHeight = (toSize.height / fromSize.height)
         self.apply(CGAffineTransform(scaleX: scaleWidth, y: scaleHeight))
-        
+
         let afterCenter = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
         let diff = CGPoint(x: beforeCenter.x - afterCenter.x, y: beforeCenter.y - afterCenter.y)
         self.apply(CGAffineTransform(translationX: diff.x, y: diff.y))

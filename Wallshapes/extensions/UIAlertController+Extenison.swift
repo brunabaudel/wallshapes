@@ -21,8 +21,8 @@ extension UIAlertController {
         alert.addAction(UIAlertAction(title: titleOK, style: .default, handler: { _ in okAction() }))
         return alert
     }
-    
-    func showAlert(_ vc: UIViewController) {
-        vc.present(self, animated: true)
+
+    func showAlert(_ vcr: UIViewController) {
+        vcr.present(self, animated: true)
     }
 }

@@ -7,12 +7,12 @@
 
 import Foundation
 
-class JsonControl {
+final class JsonControl {
     static func decodeParse<T: Decodable>(url: URL?, type: T.Type) -> T? {
         guard let url = url, let object = type.decodeParse(url: url) else { return nil }
         return object
     }
-    
+
     static func encodeParse<T: Encodable>(object: T) -> Data? {
         return object.encodeParse()
     }

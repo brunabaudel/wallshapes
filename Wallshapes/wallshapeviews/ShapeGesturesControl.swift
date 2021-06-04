@@ -7,19 +7,19 @@
 
 import UIKit
 
-class ShapeGesturesControl {
-    private weak var view: WallshapeView? //TODO: change to UIView and change the onTap function
+final class ShapeGesturesControl {
+    private weak var view: WallshapeView?
     private var viewGesture: ShapeView?
     private var shapeLayerPath: CGPath?
     private var scale: CGFloat = 0
     private var size: CGSize = CGSize.zero
     private var isLongPress: Bool = false
-    
+
     private var horizontalIndicatorView: MiddleIndicatorView!
     private var verticalIndicatorView: MiddleIndicatorView!
     private var deleteView: DeleteView!
     private var darkBackgroundDeleteView: DarkBackgroundDeleteView?
-    
+
     init<T: WallshapeView>(_ view: T) {
         self.view = view
         initMiddleIndicators()
@@ -33,32 +33,32 @@ extension ShapeGesturesControl {
         let panGR = UIPanGestureRecognizer(target: self, action: #selector(didOnPan(_:)))
         panGR.delegate = self.view
         self.view?.addGestureRecognizer(panGR)
-        
+
         let singleTapGR = UITapGestureRecognizer(target: self, action: #selector(didOnSingleTap(_:)))
         singleTapGR.numberOfTapsRequired = 1
         self.view?.addGestureRecognizer(singleTapGR)
-        
+
         let pinchGR = UIPinchGestureRecognizer(target: self, action: #selector(didOnPinch(_:)))
         self.view?.addGestureRecognizer(pinchGR)
-        
+
         let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(didOnLongPress(_:)))
         longPressGR.delegate = self.view
         longPressGR.minimumPressDuration = 0.4
         self.view?.addGestureRecognizer(longPressGR)
     }
-    
+
     @objc private func didOnPan(_ recognizer: UIPanGestureRecognizer) {
         didPan(recognizer)
     }
-    
+
     @objc private func didOnSingleTap(_ recognizer: UITapGestureRecognizer) {
         didSingleTap(recognizer)
     }
-    
+
     @objc private func didOnPinch(_ recognizer: UIPinchGestureRecognizer) {
         didPinch(recognizer)
     }
-    
+
     @objc private func didOnLongPress(_ recognizer: UILongPressGestureRecognizer) {
         didLongPress(recognizer)
     }
@@ -66,38 +66,39 @@ extension ShapeGesturesControl {
 
 extension ShapeGesturesControl {
     private func didPinch(_ recognizer: UIPinchGestureRecognizer) {
-        switch (recognizer.state) {
-            case .began:
-                let location = recognizer.location(in: self.view)
-                self.findSubview(location)
-                guard let viewGesture = self.viewGesture else {return}
-                self.size = viewGesture.frame.size
-            case .changed:
-                guard let viewGesture = self.viewGesture else {return}
-                self.scale = recognizer.scale
-                viewGesture.bounds = viewGesture.bounds
-                                        .applying(viewGesture.transform.scaledBy(x: self.scale, y: self.scale))
-                self.updateShapeLayerFrameScale()
-                recognizer.scale = 1
-            case .ended, .cancelled:
-                self.clearSubview()
-            default:
-                break
+        switch recognizer.state {
+        case .began:
+            let location = recognizer.location(in: self.view)
+            self.findSubview(location)
+            guard let viewGesture = self.viewGesture else {return}
+            self.size = viewGesture.frame.size
+        case .changed:
+            guard let viewGesture = self.viewGesture else {return}
+            self.scale = recognizer.scale
+            viewGesture.bounds = viewGesture.bounds
+                                    .applying(viewGesture.transform.scaledBy(x: self.scale, y: self.scale))
+            self.updateShapeLayerFrameScale()
+            recognizer.scale = 1
+        case .ended, .cancelled:
+            self.clearSubview()
+        default:
+            break
         }
     }
-    
+
     private func updateShapeLayerFrameScale() {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
         guard let currLayer = viewGesture.firstSublayer else {return}
         let newFrame = view.convert(view.bounds, from: viewGesture)
-        if currLayer.isEqualTo(type: CAShapeLayer.self) {
-            setupShapeLayerScale(newFrame, currLayer: currLayer as! CAShapeLayer)
+        if let shplayer = currLayer as? CAShapeLayer {
+            setupShapeLayerScale(newFrame, currLayer: shplayer)
+            return
         }
-        if currLayer.isEqualTo(type: CAGradientLayer.self) {
-            setupGradientLayerScale(newFrame, currLayer: currLayer as! CAGradientLayer)
+        if let gradlayer = currLayer as? CAGradientLayer {
+            setupGradientLayerScale(newFrame, currLayer: gradlayer)
         }
     }
-    
+
     private func setupShapeLayerScale(_ newFrame: CGRect, currLayer: CAShapeLayer) {
         guard let viewGesture = self.viewGesture else {return}
         CATransaction.begin()
@@ -106,12 +107,12 @@ extension ShapeGesturesControl {
         currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
         CATransaction.commit()
     }
-    
+
     private func setupGradientLayerScale(_ newFrame: CGRect, currLayer: CAGradientLayer) {
         guard let viewGesture = self.viewGesture else {return}
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        let shapeLayer = currLayer.mask as! CAShapeLayer
+        guard let shapeLayer = currLayer.mask as? CAShapeLayer else {return}
         shapeLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
         shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
         currLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: viewGesture.frame.size)
@@ -135,46 +136,47 @@ extension ShapeGesturesControl {
 
 extension ShapeGesturesControl {
     private func didPan(_ recognizer: UIPanGestureRecognizer) {
-        switch (recognizer.state) {
-            case .began:
-                self.view?.hideMenu()
-                let location = recognizer.location(in: self.view)
-                self.findSubview(location)
-            case .changed:
-                if !self.isLongPress { self.showMiddleIndicators() }
+        switch recognizer.state {
+        case .began:
+            self.view?.hideMenu()
+            let location = recognizer.location(in: self.view)
+            self.findSubview(location)
+        case .changed:
+            if !self.isLongPress { self.showMiddleIndicators() }
+            guard let viewGesture = self.viewGesture else {return}
+            if self.isLongPress { self.hoverDeleteView() }
+            var translation = recognizer.translation(in: viewGesture)
+            translation = translation.applying(viewGesture.transform)
+            viewGesture.center.x += translation.x
+            viewGesture.center.y += translation.y
+            self.shapeLayerPath = self.shapeLayerPath?.translate(translation)
+            recognizer.setTranslation(CGPoint.zero, in: viewGesture)
+        case .ended, .cancelled:
+            self.updateShapeLayerFrameTranslate()
+            self.clearMiddleIndicators()
+            if !isLongPress {
                 guard let viewGesture = self.viewGesture else {return}
-                if self.isLongPress { self.hoverDeleteView() }
-                var translation = recognizer.translation(in: viewGesture)
-                translation = translation.applying(viewGesture.transform)
-                viewGesture.center.x += translation.x
-                viewGesture.center.y += translation.y
-                self.shapeLayerPath = self.shapeLayerPath?.translate(translation)
-                recognizer.setTranslation(CGPoint.zero, in: viewGesture)
-            case .ended, .cancelled:
-                self.updateShapeLayerFrameTranslate()
-                self.clearMiddleIndicators()
-                if !isLongPress {
-                    guard let viewGesture = self.viewGesture else {return}
-                    viewGesture.refMenuShape()
-                    self.clearSubview()
-                }
-            default:
-                break
+                viewGesture.refMenuShape()
+                self.clearSubview()
+            }
+        default:
+            break
         }
     }
-    
+
     private func updateShapeLayerFrameTranslate() {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
         guard let currLayer = viewGesture.firstSublayer else {return}
         let newFrame = view.convert(view.bounds, from: viewGesture)
-        if currLayer.isEqualTo(type: CAShapeLayer.self) {
-            setupShapeLayer(newFrame, currLayer: currLayer as! CAShapeLayer)
+        if let shplayer = currLayer as? CAShapeLayer {
+            setupShapeLayer(newFrame, currLayer: shplayer)
+            return
         }
-        if currLayer.isEqualTo(type: CAGradientLayer.self) {
-            setupGradientLayer(newFrame, currLayer: currLayer as! CAGradientLayer)
+        if let gradlayer = currLayer as? CAGradientLayer {
+            setupGradientLayer(newFrame, currLayer: gradlayer)
         }
     }
-    
+
     private func setupShapeLayer(_ newFrame: CGRect, currLayer: CAShapeLayer) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -182,17 +184,17 @@ extension ShapeGesturesControl {
         currLayer.path = self.shapeLayerPath
         CATransaction.commit()
     }
-    
+
     private func setupGradientLayer(_ newFrame: CGRect, currLayer: CAGradientLayer) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        let shapeLayer = currLayer.mask as! CAShapeLayer
+        guard let shapeLayer = currLayer.mask as? CAShapeLayer else {return}
         shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: newFrame.size)
         shapeLayer.path = self.shapeLayerPath
         currLayer.mask = shapeLayer
         CATransaction.commit()
     }
-    
+
     private func findSubview(_ location: CGPoint) {
         guard let view = self.view else { return }
         for subview in view.subviews.reversed() {
@@ -204,7 +206,7 @@ extension ShapeGesturesControl {
             }
         }
     }
-    
+
     private func clearSubview() {
         self.viewGesture = nil
         self.shapeLayerPath = nil
@@ -222,10 +224,10 @@ extension ShapeGesturesControl {
             self.setupLongPress()
             self.hoverDeleteView()
         }
-        
+
         if recognizer.state == .ended || recognizer.state == .cancelled ||
             recognizer.state == .failed || recognizer.state == .possible {
-            guard let _ = self.viewGesture else {
+            if self.viewGesture != nil {
                 self.resetLongPress()
                 return
             }
@@ -234,21 +236,22 @@ extension ShapeGesturesControl {
             self.isLongPress = false
         }
     }
-    
+
     private func setupLongPress() {
-        guard let _ = self.viewGesture else {return}
-        self.view?.hideMenu()
-        self.insertDarkDeleteView()
-        self.deleteView.toggle(true)
+        if self.viewGesture != nil {
+            self.view?.hideMenu()
+            self.insertDarkDeleteView()
+            self.deleteView.toggle(true)
+        }
     }
-    
+
     private func resetLongPress() {
         self.view?.hideMenu()
         self.removeDarkDeleteView()
         self.deleteView.toggle(false)
         self.deleteView.hover(false)
     }
-    
+
     private func deleteViewGesture() {
         guard let viewGesture = self.viewGesture else {return}
         if viewGesture.frame.intersects(deleteView.frame) {
@@ -258,7 +261,7 @@ extension ShapeGesturesControl {
             }
         }
     }
-    
+
     private func hoverDeleteView() {
         guard let viewGesture = self.viewGesture else {return}
         if viewGesture.frame.intersects(deleteView.frame) {
@@ -269,7 +272,7 @@ extension ShapeGesturesControl {
     }
 }
 
-//MARK: - Middle Indicators
+// MARK: - Middle Indicators
 
 extension ShapeGesturesControl {
     private func initMiddleIndicators() {
@@ -277,15 +280,15 @@ extension ShapeGesturesControl {
         self.verticalIndicatorView = MiddleIndicatorView(
             frame: CGRect(x: window.frame.midX, y: window.frame.minY, width: 10, height: window.frame.height),
             type: MiddleIndicatorViewType.vertical)
-        
+
         self.horizontalIndicatorView = MiddleIndicatorView(
             frame: CGRect(x: window.frame.minX, y: window.frame.midY, width: window.frame.width, height: 10),
             type: MiddleIndicatorViewType.horizontal)
-        
+
         window.addSubview(verticalIndicatorView)
         window.addSubview(horizontalIndicatorView)
     }
-    
+
     private func showMiddleIndicators() {
         guard let viewGesture = self.viewGesture, let view = self.view else {return}
         let vert = (viewGesture.center.x > view.frame.midX-1 && viewGesture.center.x < view.frame.midX+1) &&
@@ -295,7 +298,7 @@ extension ShapeGesturesControl {
         self.verticalIndicatorView?.toggle(vert)
         self.horizontalIndicatorView?.toggle(hor)
     }
-    
+
     private func clearMiddleIndicators() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.verticalIndicatorView?.toggle(false)
@@ -304,7 +307,7 @@ extension ShapeGesturesControl {
     }
 }
 
-//MARK: - Delete
+// MARK: - Delete
 
 extension ShapeGesturesControl {
     private func initDeleteView() {
@@ -314,7 +317,7 @@ extension ShapeGesturesControl {
         self.darkBackgroundDeleteView = DarkBackgroundDeleteView(frame: window.frame)
         window.addSubview(self.deleteView)
     }
-    
+
     private func insertDarkDeleteView() {
         guard let view = self.view, let viewGesture = self.viewGesture,
               let darkBackgroundDeleteView = self.darkBackgroundDeleteView,
@@ -324,7 +327,7 @@ extension ShapeGesturesControl {
         view.insertSubview(darkBackgroundDeleteView, belowSubview: viewGesture)
         darkBackgroundDeleteView.toggle(true)
     }
-    
+
     private func removeDarkDeleteView() {
         guard let view = self.view,
               let darkBackgroundDeleteView = self.darkBackgroundDeleteView else { return }

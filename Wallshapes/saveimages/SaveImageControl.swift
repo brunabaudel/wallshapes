@@ -9,10 +9,10 @@ import UIKit
 
 class SaveImage: NSObject {
     private var renderIndicatorView: RenderIndicatorView?
-    
+
     func save(_ title: String, view: WallshapeView) {
         if #available(iOS 14.0, *) {
-            AuthorizationAssests().authorization() { authorized in
+            AuthorizationAssests().authorization { authorized in
                 if authorized {
                     DispatchQueue.main.async {
                         let frame = view.contentViewFrame()
@@ -27,7 +27,7 @@ class SaveImage: NSObject {
             self.willSaveImage(title, view: view, rect: frame)
         }
     }
-    
+
     private func willSaveImage(_ title: String, view: UIView, rect: CGRect) {
         self.showIndicator(with: title)
         guard let image = self.willPrepareImage(view, rect: rect) else {
@@ -36,12 +36,13 @@ class SaveImage: NSObject {
         }
         self.writeToPhotoAlbum(image)
     }
-    
+
     private func writeToPhotoAlbum(_ image: UIImage) {
        UIImageWriteToSavedPhotosAlbum(image, self, #selector(writeToPhotoAlbumHandler), nil)
    }
 
-    @objc private func writeToPhotoAlbumHandler(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+    @objc private func writeToPhotoAlbumHandler(_ image: UIImage,
+                                                didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             NSLog(error.localizedDescription)
             self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message)
@@ -50,21 +51,21 @@ class SaveImage: NSObject {
         }
         self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.success.message)
     }
-    
+
     private func willPrepareImage(_ view: UIView, rect: CGRect) -> UIImage? {
         let image = UIImage.imageWithView(view).toPNG()
         guard let croppedImage = image?.crop(rect, sizeView: view.frame.size) else { return nil }
         guard let pngImage = croppedImage.toPNG() else { return nil }
         return pngImage
     }
-    
+
     private func showIndicator(with message: String) {
         DispatchQueue.main.async {
             guard let window = UIApplication.window else { return }
             self.renderIndicatorView = RenderIndicatorView(frame: window.frame, message: message)
         }
     }
-    
+
     private func showAppSettingsDialog() {
         AuthorizationAssests().openAppSettings(
             "Allow Access to Your Photos",

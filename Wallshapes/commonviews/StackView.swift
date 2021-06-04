@@ -7,17 +7,17 @@
 
 import UIKit
 
-class StackView: UIStackView {
-    
+final class StackView: UIStackView {
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubviews()
     }
-    
+
     required init(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     func addSubviews() {
     }
 }

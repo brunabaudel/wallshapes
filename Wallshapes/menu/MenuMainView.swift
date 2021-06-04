@@ -14,7 +14,7 @@ enum MenuMainTypeEnum: Int, IntegerProtocol {
 
 final class MenuMainView: CustomMenuDelegate {
     typealias EnumType = MenuMainTypeEnum
-    
+
     static private let typeImage = [EnumType.clone: "copy",
                                     .circle: "circle",
                                     .square: "square-of-rounded-corners",
@@ -28,7 +28,7 @@ final class MenuMainView: CustomMenuDelegate {
                                     ]
 
     static func allCases() -> [EnumType] {
-        return (typeImage.map {$0.key}).sorted { o, i in o.rawValue < i.rawValue }
+        return (typeImage.map {$0.key}).sorted {$0.rawValue < $1.rawValue}
     }
 
     static func imageNameBy(_ type: EnumType) -> String {

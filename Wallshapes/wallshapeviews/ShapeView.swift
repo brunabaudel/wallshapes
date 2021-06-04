@@ -7,14 +7,14 @@
 
 import UIKit
 
-protocol ShapeViewDelegate {
+protocol ShapeViewDelegate: AnyObject {
     func mainView(_ shapeView: ShapeView, _ sender: TypeButton<MenuMainView>)
     func arrangeView(_ shapeView: ShapeView, _ sender: TypeButton<ArrangeMenuView>)
     func sliderView(_ shapeView: ShapeView, _ sender: SliderMenu)
 }
 
 final class ShapeView: UIView {
-    internal var delegate: ShapeViewDelegate?
+    internal weak var delegate: ShapeViewDelegate?
     private(set) var shapeViewControl: ShapeViewControl?
     private var menuShapeControl: MenuShapeControl?
 

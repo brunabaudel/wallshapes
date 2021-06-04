@@ -18,12 +18,12 @@ final class WallshapeViewControl {
         self.view = view
         self.modelControl = ModelControl()
         self.menuShapeControl = menuControl
-        
+
         guard let wallshape = self.modelControl?.recover() else { return }
         initContentView(with: wallshape.backgroundColors, size: wallshape.size)
         initShapes(shapes: wallshape.shapes)
     }
-    
+
     public func initShapes(shapes: [Shape]) {
         guard let view = self.view, let menuShapeControl = self.menuShapeControl else { return }
         for shape in shapes {
@@ -33,7 +33,7 @@ final class WallshapeViewControl {
             view.addSubview(shapeView)
         }
     }
-    
+
     public func initContentView(with colors: [CGColor], size: WallshapeSize) {
         guard let view = self.view else { return }
         contentView = UIView(frame: view.frame)
@@ -59,19 +59,19 @@ final class WallshapeViewControl {
         }
         gradientLayer.colors = colors
     }
-    
+
     public func chooseColor() {
         let color = UIColor.random
         contentView?.layer.sublayers?.removeAll()
         contentView?.backgroundColor = color
     }
-    
+
     private func addGradientLayer(with colors: [CGColor]) {
         let gradientLayer = initGradientLayer(colors)
         contentView?.layer.sublayers?.removeAll()
         contentView?.layer.insertSublayer(gradientLayer, at: 0)
     }
-    
+
     private func initGradientLayer(_ colors: [CGColor]) -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = contentView?.bounds ?? CGRect.zero
@@ -80,7 +80,7 @@ final class WallshapeViewControl {
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         return gradientLayer
     }
-    
+
     private func randomColors(_ count: Int = 2) -> [CGColor] {
         var colors: [CGColor] = []
         for _ in 0..<count {
@@ -91,9 +91,9 @@ final class WallshapeViewControl {
         }
         return colors
     }
-    
-    //MARK: - Navigationbar Functions
-    
+
+    // MARK: - Navigationbar Functions
+
     public func resizeContentView() {
         guard let view = self.view else { return }
         var newSize: CGRect = view.frame
@@ -108,13 +108,13 @@ final class WallshapeViewControl {
         contentView?.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         CATransaction.commit()
     }
-    
+
     private func squaredSize() -> CGSize {
         guard let view = self.view else { return CGSize.zero }
         let frame = min(view.frame.height, view.frame.width)
         return CGSize(width: frame/1.2, height: frame/1.2)
     }
-    
+
     public func addShape() {
         guard let view = self.view, let menuShapeControl = self.menuShapeControl else { return }
         menuShapeControl.showMenuShape()
@@ -124,26 +124,26 @@ final class WallshapeViewControl {
         shapeView.delegate = self
         view.addSubview(shapeView)
     }
-    
+
     public func clearShapes() {
         guard let view = self.view else { return }
         view.subviews.forEach { if !$0.isEqual(contentView) { $0.removeFromSuperview() } }
         menuShapeControl?.hideMenuShape()
     }
-    
+
     public func contentViewFrame() -> CGRect {
         return self.contentView?.frame ?? CGRect.zero
     }
-    
-    //MARK: - Save file
-    
+
+    // MARK: - Save file
+
     public func saveFile() {
         modelControl?.wallshapeSize(contentViewSize())
         modelControl?.updateBackgroundColors(backgroundCGColors())
         modelControl?.addShapeViews(subShapeViews())
         modelControl?.save()
     }
-    
+
     private func contentViewSize() -> WallshapeSize {
         guard let view = self.view else { return .normal }
         if contentView?.frame.height ?? 0 < view.frame.height {
@@ -151,12 +151,17 @@ final class WallshapeViewControl {
         }
         return .normal
     }
-    
+
     private func subShapeViews() -> [ShapeView] {
         guard let view = self.view else { return [] }
-        return view.subviews.filter{ type(of: $0) == ShapeView.self }.map{ $0 as! ShapeView }
+        return view.subviews
+            .filter { type(of: $0) == ShapeView.self }
+            .compactMap {
+                if let shapeview = $0 as? ShapeView { return shapeview }
+                return nil
+            }
     }
-    
+
     private func backgroundCGColors() -> [CGColor] {
         if let sublayer = contentView?.firstSublayer {
             if let colors = (sublayer as? CAGradientLayer)?.colors,
@@ -180,23 +185,9 @@ extension WallshapeViewControl: ShapeViewDelegate {
         guard let type = sender.type else {return}
         switch type {
         case .clone:
-            menuShapeControl?.hideSlider()
-            menuShapeControl?.hideMenuArrange()
-            guard let clonedShapeView = shapeView.shapeViewControl?.clone(self.menuShapeControl) else {return}
-            clonedShapeView.delegate = self
-            view?.addSubview(clonedShapeView)
-        case .circle:
-            menuShapeControl?.hideSlider()
-            menuShapeControl?.hideMenuArrange()
-            shapeView.shapeViewControl?.createPath(by: .circle)
-        case .square:
-            menuShapeControl?.hideSlider()
-            menuShapeControl?.hideMenuArrange()
-            shapeView.shapeViewControl?.createPath(by: .rectangle)
-        case .triangle:
-            menuShapeControl?.hideSlider()
-            menuShapeControl?.hideMenuArrange()
-            shapeView.shapeViewControl?.createPath(by: .triangle)
+            cloneShapeView(shapeView)
+        case .circle, .square, .triangle:
+            changeShapeView(shapeView, by: type)
         case .gradient:
             menuShapeControl?.hideSlider()
             menuShapeControl?.hideMenuArrange()
@@ -205,21 +196,51 @@ extension WallshapeViewControl: ShapeViewDelegate {
             menuShapeControl?.hideSlider()
             menuShapeControl?.hideMenuArrange()
             shapeView.shapeViewControl?.createPlainColor()
-        case .shadow:
-            guard let value = shapeView.shapeViewControl?.shape?.shadowRadius else {return}
-            menuShapeControl?.hideMenuArrange()
-            menuShapeControl?.selectSlider(.shadow, value: Float(value), sender.isSelected)
-        case .transparency:
-            guard let value = shapeView.shapeViewControl?.shape?.alpha else {return}
-            menuShapeControl?.hideMenuArrange()
-            menuShapeControl?.selectSlider(.alpha, value: Float(value), sender.isSelected)
-        case .polygon:
-            guard let value = shapeView.shapeViewControl?.shape?.polygon else {return}
-            menuShapeControl?.hideMenuArrange()
-            menuShapeControl?.selectSlider(.polygon, value: Float(value), sender.isSelected)
+        case .shadow, .transparency, .polygon:
+            selectSlider(shapeView, type, isSelected: sender.isSelected)
         case .arrangeSet:
             menuShapeControl?.hideSlider()
             menuShapeControl?.showArrangeMenu()
+        }
+    }
+
+    private func cloneShapeView(_ shapeView: ShapeView) {
+        menuShapeControl?.hideSlider()
+        menuShapeControl?.hideMenuArrange()
+        guard let clonedShapeView = shapeView.shapeViewControl?.clone(self.menuShapeControl) else {return}
+        clonedShapeView.delegate = self
+        view?.addSubview(clonedShapeView)
+    }
+
+    private func changeShapeView(_ shapeView: ShapeView, by type: MenuMainTypeEnum) {
+        menuShapeControl?.hideSlider()
+        menuShapeControl?.hideMenuArrange()
+        switch type {
+        case .circle:
+            shapeView.shapeViewControl?.createPath(by: .circle)
+        case .square:
+            shapeView.shapeViewControl?.createPath(by: .rectangle)
+        case .triangle:
+            shapeView.shapeViewControl?.createPath(by: .triangle)
+        default:
+            NSLog("Error")
+        }
+    }
+
+    private func selectSlider(_ shapeView: ShapeView, _ type: MenuMainTypeEnum, isSelected: Bool) {
+        menuShapeControl?.hideMenuArrange()
+        switch type {
+        case .shadow:
+            guard let value = shapeView.shapeViewControl?.shape?.shadowRadius else {return}
+            menuShapeControl?.selectSlider(.shadow, value: Float(value), isSelected)
+        case .transparency:
+            guard let value = shapeView.shapeViewControl?.shape?.alpha else {return}
+            menuShapeControl?.selectSlider(.alpha, value: Float(value), isSelected)
+        case .polygon:
+            guard let value = shapeView.shapeViewControl?.shape?.polygon else {return}
+            menuShapeControl?.selectSlider(.polygon, value: Float(value), isSelected)
+        default:
+            NSLog("Error")
         }
     }
 

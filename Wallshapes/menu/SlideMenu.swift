@@ -13,11 +13,11 @@ enum SliderType {
 
 final class SliderMenu: UISlider {
     public var type: SliderType?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }

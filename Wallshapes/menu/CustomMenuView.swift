@@ -11,7 +11,7 @@ public protocol IntegerProtocol {
     var rawValue: Int { get }
 }
 
-protocol CustomMenuDelegate {
+protocol CustomMenuDelegate: AnyObject {
     associatedtype EnumType: IntegerProtocol
     static func allCases() -> [EnumType]
     static func imageNameBy(_ type: EnumType) -> String
@@ -28,22 +28,22 @@ protocol CustomMenuViewDelegate: AnyObject {
 
 final class CustomMenuView<T: CustomMenuDelegate>: UIView {
     typealias CustomMenu = T
-    
+
     internal weak var delegate: CustomMenuViewDelegate?
 
     private var stackView: UIStackView?
     private var selectedButtons: [UIButton] = []
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         initLayout()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initLayout()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         initStackView()
@@ -98,7 +98,7 @@ final class CustomMenuView<T: CustomMenuDelegate>: UIView {
         sender.isSelected.toggle()
         _ = selectedButtons.map { if sender != $0 { $0.isSelected = false }}
     }
-    
+
     public func unselectAllButtons() {
         _ = selectedButtons.map { $0.isSelected = false }
     }

@@ -7,14 +7,14 @@
 
 import UIKit
 
-protocol MenuShapeControlDelegate {
+protocol MenuShapeControlDelegate: AnyObject {
     func onSliderMenu(_ sender: SliderMenu)
     func onMainMenu(_ sender: TypeButton<MenuMainView>)
     func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>)
 }
 
 final class MenuShapeControl {
-    internal var delegate: MenuShapeControlDelegate?
+    internal weak var delegate: MenuShapeControlDelegate?
 
     private var sliderView: SliderMenu?
     private var mainMenuView: CustomMenuView<MenuMainView>?
@@ -74,7 +74,7 @@ final class MenuShapeControl {
 
         guard let window = UIApplication.window else {return}
         window.addSubview(menuArrangeView)
-        
+
         menuArrangeView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         menuArrangeView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
         menuArrangeView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.5).isActive = true
@@ -123,7 +123,7 @@ extension MenuShapeControl {
             hideSlider()
         }
     }
-    
+
     private func showSlider(_ type: SliderType, value: Float) {
         guard let sliderView = self.sliderView else {return}
         sliderView.isHidden = false
@@ -151,9 +151,11 @@ extension MenuShapeControl: CustomMenuViewDelegate {
     func onClickMenu(_ sender: UIButton) {
         switch sender {
         case is TypeButton<ArrangeMenuView>:
-            delegate?.onArrangeMenu(sender as! TypeButton<ArrangeMenuView>)
+            guard let sender = sender as? TypeButton<ArrangeMenuView> else {return}
+            delegate?.onArrangeMenu(sender)
         case is TypeButton<MenuMainView>:
-            delegate?.onMainMenu(sender as! TypeButton<MenuMainView>)
+            guard let sender = sender as? TypeButton<MenuMainView> else {return}
+            delegate?.onMainMenu(sender)
         default:
             NSLog("Error")
         }

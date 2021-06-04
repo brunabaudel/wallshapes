@@ -7,23 +7,24 @@
 
 import UIKit
 
-class WallshapesViewController: UIViewController {
+final class WallshapesViewController: UIViewController {
     private var wallshapeView: WallshapeView?
-    
+
     override var prefersStatusBarHidden: Bool {
       return true
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        (self.navigationController as! WallshapesNavigationController).wallshapesDelegate = self
+        guard let nav = self.navigationController as? WallshapesNavigationController else {return}
+        nav.wallshapesDelegate = self
     }
-    
+
     override func loadView() {
         super.loadView()
         initSubviews()
     }
-    
+
     private func initSubviews() {
         wallshapeView = WallshapeView(frame: view.frame)
         guard let wallshapeView = self.wallshapeView else {return}
@@ -39,15 +40,15 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     func refreshPlainColorItemHandle() {
         wallshapeView?.chooseColor()
     }
-    
+
     func refreshGradientItemHandle() {
         wallshapeView?.chooseColors(2)
     }
-    
+
     func addItemHandle() {
         wallshapeView?.addShape()
     }
-    
+
     func clearItemHandle() {
         UIAlertController.alertView("Clear all", message: "Do you want to erase all shapes?", isCancel: true) {
             self.wallshapeView?.clearShapes()
@@ -59,7 +60,7 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
         guard let wallshapeView = self.wallshapeView else { return }
         SaveImage().save("Saving...", view: wallshapeView)
     }
-    
+
     func saveFileHandle() {
         wallshapeView?.saveFile()
     }

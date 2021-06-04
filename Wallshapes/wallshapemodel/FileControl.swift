@@ -16,7 +16,7 @@ final class FileControl {
             NSLog(error.localizedDescription)
         }
     }
-    
+
     static func read(url: URL?) -> String {
         do {
             guard let url = url else { return "" }
@@ -26,7 +26,7 @@ final class FileControl {
         }
         return ""
     }
-    
+
     static func copyToDocuments(fileName: String, ext: String) {
         guard let documentsURL = findURL(fileName: fileName, ext: ext) else { return }
         guard let sourceURL = Bundle.main.url(forResource: fileName, withExtension: ext) else {
@@ -41,7 +41,7 @@ final class FileControl {
             NSLog("Unable to copy file")
         }
     }
-    
+
     static func findURL(fileName: String, ext: String) -> URL? {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
         let url = dir.appendingPathComponent(fileName).appendingPathExtension(ext)

@@ -7,12 +7,12 @@
 
 import UIKit
 
-class DeleteView: UIView {
+final class DeleteView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         initView()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initView()
@@ -22,7 +22,7 @@ class DeleteView: UIView {
         backgroundColor = .clear
         alpha = 0.0
     }
-    
+
     public func toggle(_ isHidden: Bool, completion: ((Bool) -> Void)? = nil) {
         if !isHidden {
             self.fadeOut(0.4, completion)
@@ -30,7 +30,7 @@ class DeleteView: UIView {
             self.fadeIn(0.4, completion)
         }
     }
-    
+
     public func hover(_ isHover: Bool, completion: ((Bool) -> Void)? = nil) {
         if isHover {
             layer.contents = UIImage(named: "trash-open")?.cgImage

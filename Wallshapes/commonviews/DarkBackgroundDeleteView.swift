@@ -7,15 +7,15 @@
 
 import UIKit
 
-class DarkBackgroundDeleteView: UIView {
-    
+final class DarkBackgroundDeleteView: UIView {
+
     public var index: Int = 0
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         initView()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initView()
@@ -25,7 +25,7 @@ class DarkBackgroundDeleteView: UIView {
         backgroundColor = .init(white: 0.1, alpha: 0.7)
         alpha = 0.0
     }
-    
+
     public func toggle(_ isHidden: Bool, completion: ((Bool) -> Void)? = nil) {
         if !isHidden {
             self.fadeOut(0.4, completion)

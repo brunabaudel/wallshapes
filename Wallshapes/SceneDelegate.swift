@@ -13,14 +13,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var initialViewController: WallshapesViewController!
 
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    func scene(_ scene: UIScene,
+               willConnectTo session: UISceneSession,
+               options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+
         initialViewController = WallshapesViewController()
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = WallshapesNavigationController(rootViewController: initialViewController)
         window?.makeKeyAndVisible()
-        guard let _ = (scene as? UIWindowScene) else { return }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
