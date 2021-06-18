@@ -59,13 +59,10 @@ final class MenuShapeControl {
         guard let window = UIApplication.window else {return}
         window.addSubview(mainMenuView)
 
-        let height = (window.frame.width > window.frame.height) ? window.widthAnchor : window.heightAnchor
-        let width = (window.frame.width > window.frame.height) ? window.heightAnchor : window.widthAnchor
-
         mainMenuView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
         mainMenuView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
-        mainMenuView.heightAnchor.constraint(equalTo: height, multiplier: 0.5).isActive = true
-        mainMenuView.widthAnchor.constraint(equalTo: width, multiplier: 0.1).isActive = true
+        mainMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.5).isActive = true
+        mainMenuView.widthAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.075).isActive = true
     }
 
     private func initArrangeMenuOnWindow() {
@@ -80,7 +77,7 @@ final class MenuShapeControl {
 
         menuArrangeView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         menuArrangeView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        menuArrangeView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.5).isActive = true
+        menuArrangeView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.6).isActive = true
         menuArrangeView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
     
@@ -96,7 +93,7 @@ final class MenuShapeControl {
 
         shapeMenuView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         shapeMenuView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        shapeMenuView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.5).isActive = true
+        shapeMenuView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.6).isActive = true
         shapeMenuView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
 
