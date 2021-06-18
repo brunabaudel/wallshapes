@@ -195,7 +195,7 @@ final class WallshapeViewControl {
 // MARK: - Menus
 
 extension WallshapeViewControl: ShapeViewDelegate {
-    func mainView(_ shapeView: ShapeView, _ sender: TypeButton<MenuMainView>) {
+    func mainView(_ shapeView: ShapeView, _ sender: TypeButton<MainMenuView>) {
         guard let type = sender.type else {return}
         switch type {
         case .clone:
@@ -226,7 +226,7 @@ extension WallshapeViewControl: ShapeViewDelegate {
         view?.addSubview(clonedShapeView)
     }
 
-    private func changeShapeView(_ shapeView: ShapeView, by type: MenuMainTypeEnum) {
+    private func changeShapeView(_ shapeView: ShapeView, by type: MainMenuTypeEnum) {
         menuShapeControl?.hideSlider()
         menuShapeControl?.hideMenuArrange()
         switch type {
@@ -241,7 +241,7 @@ extension WallshapeViewControl: ShapeViewDelegate {
         }
     }
 
-    private func selectSlider(_ shapeView: ShapeView, _ type: MenuMainTypeEnum, isSelected: Bool) {
+    private func selectSlider(_ shapeView: ShapeView, _ type: MainMenuTypeEnum, isSelected: Bool) {
         menuShapeControl?.hideMenuArrange()
         switch type {
         case .shadow:

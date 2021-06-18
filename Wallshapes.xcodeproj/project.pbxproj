@@ -21,7 +21,7 @@
 		4C5E8ABE2629BD2800247C9F /* wallshape.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E8AAD2629AF3D00247C9F /* wallshape.json */; };
 		4C5E8AC22629C25200247C9F /* WallshapeModelHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AC12629C25200247C9F /* WallshapeModelHandler.swift */; };
 		4C8092D5264B49E600DDD590 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8092D4264B49E600DDD590 /* UIButton+Extension.swift */; };
-		4C837A722661782C001869DA /* MenuMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C837A712661782C001869DA /* MenuMainView.swift */; };
+		4C837A722661782C001869DA /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C837A712661782C001869DA /* MainMenuView.swift */; };
 		4C83C27D266ABE61008E97FE /* GridControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C83C27C266ABE61008E97FE /* GridControl.swift */; };
 		4C90E1B626308D0B0043696C /* ModelControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C90E1B526308D0B0043696C /* ModelControl.swift */; };
 		4CB5EF4425ED88E800193A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF4325ED88E800193A19 /* AppDelegate.swift */; };
@@ -66,7 +66,7 @@
 		4C5E8AB52629B05600247C9F /* WallshapeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeData.swift; sourceTree = "<group>"; };
 		4C5E8AC12629C25200247C9F /* WallshapeModelHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeModelHandler.swift; sourceTree = "<group>"; };
 		4C8092D4264B49E600DDD590 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
-		4C837A712661782C001869DA /* MenuMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuMainView.swift; sourceTree = "<group>"; };
+		4C837A712661782C001869DA /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		4C83C27C266ABE61008E97FE /* GridControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridControl.swift; sourceTree = "<group>"; };
 		4C90E1B526308D0B0043696C /* ModelControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelControl.swift; sourceTree = "<group>"; };
 		4CB5EF4025ED88E800193A19 /* Wallshapes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wallshapes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,7 +219,7 @@
 				4CB5EF7C25ED8BB500193A19 /* SlideMenu.swift */,
 				4C21D42526586CDB00116116 /* CustomMenuView.swift */,
 				4C21D427265872E100116116 /* ArrangeMenuView.swift */,
-				4C837A712661782C001869DA /* MenuMainView.swift */,
+				4C837A712661782C001869DA /* MainMenuView.swift */,
 				4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */,
 			);
 			path = menu;
@@ -359,7 +359,7 @@
 				4CE30AA726442AD7002AC429 /* DarkBackgroundDeleteView.swift in Sources */,
 				4C5E8AB62629B05600247C9F /* WallshapeData.swift in Sources */,
 				4C21D428265872E100116116 /* ArrangeMenuView.swift in Sources */,
-				4C837A722661782C001869DA /* MenuMainView.swift in Sources */,
+				4C837A722661782C001869DA /* MainMenuView.swift in Sources */,
 				4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */,
 				4CB5EF8925F1537100193A19 /* CGPath+Extension.swift in Sources */,
 				4CB5EF6E25ED8ABB00193A19 /* ShapeView.swift in Sources */,

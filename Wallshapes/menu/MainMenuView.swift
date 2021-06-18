@@ -1,5 +1,5 @@
 //
-//  MenuMainView.swift
+//  MainMenuView.swift
 //  Wallshapes
 //
 //  Created by Bruna Baudel on 5/28/21.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-enum MenuMainTypeEnum: Int, IntegerProtocol {
+enum MainMenuTypeEnum: Int, IntegerProtocol {
     case clone, circle, square, triangle, polygon, gradient,
          plainColor, shadow, transparency, arrangeSet
 }
 
-final class MenuMainView: CustomMenuDelegate {
-    typealias EnumType = MenuMainTypeEnum
+final class MainMenuView: CustomMenuDelegate {
+    typealias EnumType = MainMenuTypeEnum
 
     static private let typeImage = [EnumType.clone: "copy",
                                     .circle: "circle",

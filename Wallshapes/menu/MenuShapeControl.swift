@@ -9,7 +9,7 @@ import UIKit
 
 protocol MenuShapeControlDelegate: AnyObject {
     func onSliderMenu(_ sender: SliderMenu)
-    func onMainMenu(_ sender: TypeButton<MenuMainView>)
+    func onMainMenu(_ sender: TypeButton<MainMenuView>)
     func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>)
 }
 
@@ -17,7 +17,7 @@ final class MenuShapeControl {
     internal weak var delegate: MenuShapeControlDelegate?
 
     private var sliderView: SliderMenu?
-    private var mainMenuView: CustomMenuView<MenuMainView>?
+    private var mainMenuView: CustomMenuView<MainMenuView>?
     private var menuArrangeView: CustomMenuView<ArrangeMenuView>?
 
     init() {
@@ -47,7 +47,7 @@ final class MenuShapeControl {
     }
 
     private func initMainMenuOnWindow() {
-        mainMenuView = CustomMenuView<MenuMainView>(frame: CGRect.zero)
+        mainMenuView = CustomMenuView<MainMenuView>(frame: CGRect.zero)
         guard let mainMenuView = self.mainMenuView else {return}
         mainMenuView.translatesAutoresizingMaskIntoConstraints = false
         mainMenuView.isHidden = true
@@ -153,8 +153,8 @@ extension MenuShapeControl: CustomMenuViewDelegate {
         case is TypeButton<ArrangeMenuView>:
             guard let sender = sender as? TypeButton<ArrangeMenuView> else {return}
             delegate?.onArrangeMenu(sender)
-        case is TypeButton<MenuMainView>:
-            guard let sender = sender as? TypeButton<MenuMainView> else {return}
+        case is TypeButton<MainMenuView>:
+            guard let sender = sender as? TypeButton<MainMenuView> else {return}
             delegate?.onMainMenu(sender)
         default:
             NSLog("Error")

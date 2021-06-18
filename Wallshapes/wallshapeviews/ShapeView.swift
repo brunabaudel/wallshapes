@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ShapeViewDelegate: AnyObject {
-    func mainView(_ shapeView: ShapeView, _ sender: TypeButton<MenuMainView>)
+    func mainView(_ shapeView: ShapeView, _ sender: TypeButton<MainMenuView>)
     func arrangeView(_ shapeView: ShapeView, _ sender: TypeButton<ArrangeMenuView>)
     func sliderView(_ shapeView: ShapeView, _ sender: SliderMenu)
 }
@@ -72,7 +72,7 @@ extension ShapeView {
 }
 
 extension ShapeView: MenuShapeControlDelegate {
-    func onMainMenu(_ sender: TypeButton<MenuMainView>) {
+    func onMainMenu(_ sender: TypeButton<MainMenuView>) {
         delegate?.mainView(self, sender)
     }
 
