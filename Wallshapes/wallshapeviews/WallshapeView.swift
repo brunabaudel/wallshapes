@@ -11,22 +11,19 @@ final class WallshapeView: UIView {
     private var wallshapeViewControl: WallshapeViewControl?
     private var gesturesControl: ShapeGesturesControl?
     private var menuShapeControl: MenuShapeControl?
+    internal var contentView: UIView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.contentView = UIView(frame: frame)
         self.menuShapeControl = MenuShapeControl()
         self.wallshapeViewControl = WallshapeViewControl(self, menuControl: menuShapeControl)
         self.gesturesControl = ShapeGesturesControl(self)
-
         self.backgroundColor = .init(white: 0.15, alpha: 1)
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-    }
-
-    public func contentViewFrame() -> CGRect {
-        return wallshapeViewControl?.contentViewFrame() ?? CGRect.zero
     }
 
     public func chooseColors(_ count: Int) {
@@ -41,6 +38,10 @@ final class WallshapeView: UIView {
         wallshapeViewControl?.resizeContentView()
     }
 
+    public func gridView() {
+        wallshapeViewControl?.gridView()
+    }
+
     public func addShape() {
         wallshapeViewControl?.addShape()
     }
@@ -51,6 +52,10 @@ final class WallshapeView: UIView {
 
     public func saveFile() {
         wallshapeViewControl?.saveFile()
+    }
+
+    public func saveToPhotos(title: String) {
+        wallshapeViewControl?.saveToPhotos(title: title)
     }
 
     public func hideMenu() {

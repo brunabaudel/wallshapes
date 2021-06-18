@@ -33,6 +33,10 @@ final class WallshapesViewController: UIViewController {
 }
 
 extension WallshapesViewController: WallshapesNavigationControllerDelegate {
+    func gridViewHandle() {
+        wallshapeView?.gridView()
+    }
+
     func changeViewSizeHandle() {
         wallshapeView?.resizeContentView()
     }
@@ -56,9 +60,8 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     }
 
     func saveItemHandle() {
-        saveFileHandle()
-        guard let wallshapeView = self.wallshapeView else { return }
-        SaveImage().save("Saving...", view: wallshapeView)
+        wallshapeView?.saveFile()
+        wallshapeView?.saveToPhotos(title: "Saving...")
     }
 
     func saveFileHandle() {

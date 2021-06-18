@@ -9,8 +9,7 @@ import UIKit
 
 final class WallshapeViewControl {
     private weak var view: WallshapeView?
-    private var contentView: UIView?
-
+    private var gridControl: GridControl?
     private var modelControl: ModelControl?
     private var menuShapeControl: MenuShapeControl?
 
@@ -18,13 +17,14 @@ final class WallshapeViewControl {
         self.view = view
         self.modelControl = ModelControl()
         self.menuShapeControl = menuControl
-
+        
         guard let wallshape = self.modelControl?.recover() else { return }
         initContentView(with: wallshape.backgroundColors, size: wallshape.size)
         initShapes(shapes: wallshape.shapes)
+        initGridView()
     }
 
-    public func initShapes(shapes: [Shape]) {
+    private func initShapes(shapes: [Shape]) {
         guard let view = self.view, let menuShapeControl = self.menuShapeControl else { return }
         for shape in shapes {
             let frame = shape.frame
@@ -34,10 +34,9 @@ final class WallshapeViewControl {
         }
     }
 
-    public func initContentView(with colors: [CGColor], size: WallshapeSize) {
+    private func initContentView(with colors: [CGColor], size: WallshapeSize) {
         guard let view = self.view else { return }
-        contentView = UIView(frame: view.frame)
-        guard let contentView = self.contentView else { return }
+        guard let contentView = view.contentView else { return }
         if colors.count == 1 {
             contentView.backgroundColor = UIColor(cgColor: colors.first!)
         } else {
@@ -49,11 +48,19 @@ final class WallshapeViewControl {
         view.addSubview(contentView)
     }
 
+    private func initGridView() {
+        guard let view = self.view, let contentView = view.contentView else { return }
+        gridControl = GridControl(frame: contentView.bounds)
+        guard let gridControl = self.gridControl, let shapelayer = gridControl.shapelayer else { return }
+        gridControl.isHidden = true
+        contentView.layer.addSublayer(shapelayer)
+    }
+
     // MARK: - Colors
 
     public func chooseColors(_ count: Int) {
         let colors = self.randomColors(2)
-        guard let gradientLayer = (contentView?.layer.sublayers?.first) as? CAGradientLayer else {
+        guard let gradientLayer = (self.view?.contentView?.layer.sublayers?.first) as? CAGradientLayer else {
             addGradientLayer(with: colors)
             return
         }
@@ -62,19 +69,19 @@ final class WallshapeViewControl {
 
     public func chooseColor() {
         let color = UIColor.random
-        contentView?.layer.sublayers?.removeAll()
-        contentView?.backgroundColor = color
+        self.view?.contentView?.layer.sublayers?.removeAll(where: { layer in layer is CAGradientLayer })
+        self.view?.contentView?.backgroundColor = color
     }
 
     private func addGradientLayer(with colors: [CGColor]) {
         let gradientLayer = initGradientLayer(colors)
-        contentView?.layer.sublayers?.removeAll()
-        contentView?.layer.insertSublayer(gradientLayer, at: 0)
+        self.view?.contentView?.layer.sublayers?.removeAll(where: { layer in layer is CAGradientLayer })
+        self.view?.contentView?.layer.insertSublayer(gradientLayer, at: 0)
     }
 
     private func initGradientLayer(_ colors: [CGColor]) -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = contentView?.bounds ?? CGRect.zero
+        gradientLayer.frame = self.view?.contentView?.bounds ?? CGRect.zero
         gradientLayer.colors = colors
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
@@ -94,18 +101,23 @@ final class WallshapeViewControl {
 
     // MARK: - Navigationbar Functions
 
+    public func gridView() {
+        gridControl?.isHidden.toggle()
+    }
+
     public func resizeContentView() {
         guard let view = self.view else { return }
         var newSize: CGRect = view.frame
-        if contentView?.frame.height != contentView?.frame.width {
+        if view.contentView?.frame.height != view.contentView?.frame.width {
             newSize = CGRect(origin: CGPoint.zero, size: self.squaredSize())
         }
-        contentView?.frame.origin = CGPoint.zero
-        contentView?.frame.size = newSize.size
-        contentView?.center = view.center
+        self.view?.contentView?.frame.origin = CGPoint.zero
+        self.view?.contentView?.frame.size = newSize.size
+        self.view?.contentView?.center = view.center
+        self.gridControl?.createGrid(frame: self.view?.contentView?.bounds)
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        contentView?.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        self.view?.contentView?.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         CATransaction.commit()
     }
 
@@ -127,12 +139,8 @@ final class WallshapeViewControl {
 
     public func clearShapes() {
         guard let view = self.view else { return }
-        view.subviews.forEach { if !$0.isEqual(contentView) { $0.removeFromSuperview() } }
+        view.subviews.forEach { if !$0.isEqual(view.contentView) { $0.removeFromSuperview() } }
         menuShapeControl?.hideMenuShape()
-    }
-
-    public func contentViewFrame() -> CGRect {
-        return self.contentView?.frame ?? CGRect.zero
     }
 
     // MARK: - Save file
@@ -144,9 +152,20 @@ final class WallshapeViewControl {
         modelControl?.save()
     }
 
+    public func saveToPhotos(title: String) {
+        guard let view = self.view, let contentView = view.contentView else {return}
+        if let gridLayer = (contentView.layer.sublayers?.last) as? CAShapeLayer {
+            gridLayer.removeFromSuperlayer()
+        }
+        SaveImage.save(title, view: view, frame: contentView.frame) {
+            guard let gridControl = self.gridControl, let shapelayer = gridControl.shapelayer else { return }
+            contentView.layer.addSublayer(shapelayer)
+        }
+    }
+
     private func contentViewSize() -> WallshapeSize {
         guard let view = self.view else { return .normal }
-        if contentView?.frame.height ?? 0 < view.frame.height {
+        if view.contentView?.frame.height ?? 0 < view.frame.height {
             return .small
         }
         return .normal
@@ -156,23 +175,18 @@ final class WallshapeViewControl {
         guard let view = self.view else { return [] }
         return view.subviews
             .filter { type(of: $0) == ShapeView.self }
-            .compactMap {
-                if let shapeview = $0 as? ShapeView { return shapeview }
-                return nil
-            }
+            .compactMap { $0 as? ShapeView }
     }
 
     private func backgroundCGColors() -> [CGColor] {
-        if let sublayer = contentView?.firstSublayer {
-            if let colors = (sublayer as? CAGradientLayer)?.colors,
-               let cgColors = colors as? [CGColor],
-               sublayer.isEqualTo(type: CAGradientLayer.self) {
+        if let sublayer = self.view?.contentView?.firstSublayer,
+           let gradientLayer = sublayer as? CAGradientLayer,
+           let colors = gradientLayer.colors,
+           let cgColors = colors as? [CGColor] {
                 return cgColors
-            }
-        } else {
-            if let cgColors = contentView?.backgroundColor?.cgColor {
-                return [cgColors]
-            }
+        }
+        if let cgColors = self.view?.contentView?.backgroundColor?.cgColor {
+            return [cgColors]
         }
         return []
     }

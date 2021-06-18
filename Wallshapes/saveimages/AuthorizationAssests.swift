@@ -49,7 +49,7 @@ final class AuthorizationAssests {
         }
     }
 
-    public func openAppSettings(_ title: String, message: String, titleOK: String) {
+    static public func openAppSettings(_ title: String, message: String, titleOK: String) {
         DispatchQueue.main.async {
             guard let window = UIApplication.window else {return}
             UIAlertController.alertView(title, message: message, titleOK: titleOK, isCancel: true) {
