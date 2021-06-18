@@ -129,7 +129,7 @@ final class WallshapeViewControl {
 
     public func addShape() {
         guard let view = self.view, let menuShapeControl = self.menuShapeControl else { return }
-        menuShapeControl.showMenuShape()
+        menuShapeControl.showMenu()
         let size = view.bounds.width > view.bounds.height ? view.bounds.midY/2 : view.bounds.midX/2
         let frame = CGRect(x: size*1.75, y: size, width: size, height: size)
         let shapeView = ShapeView(frame: frame, menu: menuShapeControl)
@@ -140,7 +140,7 @@ final class WallshapeViewControl {
     public func clearShapes() {
         guard let view = self.view else { return }
         view.subviews.forEach { if !$0.isEqual(view.contentView) { $0.removeFromSuperview() } }
-        menuShapeControl?.hideMenuShape()
+        menuShapeControl?.hideMenu()
     }
 
     // MARK: - Save file
@@ -200,33 +200,65 @@ extension WallshapeViewControl: ShapeViewDelegate {
         switch type {
         case .clone:
             cloneShapeView(shapeView)
-        case .circle, .square, .triangle:
-            changeShapeView(shapeView, by: type)
         case .gradient:
             menuShapeControl?.hideSlider()
+            menuShapeControl?.hideShapeMenu()
             menuShapeControl?.hideMenuArrange()
             shapeView.shapeViewControl?.createGradientColors()
         case .plainColor:
             menuShapeControl?.hideSlider()
+            menuShapeControl?.hideShapeMenu()
             menuShapeControl?.hideMenuArrange()
             shapeView.shapeViewControl?.createPlainColor()
-        case .shadow, .transparency, .polygon:
+        case .shadow, .transparency:
             selectSlider(shapeView, type, isSelected: sender.isSelected)
         case .arrangeSet:
+            menuShapeControl?.hideShapeMenu()
             menuShapeControl?.hideSlider()
             menuShapeControl?.showArrangeMenu()
+        case .shapes:
+            menuShapeControl?.hideMenuArrange()
+            menuShapeControl?.hideSlider()
+            menuShapeControl?.showShapeMenu()
         }
     }
 
     private func cloneShapeView(_ shapeView: ShapeView) {
         menuShapeControl?.hideSlider()
         menuShapeControl?.hideMenuArrange()
+        menuShapeControl?.hideShapeMenu()
         guard let clonedShapeView = shapeView.shapeViewControl?.clone(self.menuShapeControl) else {return}
         clonedShapeView.delegate = self
         view?.addSubview(clonedShapeView)
     }
 
-    private func changeShapeView(_ shapeView: ShapeView, by type: MainMenuTypeEnum) {
+    private func selectSlider(_ shapeView: ShapeView, _ type: MainMenuTypeEnum, isSelected: Bool) {
+        menuShapeControl?.hideMenuArrange()
+        menuShapeControl?.hideShapeMenu()
+        switch type {
+        case .shadow:
+            guard let value = shapeView.shapeViewControl?.shape?.shadowRadius else {return}
+            menuShapeControl?.selectSlider(.shadow, value: Float(value), isSelected)
+        case .transparency:
+            guard let value = shapeView.shapeViewControl?.shape?.alpha else {return}
+            menuShapeControl?.selectSlider(.alpha, value: Float(value), isSelected)
+        default:
+            NSLog("Error")
+        }
+    }
+    
+    func shapeView(_ shapeView: ShapeView, _ sender: TypeButton<ShapeMenuView>) {
+        guard let type = sender.type else {return}
+        switch type {
+        case .circle, .square, .triangle:
+            changeShapeView(shapeView, by: type)
+        case .polygon:
+            guard let value = shapeView.shapeViewControl?.shape?.polygon else {return}
+            menuShapeControl?.selectSlider(.polygon, value: Float(value), sender.isSelected)
+        }
+    }
+
+    private func changeShapeView(_ shapeView: ShapeView, by type: ShapeMenuTypeEnum) {
         menuShapeControl?.hideSlider()
         menuShapeControl?.hideMenuArrange()
         switch type {
@@ -240,24 +272,7 @@ extension WallshapeViewControl: ShapeViewDelegate {
             NSLog("Error")
         }
     }
-
-    private func selectSlider(_ shapeView: ShapeView, _ type: MainMenuTypeEnum, isSelected: Bool) {
-        menuShapeControl?.hideMenuArrange()
-        switch type {
-        case .shadow:
-            guard let value = shapeView.shapeViewControl?.shape?.shadowRadius else {return}
-            menuShapeControl?.selectSlider(.shadow, value: Float(value), isSelected)
-        case .transparency:
-            guard let value = shapeView.shapeViewControl?.shape?.alpha else {return}
-            menuShapeControl?.selectSlider(.alpha, value: Float(value), isSelected)
-        case .polygon:
-            guard let value = shapeView.shapeViewControl?.shape?.polygon else {return}
-            menuShapeControl?.selectSlider(.polygon, value: Float(value), isSelected)
-        default:
-            NSLog("Error")
-        }
-    }
-
+        
     func arrangeView(_ shapeView: ShapeView, _ sender: TypeButton<ArrangeMenuView>) {
         guard let view = self.view, let type = sender.type else {return}
         switch type {

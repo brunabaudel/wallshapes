@@ -8,7 +8,7 @@
 import UIKit
 
 enum MainMenuTypeEnum: Int, IntegerProtocol {
-    case clone, circle, square, triangle, polygon, gradient,
+    case clone, shapes, gradient,
          plainColor, shadow, transparency, arrangeSet
 }
 
@@ -16,15 +16,12 @@ final class MainMenuView: CustomMenuDelegate {
     typealias EnumType = MainMenuTypeEnum
 
     static private let typeImage = [EnumType.clone: "copy",
-                                    .circle: "circle",
-                                    .square: "square-of-rounded-corners",
-                                    .triangle: "bleach",
+                                    .shapes: "shapes",
                                     .gradient: "gradient",
                                     .plainColor: "bucket",
                                     .shadow: "shadow",
                                     .transparency: "transparency",
-                                    .polygon: "hexagonal",
-                                    .arrangeSet: "arrange-set"
+                                    .arrangeSet: "arrange-set",
                                     ]
 
     static func allCases() -> [EnumType] {
@@ -37,9 +34,9 @@ final class MainMenuView: CustomMenuDelegate {
 
     static func state(_ type: EnumType) -> UIControl.State {
         switch type {
-        case .clone, .circle, .square, .triangle, .gradient, .plainColor:
+        case .clone, .gradient, .plainColor:
             return .highlighted
-        case .shadow, .transparency, .polygon, .arrangeSet:
+        case .shapes, .shadow, .transparency, .arrangeSet:
             return .selected
         }
     }

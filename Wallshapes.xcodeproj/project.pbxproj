@@ -43,6 +43,7 @@
 		4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8F25F1570800193A19 /* CALayer+Extension.swift */; };
 		4CB5EF9F25F670E900193A19 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF9E25F670E900193A19 /* UIApplication+Extension.swift */; };
 		4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */; };
+		4CD45EC8267D043700333086 /* ShapeMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD45EC7267D043700333086 /* ShapeMenuView.swift */; };
 		4CE30AA52642C034002AC429 /* DeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE30AA42642C034002AC429 /* DeleteView.swift */; };
 		4CE30AA726442AD7002AC429 /* DarkBackgroundDeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE30AA626442AD7002AC429 /* DarkBackgroundDeleteView.swift */; };
 		4CF48BD82621F380009822DA /* SaveImageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BD72621F380009822DA /* SaveImageControl.swift */; };
@@ -90,6 +91,7 @@
 		4CB5EF8F25F1570800193A19 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF9E25F670E900193A19 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderIndicatorView.swift; sourceTree = "<group>"; };
+		4CD45EC7267D043700333086 /* ShapeMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeMenuView.swift; sourceTree = "<group>"; };
 		4CE30AA42642C034002AC429 /* DeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteView.swift; sourceTree = "<group>"; };
 		4CE30AA626442AD7002AC429 /* DarkBackgroundDeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkBackgroundDeleteView.swift; sourceTree = "<group>"; };
 		4CF48BD72621F380009822DA /* SaveImageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImageControl.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 			children = (
 				4CB5EF7C25ED8BB500193A19 /* SlideMenu.swift */,
 				4C21D42526586CDB00116116 /* CustomMenuView.swift */,
+				4CD45EC7267D043700333086 /* ShapeMenuView.swift */,
 				4C21D427265872E100116116 /* ArrangeMenuView.swift */,
 				4C837A712661782C001869DA /* MainMenuView.swift */,
 				4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */,
@@ -338,6 +341,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CD45EC8267D043700333086 /* ShapeMenuView.swift in Sources */,
 				4C51FFA1260413320064CE04 /* ShapeViewControl.swift in Sources */,
 				4C90E1B626308D0B0043696C /* ModelControl.swift in Sources */,
 				4C50EEF7261F50920096D630 /* WallshapesViewController.swift in Sources */,

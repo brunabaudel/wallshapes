@@ -59,7 +59,7 @@ final class WallshapeView: UIView {
     }
 
     public func hideMenu() {
-        menuShapeControl?.hideMenuShape()
+        menuShapeControl?.hideMenu()
     }
 }
 

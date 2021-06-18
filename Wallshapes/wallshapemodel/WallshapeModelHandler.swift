@@ -13,8 +13,12 @@ final class WallshapeModelHandler {
 
     static public func store(wallshape: Wallshape) {
         let size = wallshape.size.rawValue
-        let backgroundColor = cgcolorToColordata(wallshape.backgroundColors)
-        let shapes = shapeToShapedata(wallshape.shapes)
+        var backgroundColor = cgcolorToColordata(wallshape.backgroundColors)
+        var shapes = shapeToShapedata(wallshape.shapes)
+        defer {
+            backgroundColor = []
+            shapes = []
+        }
         let wallshapeData = WallshapeData(name: dirName, size: size, backgroundColor: backgroundColor, shapes: shapes)
         guard let data = JsonControl.encodeParse(object: wallshapeData) else { return }
         guard let string = String(data: data, encoding: .utf8) else { return }
@@ -26,8 +30,12 @@ final class WallshapeModelHandler {
         let url = FileControl.findURL(fileName: dirName, ext: dirExt)
         guard let wallshapeData = JsonControl.decodeParse(url: url, type: WallshapeData.self) else { return nil }
         guard let size = WallshapeSize(rawValue: wallshapeData.size) else { return nil }
-        let backgroundColors = colordataToCGColor(wallshapeData.backgroundColor)
-        let shapes = shapedataToShape(wallshapeData.shapes)
+        var backgroundColors = colordataToCGColor(wallshapeData.backgroundColor)
+        var shapes = shapedataToShape(wallshapeData.shapes)
+        defer {
+            backgroundColors = []
+            shapes = []
+        }
         let wallshape = Wallshape(backgroundColors: backgroundColors, shapes: shapes, size: size)
         return wallshape
     }
