@@ -24,7 +24,6 @@ final class ShapeViewControl {
     }
 
     public func createPath(by type: ShapeType) {
-        self.shape?.polygon = 0
         self.shape?.type = type
         switch type {
         case ShapeType.circle:
@@ -121,6 +120,7 @@ extension ShapeViewControl {
     }
 
     private func createPathCircle() {
+        self.shape?.polygon = 0
         let path = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: view.frame.origin.x + (view.frame.size.width)/2,
                                         y: view.frame.origin.y + (view.frame.size.height)/2),
@@ -130,6 +130,7 @@ extension ShapeViewControl {
     }
 
     private func createPathRectangle() {
+        self.shape?.polygon = 0
         let path = UIBezierPath()
         path.move(to: CGPoint(x: view.frame.origin.x, y: view.frame.origin.y))
         path.addLine(to: CGPoint(x: view.frame.origin.x, y: view.frame.origin.y + view.frame.size.height))
@@ -141,6 +142,7 @@ extension ShapeViewControl {
     }
 
     private func createPathTriangle() {
+        self.shape?.polygon = 0
         let path = UIBezierPath()
         path.move(to: CGPoint(x: view.frame.width/2 + view.frame.origin.x, y: view.frame.origin.y))
         path.addLine(to: CGPoint(x: view.frame.origin.x, y: view.frame.size.height + view.frame.origin.y))

@@ -249,18 +249,8 @@ extension WallshapeViewControl: ShapeViewDelegate {
     
     func shapeView(_ shapeView: ShapeView, _ sender: TypeButton<ShapeMenuView>) {
         guard let type = sender.type else {return}
-        switch type {
-        case .circle, .square, .triangle:
-            changeShapeView(shapeView, by: type)
-        case .polygon:
-            guard let value = shapeView.shapeViewControl?.shape?.polygon else {return}
-            menuShapeControl?.selectSlider(.polygon, value: Float(value), sender.isSelected)
-        }
-    }
-
-    private func changeShapeView(_ shapeView: ShapeView, by type: ShapeMenuTypeEnum) {
-        menuShapeControl?.hideSlider()
         menuShapeControl?.hideMenuArrange()
+        menuShapeControl?.hideSlider()
         switch type {
         case .circle:
             shapeView.shapeViewControl?.createPath(by: .circle)
@@ -268,8 +258,9 @@ extension WallshapeViewControl: ShapeViewDelegate {
             shapeView.shapeViewControl?.createPath(by: .rectangle)
         case .triangle:
             shapeView.shapeViewControl?.createPath(by: .triangle)
-        default:
-            NSLog("Error")
+        case .polygon:
+            guard let value = shapeView.shapeViewControl?.shape?.polygon else {return}
+            menuShapeControl?.selectSlider(.polygon, value: Float(value), sender.isSelected)
         }
     }
         
@@ -308,6 +299,7 @@ extension WallshapeViewControl: ShapeViewDelegate {
             let value = CGFloat(sender.value)
             shapeView.shapeViewControl?.createPolygon(value)
             shape.polygon = value
+            shape.type = .polygon
         default:
             break
         }
