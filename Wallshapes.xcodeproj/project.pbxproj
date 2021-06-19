@@ -136,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				4C83C27C266ABE61008E97FE /* GridControl.swift */,
+				4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */,
 			);
 			path = grid;
 			sourceTree = "<group>";
@@ -159,12 +160,12 @@
 		4CB5EF4225ED88E800193A19 /* Wallshapes */ = {
 			isa = PBXGroup;
 			children = (
-				4C83C27B266ABE4C008E97FE /* grid */,
 				4C1340CA262B32E60070F7DC /* wallshapesjson */,
 				4C5E8AAC2629AF0300247C9F /* wallshapemodel */,
 				4CF48BEC2624BE05009822DA /* saveimages */,
 				4CB5EF7F25ED8C1E00193A19 /* commonviews */,
 				4CB5EF5C25ED89FB00193A19 /* extensions */,
+				4C83C27B266ABE4C008E97FE /* grid */,
 				4CB5EF7725ED8B8800193A19 /* menu */,
 				4CB5EF6625ED8A6100193A19 /* wallshapeviews */,
 				4CB5EF5A25ED89C100193A19 /* main */,
@@ -231,7 +232,6 @@
 		4CB5EF7F25ED8C1E00193A19 /* commonviews */ = {
 			isa = PBXGroup;
 			children = (
-				4C51FFA82605214F0064CE04 /* MiddleIndicatorView.swift */,
 				4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */,
 				4CB5EF8025ED8C3000193A19 /* StackView.swift */,
 				4CE30AA42642C034002AC429 /* DeleteView.swift */,
