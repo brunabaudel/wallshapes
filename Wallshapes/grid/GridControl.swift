@@ -9,7 +9,7 @@ import UIKit
 
 final class GridControl {
 
-    private let GAP = 20.0 // (gcf hxw)??
+    private let GAP: CGFloat = 20.0 // (gcf hxw)??
     private(set) var shapelayer: CAShapeLayer?
     var isHidden: Bool = true {
         didSet { shapelayer?.isHidden = isHidden }
@@ -34,7 +34,7 @@ final class GridControl {
         shapelayer.path = initGridPath(frame: frame, wLines: widhtLines, hLines: heightLines).cgPath
     }
 
-    private func initGridPath(frame: CGRect, wLines: Double, hLines: Double) -> UIBezierPath {
+    private func initGridPath(frame: CGRect, wLines: CGFloat, hLines: CGFloat) -> UIBezierPath {
         let path = UIBezierPath()
         for idx in 1...Int(wLines) {
             path.move(to: CGPoint(x: CGFloat(idx) * GAP, y: frame.minX))
