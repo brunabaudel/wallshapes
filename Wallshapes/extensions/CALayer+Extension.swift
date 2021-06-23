@@ -41,3 +41,12 @@ extension CALayer {
         return false
     }
 }
+
+extension CATransaction {
+    class func removeAnimation(completion: () -> Void) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        completion()
+        CATransaction.commit()
+    }
+}
