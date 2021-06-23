@@ -117,10 +117,9 @@ final class WallshapeViewControl {
         self.view?.contentView?.frame.size = newSize.size
         self.view?.contentView?.center = view.center
         self.gridControl?.createGrid(frame: self.view?.contentView?.bounds)
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        self.view?.contentView?.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-        CATransaction.commit()
+        CATransaction.removeAnimation {
+            self.view?.contentView?.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        }
     }
 
     private func squaredSize() -> CGSize {

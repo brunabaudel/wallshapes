@@ -101,23 +101,21 @@ extension ShapeGesturesControl {
 
     private func setupShapeLayerScale(_ newFrame: CGRect, currLayer: CAShapeLayer) {
         guard let viewGesture = self.viewGesture else {return}
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        currLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
-        currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
-        CATransaction.commit()
+        CATransaction.removeAnimation {
+            currLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
+            currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
+        }
     }
 
     private func setupGradientLayerScale(_ newFrame: CGRect, currLayer: CAGradientLayer) {
         guard let viewGesture = self.viewGesture else {return}
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        guard let shapeLayer = currLayer.mask as? CAShapeLayer else {return}
-        shapeLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
-        shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
-        currLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: viewGesture.frame.size)
-        currLayer.mask = shapeLayer
-        CATransaction.commit()
+        CATransaction.removeAnimation {
+            guard let shapeLayer = currLayer.mask as? CAShapeLayer else {return}
+            shapeLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
+            shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
+            currLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: viewGesture.frame.size)
+            currLayer.mask = shapeLayer
+        }
     }
 }
 
@@ -178,21 +176,19 @@ extension ShapeGesturesControl {
     }
 
     private func setupShapeLayer(_ newFrame: CGRect, currLayer: CAShapeLayer) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: newFrame.size)
-        currLayer.path = self.shapeLayerPath
-        CATransaction.commit()
+        CATransaction.removeAnimation {
+            currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: newFrame.size)
+            currLayer.path = self.shapeLayerPath
+        }
     }
 
     private func setupGradientLayer(_ newFrame: CGRect, currLayer: CAGradientLayer) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        guard let shapeLayer = currLayer.mask as? CAShapeLayer else {return}
-        shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: newFrame.size)
-        shapeLayer.path = self.shapeLayerPath
-        currLayer.mask = shapeLayer
-        CATransaction.commit()
+        CATransaction.removeAnimation {
+            guard let shapeLayer = currLayer.mask as? CAShapeLayer else {return}
+            shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: newFrame.size)
+            shapeLayer.path = self.shapeLayerPath
+            currLayer.mask = shapeLayer
+        }
     }
 
     private func findSubview(_ location: CGPoint) {
