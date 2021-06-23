@@ -40,8 +40,10 @@ final class ShapeViewControl {
     public func createPlainColor() {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
         let color = UIColor.random
-        shapeLayer.fillColor = color.cgColor
-        self.replaceLayer(shapeLayer)
+        CATransaction.removeAnimation {
+            shapeLayer.fillColor = color.withAlphaComponent(shape.alpha).cgColor
+            self.replaceLayer(shapeLayer)
+        }
         shape.shapeLayer = shapeLayer
         shape.layerColors?[0] = color
         shape.gradientLayer = nil
@@ -52,7 +54,7 @@ final class ShapeViewControl {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
             let colors = [UIColor.random, UIColor.random]
-            let cgColors = colors.map {$0.cgColor}
+            let cgColors = colors.map {$0.withAlphaComponent(shape.alpha).cgColor}
             gradient.colors = cgColors
             gradient.mask = shapeLayer
             self.replaceLayer(gradient)
@@ -76,8 +78,26 @@ final class ShapeViewControl {
     }
 
     public func createAlpha(_ value: CGFloat) {
-        self.view.alpha = value
-        self.shape?.alpha = value
+        guard let sublayers = self.view.layer.sublayers else {return}
+        if let shapelayer = sublayers.first as? CAShapeLayer,
+           let cgcolor = shapelayer.fillColor {
+            let color = UIColor(cgColor: cgcolor)
+            self.shape?.alpha = value
+            CATransaction.removeAnimation {
+                shapelayer.fillColor = color.withAlphaComponent(value).cgColor
+            }
+            return
+        }
+        
+        if let gradietlayer = sublayers.first as? CAGradientLayer,
+           let cgcolors = gradietlayer.colors as? [CGColor] {
+            let colors = cgcolors.map {UIColor(cgColor: $0).withAlphaComponent(value).cgColor}
+            self.shape?.alpha = value
+            CATransaction.removeAnimation {
+                gradietlayer.colors = colors
+            }
+            return
+        }
     }
 
     public func createPolygon(_ value: CGFloat) {
@@ -171,7 +191,8 @@ extension ShapeViewControl {
     private func replaceGradientLayer(_ shapeLayer: CAShapeLayer) {
         guard let shape = self.shape, let colors = shape.layerColors else {return}
         let gradient = CAGradientLayer()
-        let cgColors = colors.map {$0.cgColor}
+        let cgColors = colors.map {$0.withAlphaComponent(shape.alpha).cgColor}
+        shapeLayer.fillColor = UIColor.white.withAlphaComponent(1.0).cgColor
         gradient.bounds = self.view.bounds
         gradient.position = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
         gradient.colors = cgColors
@@ -189,7 +210,7 @@ extension ShapeViewControl {
                                                   y: -self.view.frame.minY),
                                   size: self.view.frame.size)
         shapeLayer.path = path.cgPath
-        shapeLayer.fillColor = color.cgColor
+        shapeLayer.fillColor = color.withAlphaComponent(shape.alpha).cgColor
         shapeLayer.mask = nil
         shape.layerColors?[0] = color
         shape.shapeLayer = shapeLayer
