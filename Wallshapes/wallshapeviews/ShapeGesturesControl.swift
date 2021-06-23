@@ -20,7 +20,7 @@ final class ShapeGesturesControl {
     private var deleteView: DeleteView!
     private var darkBackgroundDeleteView: DarkBackgroundDeleteView?
 
-    init<T: WallshapeView>(_ view: T) {
+    init(_ view: WallshapeView) {
         self.view = view
         initMiddleIndicators()
         initDeleteView()
