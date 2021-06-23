@@ -8,7 +8,7 @@
 import UIKit
 
 final class ShapeViewControl {
-    private var view: ShapeView
+    private var view: ShapeView?
     private(set) var shape: Shape?
 
     // Load shape
@@ -67,18 +67,19 @@ final class ShapeViewControl {
     }
 
     public func createShadow(_ value: CGFloat) {
-        self.view.layer.shadowRadius = value * 100
-        self.view.layer.shadowOpacity = 0.5
-        self.view.layer.shadowOffset = .zero
-        self.view.layer.shadowColor = UIColor.black.cgColor
-        self.view.layer.shouldRasterize = true
-        self.view.layer.rasterizationScale = UIScreen.main.scale
-        if value == 0 { self.view.layer.shadowColor = UIColor.clear.cgColor }
+        guard let view = self.view else {return}
+        view.layer.shadowRadius = value * 100
+        view.layer.shadowOpacity = 0.5
+        view.layer.shadowOffset = .zero
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shouldRasterize = true
+        view.layer.rasterizationScale = UIScreen.main.scale
+        if value == 0 { view.layer.shadowColor = UIColor.clear.cgColor }
         self.shape?.shadowRadius = value
     }
 
     public func createAlpha(_ value: CGFloat) {
-        guard let sublayers = self.view.layer.sublayers else {return}
+        guard let view = self.view, let sublayers = view.layer.sublayers else {return}
         if let shapelayer = sublayers.first as? CAShapeLayer,
            let cgcolor = shapelayer.fillColor {
             let color = UIColor(cgColor: cgcolor)
@@ -102,13 +103,13 @@ final class ShapeViewControl {
 
     public func createPolygon(_ value: CGFloat) {
         let vUInt = UInt32(value * 10)
-        let path = regularPolygonInRect(vUInt)
+        guard let path = regularPolygonInRect(vUInt) else {return}
         changeShapeLayer(path)
         self.shape?.polygon = value
     }
 
     public func clone(_ menuShapeView: MenuShapeControl?) -> ShapeView? {
-        guard let menuShapeView = menuShapeView, let shape = self.shape else { return nil }
+        guard let view = self.view, let menuShapeView = menuShapeView, let shape = self.shape else { return nil }
         let frame = view.frame
         let clonedShape = Shape()
         clonedShape.alpha = shape.alpha
@@ -141,6 +142,7 @@ extension ShapeViewControl {
     }
 
     private func createPathCircle() {
+        guard let view = self.view else {return}
         self.shape?.polygon = 0
         let path = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: view.frame.origin.x + (view.frame.size.width)/2,
@@ -151,6 +153,7 @@ extension ShapeViewControl {
     }
 
     private func createPathRectangle() {
+        guard let view = self.view else {return}
         self.shape?.polygon = 0
         let path = UIBezierPath()
         path.move(to: CGPoint(x: view.frame.origin.x, y: view.frame.origin.y))
@@ -163,6 +166,7 @@ extension ShapeViewControl {
     }
 
     private func createPathTriangle() {
+        guard let view = self.view else {return}
         self.shape?.polygon = 0
         let path = UIBezierPath()
         path.move(to: CGPoint(x: view.frame.width/2 + view.frame.origin.x, y: view.frame.origin.y))
@@ -189,12 +193,12 @@ extension ShapeViewControl {
     }
 
     private func replaceGradientLayer(_ shapeLayer: CAShapeLayer) {
-        guard let shape = self.shape, let colors = shape.layerColors else {return}
+        guard let view = self.view, let shape = self.shape, let colors = shape.layerColors else {return}
         let gradient = CAGradientLayer()
         let cgColors = colors.map {$0.withAlphaComponent(shape.alpha).cgColor}
         shapeLayer.fillColor = UIColor.white.withAlphaComponent(1.0).cgColor
-        gradient.bounds = self.view.bounds
-        gradient.position = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+        gradient.bounds = view.bounds
+        gradient.position = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
         gradient.colors = cgColors
         gradient.mask = shapeLayer
         self.replaceLayer(gradient)
@@ -204,11 +208,11 @@ extension ShapeViewControl {
     }
 
     private func createShapeLayers(_ path: UIBezierPath, color: UIColor) -> CAShapeLayer? {
-        guard let shape = self.shape else {return nil}
+        guard let view = self.view, let shape = self.shape else {return nil}
         let shapeLayer = CAShapeLayer()
-        shapeLayer.frame = CGRect(origin: CGPoint(x: -self.view.frame.minX,
-                                                  y: -self.view.frame.minY),
-                                  size: self.view.frame.size)
+        shapeLayer.frame = CGRect(origin: CGPoint(x: -view.frame.minX,
+                                                  y: -view.frame.minY),
+                                  size: view.frame.size)
         shapeLayer.path = path.cgPath
         shapeLayer.fillColor = color.withAlphaComponent(shape.alpha).cgColor
         shapeLayer.mask = nil
@@ -219,14 +223,15 @@ extension ShapeViewControl {
     }
 
     private func replaceLayer(_ newLayer: CALayer) {
-        self.view.layer.sublayers?.removeAll()
-        self.view.layer.addSublayer(newLayer)
+        guard let view = self.view else {return}
+        view.layer.sublayers?.removeAll()
+        view.layer.addSublayer(newLayer)
     }
 
     private func createPathPolygon() {
         guard let shape = self.shape else {return}
         let vUInt = UInt32(shape.polygon * 10)
-        let path = regularPolygonInRect(vUInt)
+        guard let path = regularPolygonInRect(vUInt) else {return}
         changeShapeLayer(path)
     }
 
@@ -234,7 +239,8 @@ extension ShapeViewControl {
         return CGPoint(x: radius * cos(angle) + offset.x, y: radius * sin(angle) + offset.y)
     }
 
-    private func regularPolygonInRect(_ value: UInt32) -> UIBezierPath {
+    private func regularPolygonInRect(_ value: UInt32) -> UIBezierPath? {
+        guard let view = self.view else {return nil}
         let degree = value % 12 + 3
         let center = CGPoint(x: (view.frame.width/2) + view.frame.origin.x,
                              y: (view.frame.height/2) + view.frame.origin.y)
