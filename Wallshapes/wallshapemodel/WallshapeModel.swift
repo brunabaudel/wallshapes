@@ -17,10 +17,10 @@ enum WallshapeSize: String {
 
 final class Wallshape {
     var size: WallshapeSize = .normal
-    var backgroundColors: [CGColor] = []
+    var backgroundColors: [UIColor] = []
     var shapes: [Shape] = []
 
-    init(backgroundColors: [CGColor], shapes: [Shape], size: WallshapeSize) {
+    init(backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
         self.size = size
         self.backgroundColors = backgroundColors
         self.shapes = shapes
@@ -31,7 +31,7 @@ final class Shape {
     var zPosition: Int = 0
     var type: ShapeType?
     var frame: CGRect = CGRect.zero
-    var layerColors: [CGColor]? = []
+    var layerColors: [UIColor]? = []
     var layerType: CALayer.Type = CAShapeLayer.self
     var shapeLayer: CAShapeLayer?
     var gradientLayer: CAGradientLayer?

@@ -39,8 +39,8 @@ final class ShapeViewControl {
 
     public func createPlainColor() {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
-        let color = UIColor.random.cgColor
-        shapeLayer.fillColor = color
+        let color = UIColor.random
+        shapeLayer.fillColor = color.cgColor
         self.replaceLayer(shapeLayer)
         shape.shapeLayer = shapeLayer
         shape.layerColors?[0] = color
@@ -51,8 +51,9 @@ final class ShapeViewControl {
     public func createGradientColors() {
         guard let shape = self.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
-            let colors = [UIColor.random.cgColor, UIColor.random.cgColor]
-            gradient.colors = colors
+            let colors = [UIColor.random, UIColor.random]
+            let cgColors = colors.map {$0.cgColor}
+            gradient.colors = cgColors
             gradient.mask = shapeLayer
             self.replaceLayer(gradient)
             shape.gradientLayer = gradient
@@ -114,8 +115,8 @@ extension ShapeViewControl {
 
     private func initShapeView() {
         self.shape = Shape()
-        self.shape?.layerColors?.append(UIColor.random.cgColor)
-        self.shape?.layerColors?.append(UIColor.random.cgColor)
+        self.shape?.layerColors?.append(UIColor.random)
+        self.shape?.layerColors?.append(UIColor.random)
         self.createPath(by: ShapeType.circle)
     }
 
@@ -170,9 +171,10 @@ extension ShapeViewControl {
     private func replaceGradientLayer(_ shapeLayer: CAShapeLayer) {
         guard let shape = self.shape, let colors = shape.layerColors else {return}
         let gradient = CAGradientLayer()
+        let cgColors = colors.map {$0.cgColor}
         gradient.bounds = self.view.bounds
         gradient.position = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
-        gradient.colors = colors
+        gradient.colors = cgColors
         gradient.mask = shapeLayer
         self.replaceLayer(gradient)
         shape.gradientLayer = gradient
@@ -180,14 +182,14 @@ extension ShapeViewControl {
         shape.layerType = CAGradientLayer.self
     }
 
-    private func createShapeLayers(_ path: UIBezierPath, color: CGColor) -> CAShapeLayer? {
+    private func createShapeLayers(_ path: UIBezierPath, color: UIColor) -> CAShapeLayer? {
         guard let shape = self.shape else {return nil}
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = CGRect(origin: CGPoint(x: -self.view.frame.minX,
                                                   y: -self.view.frame.minY),
                                   size: self.view.frame.size)
         shapeLayer.path = path.cgPath
-        shapeLayer.fillColor = color
+        shapeLayer.fillColor = color.cgColor
         shapeLayer.mask = nil
         shape.layerColors?[0] = color
         shape.shapeLayer = shapeLayer

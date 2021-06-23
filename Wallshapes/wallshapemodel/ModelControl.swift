@@ -10,7 +10,7 @@ import UIKit
 final class ModelControl {
     private var size: WallshapeSize = .normal
     private var shapeViews: [ShapeView] = []
-    private var backgroundColors: [CGColor] = []
+    private var backgroundColors: [UIColor] = []
 
     // MARK: - Get/Set data from json
 
@@ -24,7 +24,7 @@ final class ModelControl {
 
     // MARK: - Get data from user
 
-    public func updateBackgroundColors(_ colors: [CGColor]) {
+    public func updateBackgroundColors(_ colors: [UIColor]) {
         self.backgroundColors = colors
     }
 

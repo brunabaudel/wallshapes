@@ -34,11 +34,11 @@ final class WallshapeViewControl {
         }
     }
 
-    private func initContentView(with colors: [CGColor], size: WallshapeSize) {
+    private func initContentView(with colors: [UIColor], size: WallshapeSize) {
         guard let view = self.view else { return }
         guard let contentView = view.contentView else { return }
         if colors.count == 1 {
-            contentView.backgroundColor = UIColor(cgColor: colors.first!)
+            contentView.backgroundColor = colors.first
         } else {
             addGradientLayer(with: colors)
         }
@@ -64,7 +64,8 @@ final class WallshapeViewControl {
             addGradientLayer(with: colors)
             return
         }
-        gradientLayer.colors = colors
+        let cgColors = colors.map{$0.cgColor}
+        gradientLayer.colors = cgColors
     }
 
     public func chooseColor() {
@@ -73,25 +74,26 @@ final class WallshapeViewControl {
         self.view?.contentView?.backgroundColor = color
     }
 
-    private func addGradientLayer(with colors: [CGColor]) {
+    private func addGradientLayer(with colors: [UIColor]) {
         let gradientLayer = initGradientLayer(colors)
         self.view?.contentView?.layer.sublayers?.removeAll(where: { layer in layer is CAGradientLayer })
         self.view?.contentView?.layer.insertSublayer(gradientLayer, at: 0)
     }
 
-    private func initGradientLayer(_ colors: [CGColor]) -> CAGradientLayer {
+    private func initGradientLayer(_ colors: [UIColor]) -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
+        let cgColors = colors.map{$0.cgColor}
         gradientLayer.frame = self.view?.contentView?.bounds ?? CGRect.zero
-        gradientLayer.colors = colors
+        gradientLayer.colors = cgColors
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         return gradientLayer
     }
 
-    private func randomColors(_ count: Int = 2) -> [CGColor] {
-        var colors: [CGColor] = []
+    private func randomColors(_ count: Int = 2) -> [UIColor] {
+        var colors: [UIColor] = []
         for _ in 0..<count {
-            let color = UIColor.random.cgColor
+            let color = UIColor.random
             if !colors.contains(color) {
                 colors.append(color)
             }
@@ -147,7 +149,7 @@ final class WallshapeViewControl {
 
     public func saveFile() {
         modelControl?.wallshapeSize(contentViewSize())
-        modelControl?.updateBackgroundColors(backgroundCGColors())
+        modelControl?.updateBackgroundColors(backgroundUIColors())
         modelControl?.addShapeViews(subShapeViews())
         modelControl?.save()
     }
@@ -178,15 +180,15 @@ final class WallshapeViewControl {
             .compactMap { $0 as? ShapeView }
     }
 
-    private func backgroundCGColors() -> [CGColor] {
+    private func backgroundUIColors() -> [UIColor] {
         if let sublayer = self.view?.contentView?.firstSublayer,
            let gradientLayer = sublayer as? CAGradientLayer,
            let colors = gradientLayer.colors,
            let cgColors = colors as? [CGColor] {
-                return cgColors
+            return cgColors.map {UIColor(cgColor: $0)}
         }
-        if let cgColors = self.view?.contentView?.backgroundColor?.cgColor {
-            return [cgColors]
+        if let uicolors = self.view?.contentView?.backgroundColor {
+            return [uicolors]
         }
         return []
     }
