@@ -11,16 +11,10 @@ final class ShapeViewControl {
     private var view: ShapeView?
     private(set) var shape: Shape?
 
-    // Load shape
     init(_ view: ShapeView, shape: Shape) {
         self.view = view
-        initLoadShapeView(shape: shape)
-    }
-
-    // Add shape
-    init(_ view: ShapeView) {
-        self.view = view
-        initShapeView()
+        self.shape = shape
+        createShapeView(shape: shape)
     }
 
     public func createPath(by type: ShapeType) {
@@ -126,16 +120,17 @@ final class ShapeViewControl {
 // MARK: - Class methods
 
 extension ShapeViewControl {
-    private func initLoadShapeView(shape: Shape) {
-        self.shape = shape
-        guard let type = shape.type else { return }
+    private func createShapeView(shape: Shape) {
+        guard let type = shape.type else {
+            self.createShapeView()
+            return
+        }
         self.createPath(by: type)
         self.createAlpha(shape.alpha)
         self.createShadow(shape.shadowRadius)
     }
 
-    private func initShapeView() {
-        self.shape = Shape()
+    private func createShapeView() {
         self.shape?.layerColors?.append(UIColor.random)
         self.shape?.layerColors?.append(UIColor.random)
         self.createPath(by: ShapeType.circle)

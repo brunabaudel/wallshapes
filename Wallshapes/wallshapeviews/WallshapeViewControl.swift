@@ -133,7 +133,7 @@ final class WallshapeViewControl {
         menuShapeControl.showMenu()
         let size = view.bounds.width > view.bounds.height ? view.bounds.midY/2 : view.bounds.midX/2
         let frame = CGRect(x: size*1.75, y: size, width: size, height: size)
-        let shapeView = ShapeView(frame: frame, menu: menuShapeControl)
+        let shapeView = ShapeView(frame: frame, menu: menuShapeControl, shape: Shape())
         shapeView.delegate = self
         view.addSubview(shapeView)
     }

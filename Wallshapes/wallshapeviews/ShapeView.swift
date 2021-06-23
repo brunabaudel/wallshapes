@@ -19,32 +19,15 @@ final class ShapeView: UIView {
     private(set) var shapeViewControl: ShapeViewControl?
     private var menuShapeControl: MenuShapeControl?
 
-    // Load shape
     init(frame: CGRect, menu: MenuShapeControl, shape: Shape) {
         super.init(frame: frame)
-        initLoadShapeView(menu, shape: shape)
-    }
-
-    // Add shape
-    init(frame: CGRect, menu: MenuShapeControl) {
-        super.init(frame: frame)
-        initShapeView(menu)
+        self.shapeViewControl = ShapeViewControl(self, shape: shape)
+        self.menuShapeControl = menu
+        self.delegateMenuShape()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-    }
-
-    private func initShapeView(_ menu: MenuShapeControl) {
-        shapeViewControl = ShapeViewControl(self)
-        menuShapeControl = menu
-        refMenuShape()
-    }
-
-    private func initLoadShapeView(_ menu: MenuShapeControl, shape: Shape) {
-        shapeViewControl = ShapeViewControl(self, shape: shape)
-        menuShapeControl = menu
-        delegateMenuShape()
     }
 }
 
