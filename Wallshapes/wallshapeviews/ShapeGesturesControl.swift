@@ -9,6 +9,7 @@ import UIKit
 
 final class ShapeGesturesControl {
     private weak var view: WallshapeView?
+    private var menuShapeControl: MenuShapeControl?
     private var viewGesture: ShapeView?
     private var shapeLayerPath: CGPath?
     private var scale: CGFloat = 0
@@ -20,8 +21,9 @@ final class ShapeGesturesControl {
     private var deleteView: DeleteView!
     private var darkBackgroundDeleteView: DarkBackgroundDeleteView?
 
-    init(_ view: WallshapeView) {
+    init(_ view: WallshapeView, menuControl: MenuShapeControl?) {
         self.view = view
+        self.menuShapeControl = menuControl
         initMiddleIndicators()
         initDeleteView()
         initGestures()
@@ -124,10 +126,12 @@ extension ShapeGesturesControl {
         let location = recognizer.location(in: self.view)
         self.findSubview(location)
         guard let viewGesture = self.viewGesture else {
-            self.view?.hideMenu()
+            menuShapeControl?.hideMenu()
             return
         }
-        viewGesture.refMenuShape()
+        viewGesture.setupSliderMenuShape()
+        menuShapeControl?.delegate = viewGesture
+        menuShapeControl?.showMenu()
         self.clearSubview()
     }
 }
@@ -136,7 +140,7 @@ extension ShapeGesturesControl {
     private func didPan(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            self.view?.hideMenu()
+            menuShapeControl?.hideMenu()
             let location = recognizer.location(in: self.view)
             self.findSubview(location)
         case .changed:
@@ -154,7 +158,9 @@ extension ShapeGesturesControl {
             self.clearMiddleIndicators()
             if !isLongPress {
                 guard let viewGesture = self.viewGesture else {return}
-                viewGesture.refMenuShape()
+                viewGesture.setupSliderMenuShape()
+                menuShapeControl?.delegate = viewGesture
+                menuShapeControl?.showMenu()
                 self.clearSubview()
             }
         default:
@@ -235,14 +241,14 @@ extension ShapeGesturesControl {
 
     private func setupLongPress() {
         if self.viewGesture != nil {
-            self.view?.hideMenu()
+            menuShapeControl?.hideMenu()
             self.insertDarkDeleteView()
             self.deleteView.toggle(true)
         }
     }
 
     private func resetLongPress() {
-        self.view?.hideMenu()
+        menuShapeControl?.hideMenu()
         self.removeDarkDeleteView()
         self.deleteView.toggle(false)
         self.deleteView.hover(false)

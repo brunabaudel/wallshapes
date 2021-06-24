@@ -23,7 +23,7 @@ final class ShapeView: UIView {
         super.init(frame: frame)
         self.shapeViewControl = ShapeViewControl(self, shape: shape)
         self.menuShapeControl = menu
-        self.delegateMenuShape()
+        self.menuShapeControl?.delegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -32,17 +32,7 @@ final class ShapeView: UIView {
 }
 
 extension ShapeView {
-    public func refMenuShape() {
-        delegateMenuShape()
-        setupSliderMenuShape()
-        menuShapeControl?.showMenu()
-    }
-
-    private func delegateMenuShape() {
-        menuShapeControl?.delegate = self
-    }
-
-    private func setupSliderMenuShape() {
+    public func setupSliderMenuShape() {
         guard let type = menuShapeControl?.typeSlider() else {return}
         switch type {
         case .shadow:

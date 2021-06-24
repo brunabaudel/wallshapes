@@ -18,7 +18,7 @@ final class WallshapeView: UIView {
         self.contentView = UIView(frame: frame)
         self.menuShapeControl = MenuShapeControl()
         self.wallshapeViewControl = WallshapeViewControl(self, menuControl: menuShapeControl)
-        self.gesturesControl = ShapeGesturesControl(self)
+        self.gesturesControl = ShapeGesturesControl(self, menuControl: menuShapeControl)
         self.backgroundColor = .init(white: 0.15, alpha: 1)
     }
 
@@ -56,10 +56,6 @@ final class WallshapeView: UIView {
 
     public func saveToPhotos(title: String) {
         wallshapeViewControl?.saveToPhotos(title: title)
-    }
-
-    public func hideMenu() {
-        menuShapeControl?.hideMenu()
     }
 }
 
