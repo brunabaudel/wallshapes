@@ -45,7 +45,7 @@ extension ModelControl {
     private func shapes() -> [Shape] {
         var shapes: [Shape] = []
         shapeViews.enumerated().forEach { (idx, shapeView) in
-            guard let shape = shapeView.shapeViewControl?.shape else { return }
+            guard let shape = shapeView.shape else { return }
             shape.frame = shapeView.frame
             shape.zPosition = idx
             shapes.append(shape)

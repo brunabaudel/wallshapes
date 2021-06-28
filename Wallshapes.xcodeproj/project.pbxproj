@@ -208,10 +208,9 @@
 			isa = PBXGroup;
 			children = (
 				4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */,
+				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
 				4C570DB9262F369300FF2AF8 /* WallshapeViewControl.swift */,
 				4CB5EF8425ED9F9F00193A19 /* ShapeGesturesControl.swift */,
-				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
-				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
 			);
 			path = wallshapeviews;
 			sourceTree = "<group>";
@@ -225,6 +224,7 @@
 				4C21D427265872E100116116 /* ArrangeMenuView.swift */,
 				4C837A712661782C001869DA /* MainMenuView.swift */,
 				4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */,
+				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
 			);
 			path = menu;
 			sourceTree = "<group>";

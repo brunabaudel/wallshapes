@@ -9,6 +9,9 @@ import UIKit
 
 final class WallshapesViewController: UIViewController {
     private var wallshapeView: WallshapeView?
+    private var wallshapeViewControl: WallshapeViewControl?
+    private var gesturesControl: ShapeGesturesControl?
+    private var menuShapeControl: MenuShapeControl?
 
     override var prefersStatusBarHidden: Bool {
       return true
@@ -18,6 +21,11 @@ final class WallshapesViewController: UIViewController {
         super.viewDidLoad()
         guard let nav = self.navigationController as? WallshapesNavigationController else {return}
         nav.wallshapesDelegate = self
+        guard let wallshapeView = self.wallshapeView else {return}
+        self.menuShapeControl = MenuShapeControl(wallshapeView)
+        guard let menuShapeControl = self.menuShapeControl else {return}
+        self.wallshapeViewControl = WallshapeViewControl(wallshapeView, menuControl: menuShapeControl)
+        self.gesturesControl = ShapeGesturesControl(wallshapeView, menuControl: menuShapeControl)
     }
 
     override func loadView() {
@@ -34,37 +42,37 @@ final class WallshapesViewController: UIViewController {
 
 extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     func gridViewHandle() {
-        wallshapeView?.gridView()
+        wallshapeViewControl?.gridView()
     }
 
     func changeViewSizeHandle() {
-        wallshapeView?.resizeContentView()
+        wallshapeViewControl?.resizeContentView()
     }
 
     func refreshPlainColorItemHandle() {
-        wallshapeView?.chooseColor()
+        wallshapeViewControl?.chooseColor()
     }
 
     func refreshGradientItemHandle() {
-        wallshapeView?.chooseColors(2)
+        wallshapeViewControl?.chooseColors(2)
     }
 
     func addItemHandle() {
-        wallshapeView?.addShape()
+        wallshapeViewControl?.addShape()
     }
 
     func clearItemHandle() {
         UIAlertController.alertView("Clear all", message: "Do you want to erase all shapes?", isCancel: true) {
-            self.wallshapeView?.clearShapes()
+            self.wallshapeViewControl?.clearShapes()
         }.showAlert(self)
     }
 
     func saveItemHandle() {
-        wallshapeView?.saveFile()
-        wallshapeView?.saveToPhotos(title: "Saving...")
+        wallshapeViewControl?.saveFile()
+        wallshapeViewControl?.saveToPhotos(title: "Saving...")
     }
 
     func saveFileHandle() {
-        wallshapeView?.saveFile()
+        wallshapeViewControl?.saveFile()
     }
 }

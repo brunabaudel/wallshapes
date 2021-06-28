@@ -8,21 +8,27 @@
 import UIKit
 
 protocol MenuShapeControlDelegate: AnyObject {
-    func onSliderMenu(_ sender: SliderMenu)
-    func onMainMenu(_ sender: TypeButton<MainMenuView>)
-    func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>)
-    func onShapeMenu(_ sender: TypeButton<ShapeMenuView>)
+    func onSliderMenu(_ sender: SliderMenu, shapeView: ShapeView)
+    func onMainMenu(_ sender: TypeButton<MainMenuView>, shapeView: ShapeView)
+    func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>, shapeView: ShapeView)
+    func onShapeMenu(_ sender: TypeButton<ShapeMenuView>, shapeView: ShapeView)
 }
 
 final class MenuShapeControl {
     internal weak var delegate: MenuShapeControlDelegate?
-
+    
+    private weak var shapeview: ShapeView?
+    private(set) weak var wallshapeview: WallshapeView?
+    
     private var sliderView: SliderMenu?
     private var mainMenuView: CustomMenuView<MainMenuView>?
     private var shapeMenuView: CustomMenuView<ShapeMenuView>?
     private var menuArrangeView: CustomMenuView<ArrangeMenuView>?
+    private var shapeViewControl: ShapeViewControl!
 
-    init() {
+    init(_ wallshapeview: WallshapeView) {
+        self.wallshapeview = wallshapeview
+        self.shapeViewControl = ShapeViewControl(self)
         initSliderOnWindow()
         initMainMenuOnWindow()
         initShapeMenuOnWindow()
@@ -146,7 +152,8 @@ extension MenuShapeControl {
 
 extension MenuShapeControl {
     @objc private func onSliderValueChanged(_ sender: SliderMenu) {
-        delegate?.onSliderMenu(sender)
+        guard let shapeview = self.shapeview else {return}
+        delegate?.onSliderMenu(sender, shapeView: shapeview)
     }
 
     public func selectSlider(_ type: SliderType, value: Float, _ isSelected: Bool) {
@@ -182,18 +189,34 @@ extension MenuShapeControl {
 
 extension MenuShapeControl: CustomMenuViewDelegate {
     func onClickMenu(_ sender: UIButton) {
+        guard let shapeview = self.shapeview else {return}
         switch sender {
         case is TypeButton<ArrangeMenuView>:
             guard let sender = sender as? TypeButton<ArrangeMenuView> else {return}
-            delegate?.onArrangeMenu(sender)
+            delegate?.onArrangeMenu(sender, shapeView: shapeview)
         case is TypeButton<ShapeMenuView>:
             guard let sender = sender as? TypeButton<ShapeMenuView> else {return}
-            delegate?.onShapeMenu(sender)
+            delegate?.onShapeMenu(sender, shapeView: shapeview)
         case is TypeButton<MainMenuView>:
             guard let sender = sender as? TypeButton<MainMenuView> else {return}
-            delegate?.onMainMenu(sender)
+            delegate?.onMainMenu(sender, shapeView: shapeview)
         default:
             NSLog("Error")
         }
+    }
+}
+
+extension MenuShapeControl {
+    public func createShapeView(_ shapeview: ShapeView) {
+        shapeViewControl.createShapeView(shapeview)
+    }
+    
+    public func refShapeView(_ shapeview: ShapeView?) {
+        guard let shapeview = shapeview else {return}
+        self.shapeview = shapeview
+    }
+    
+    public func setupSliderMenuShape(_ shapeview: ShapeView) {
+        shapeViewControl.setupSliderMenuShape(shapeview)
     }
 }

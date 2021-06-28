@@ -21,7 +21,7 @@ final class ShapeGesturesControl {
     private var deleteView: DeleteView!
     private var darkBackgroundDeleteView: DarkBackgroundDeleteView?
 
-    init(_ view: WallshapeView, menuControl: MenuShapeControl?) {
+    init(_ view: WallshapeView, menuControl: MenuShapeControl) {
         self.view = view
         self.menuShapeControl = menuControl
         initMiddleIndicators()
@@ -129,8 +129,7 @@ extension ShapeGesturesControl {
             menuShapeControl?.hideMenu()
             return
         }
-        viewGesture.setupSliderMenuShape()
-        menuShapeControl?.delegate = viewGesture
+        menuShapeControl?.setupSliderMenuShape(viewGesture)
         menuShapeControl?.showMenu()
         self.clearSubview()
     }
@@ -158,8 +157,7 @@ extension ShapeGesturesControl {
             self.clearMiddleIndicators()
             if !isLongPress {
                 guard let viewGesture = self.viewGesture else {return}
-                viewGesture.setupSliderMenuShape()
-                menuShapeControl?.delegate = viewGesture
+                menuShapeControl?.setupSliderMenuShape(viewGesture)
                 menuShapeControl?.showMenu()
                 self.clearSubview()
             }
@@ -204,6 +202,7 @@ extension ShapeGesturesControl {
             if currLayer.contains(location) {
                 self.viewGesture = subview as? ShapeView
                 self.shapeLayerPath = currLayer.layerMutableCopy
+                self.menuShapeControl?.refShapeView(viewGesture)
                 break
             }
         }
