@@ -24,7 +24,7 @@ final class MenuShapeControl {
     private var mainMenuView: CustomMenuView<MainMenuView>?
     private var shapeMenuView: CustomMenuView<ShapeMenuView>?
     private var menuArrangeView: CustomMenuView<ArrangeMenuView>?
-    private var shapeViewControl: ShapeViewControl!
+    private var shapeViewControl: ShapeViewControl?
 
     init(_ wallshapeview: WallshapeView) {
         self.wallshapeview = wallshapeview
@@ -208,7 +208,7 @@ extension MenuShapeControl: CustomMenuViewDelegate {
 
 extension MenuShapeControl {
     public func createShapeView(_ shapeview: ShapeView) {
-        shapeViewControl.createShapeView(shapeview)
+        shapeViewControl?.createShapeView(shapeview)
     }
     
     public func refShapeView(_ shapeview: ShapeView?) {
@@ -217,6 +217,6 @@ extension MenuShapeControl {
     }
     
     public func setupSliderMenuShape(_ shapeview: ShapeView) {
-        shapeViewControl.setupSliderMenuShape(shapeview)
+        shapeViewControl?.setupSliderMenuShape(shapeview)
     }
 }
