@@ -72,16 +72,21 @@ extension ShapeGesturesControl {
         case .began:
             let location = recognizer.location(in: self.view)
             self.findSubview(location)
-            guard let viewGesture = self.viewGesture else {return}
-            self.size = viewGesture.frame.size
+            guard let view = self.view, let tempview = view.tempView else {return}
+            self.size = tempview.frame.size
         case .changed:
-            guard let viewGesture = self.viewGesture else {return}
+            guard let view = self.view, let tempview = view.tempView else {return}
             self.scale = recognizer.scale
-            viewGesture.bounds = viewGesture.bounds
-                                    .applying(viewGesture.transform.scaledBy(x: self.scale, y: self.scale))
-            self.updateShapeLayerFrameScale()
+            let newSize = tempview.bounds.applying(tempview.transform.scaledBy(x: self.scale, y: self.scale))
+            if newSize.size.height > 10 {
+                tempview.bounds = newSize
+                self.updateShapeLayerFrameScale()
+            }
             recognizer.scale = 1
         case .ended, .cancelled:
+            guard let view = self.view, let tempview = view.tempView,
+                  let viewGesture = self.viewGesture else {return}
+            viewGesture.frame = tempview.bounds
             self.clearSubview()
         default:
             break
@@ -89,9 +94,11 @@ extension ShapeGesturesControl {
     }
 
     private func updateShapeLayerFrameScale() {
-        guard let viewGesture = self.viewGesture, let view = self.view else {return}
-        guard let currLayer = viewGesture.firstSublayer else {return}
-        let newFrame = view.convert(view.bounds, from: viewGesture)
+        guard let view = self.view,
+              let tempview = view.tempView,
+              let viewGesture = self.viewGesture,
+              let currLayer = viewGesture.firstSublayer else {return}
+        let newFrame = view.convert(view.bounds, from: tempview)
         if let shplayer = currLayer as? CAShapeLayer {
             setupShapeLayerScale(newFrame, currLayer: shplayer)
             return
@@ -102,22 +109,35 @@ extension ShapeGesturesControl {
     }
 
     private func setupShapeLayerScale(_ newFrame: CGRect, currLayer: CAShapeLayer) {
-        guard let viewGesture = self.viewGesture else {return}
+        guard let view = self.view, let tempview = view.tempView else {return}
         CATransaction.removeAnimation {
-            currLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
-            currLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
+            guard let scaledPath = self.shapeLayerPath?.scale(self.size, toSize: tempview.frame.size) else {return}
+            let frameLayer = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: tempview.frame.size)
+            currLayer.path = scaledPath
+            currLayer.frame = frameLayer
+            setupSelectedBorderLayerScale(frameLayer, scaledPath: scaledPath)
         }
     }
 
     private func setupGradientLayerScale(_ newFrame: CGRect, currLayer: CAGradientLayer) {
-        guard let viewGesture = self.viewGesture else {return}
+        guard let view = self.view, let tempview = view.tempView else {return}
         CATransaction.removeAnimation {
-            guard let shapeLayer = currLayer.mask as? CAShapeLayer else {return}
-            shapeLayer.path = self.shapeLayerPath?.scale(self.size, toSize: viewGesture.frame.size)
-            shapeLayer.frame = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: viewGesture.frame.size)
-            currLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: viewGesture.frame.size)
+            guard let shapeLayer = currLayer.mask as? CAShapeLayer,
+                  let scaledPath = self.shapeLayerPath?.scale(self.size, toSize: tempview.frame.size) else {return}
+            let frameLayer = CGRect(origin: CGPoint(x: -newFrame.minX, y: -newFrame.minY), size: tempview.frame.size)
+            shapeLayer.path = scaledPath
+            shapeLayer.frame = frameLayer
+            currLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: tempview.frame.size)
             currLayer.mask = shapeLayer
+            setupSelectedBorderLayerScale(frameLayer, scaledPath: scaledPath)
         }
+    }
+    
+    private func setupSelectedBorderLayerScale(_ newFrame: CGRect, scaledPath: CGPath) {
+        guard let view = self.view, let selectBorder = view.selectBorder,
+              let borderLayer = selectBorder.firstSublayer as? CAShapeLayer else {return}
+        borderLayer.path = scaledPath
+        borderLayer.frame = newFrame
     }
 }
 
@@ -127,6 +147,7 @@ extension ShapeGesturesControl {
         self.findSubview(location)
         guard let viewGesture = self.viewGesture else {
             menuShapeControl?.hideMenu()
+            menuShapeControl?.unselectShapeView()
             return
         }
         menuShapeControl?.setupSliderMenuShape(viewGesture)
@@ -144,14 +165,14 @@ extension ShapeGesturesControl {
             self.findSubview(location)
         case .changed:
             if !self.isLongPress { self.showMiddleIndicators() }
-            guard let viewGesture = self.viewGesture else {return}
+            guard let _ = self.viewGesture, let view = self.view, let tempview = view.tempView else {return}
             if self.isLongPress { self.hoverDeleteView() }
-            var translation = recognizer.translation(in: viewGesture)
-            translation = translation.applying(viewGesture.transform)
-            viewGesture.center.x += translation.x
-            viewGesture.center.y += translation.y
+            var translation = recognizer.translation(in: tempview)
+            translation = translation.applying(tempview.transform)
+            tempview.center.x += translation.x
+            tempview.center.y += translation.y
             self.shapeLayerPath = self.shapeLayerPath?.translate(translation)
-            recognizer.setTranslation(CGPoint.zero, in: viewGesture)
+            recognizer.setTranslation(CGPoint.zero, in: tempview)
         case .ended, .cancelled:
             self.updateShapeLayerFrameTranslate()
             self.clearMiddleIndicators()
@@ -194,16 +215,33 @@ extension ShapeGesturesControl {
             currLayer.mask = shapeLayer
         }
     }
-
+}
+    
+extension ShapeGesturesControl {
     private func findSubview(_ location: CGPoint) {
-        guard let view = self.view else { return }
+        guard let view = self.view, let tempView = view.tempView else {return}
         for subview in view.subviews.reversed() {
-            guard let currLayer = subview.firstSublayer else { return }
-            if currLayer.contains(location) {
-                self.viewGesture = subview as? ShapeView
-                self.shapeLayerPath = currLayer.layerMutableCopy
-                self.menuShapeControl?.refShapeView(viewGesture)
-                break
+            if let subview = subview as? ShapeView {
+                guard let currLayer = subview.firstSublayer else {return}
+                if currLayer.contains(location) {
+                    self.viewGesture = subview
+                    self.shapeLayerPath = currLayer.layerMutableCopy
+                    self.menuShapeControl?.unselectShapeView()
+                    self.menuShapeControl?.selectShapeView(subview)
+                    break
+                }
+            } else {
+                if tempView.frame.contains(location) {
+                    let subview = (tempView.subviews.filter {type(of: $0) == ShapeView.self}).first
+                    if let subview = subview as? ShapeView {
+                        guard let currLayer = subview.firstSublayer else {return}
+                        if currLayer.contains(location) {
+                            self.viewGesture = subview
+                            self.shapeLayerPath = currLayer.layerMutableCopy
+                            break
+                        }
+                    }
+                }
             }
         }
     }

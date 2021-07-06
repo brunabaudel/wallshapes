@@ -56,9 +56,9 @@ final class SaveImage: NSObject {
                                          completionHandler: @escaping () -> Void) -> UIImage? {
         let image = UIImage.imageWithView(view).toPNG()
         completionHandler()
-        guard let image = image?.crop(rect, sizeView: view.frame.size) else { return nil }
-        guard let image = image.toPNG() else { return nil }
-        return image
+        guard let imagecropped = image?.crop(rect, sizeView: view.frame.size) else { return nil }
+        guard let imagepng = imagecropped.toPNG() else { return nil }
+        return imagepng
     }
 
     static private func showIndicator(with message: String) {

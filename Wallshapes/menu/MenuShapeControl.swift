@@ -210,13 +210,17 @@ extension MenuShapeControl {
     public func createShapeView(_ shapeview: ShapeView) {
         shapeViewControl?.createShapeView(shapeview)
     }
-    
-    public func refShapeView(_ shapeview: ShapeView?) {
-        guard let shapeview = shapeview else {return}
-        self.shapeview = shapeview
-    }
-    
+
     public func setupSliderMenuShape(_ shapeview: ShapeView) {
         shapeViewControl?.setupSliderMenuShape(shapeview)
+    }
+
+    public func selectShapeView(_ shapeview: ShapeView) {
+        self.shapeview = shapeview
+        shapeViewControl?.selectView(shapeview)
+    }
+
+    public func unselectShapeView() {
+        shapeViewControl?.unselectView()
     }
 }

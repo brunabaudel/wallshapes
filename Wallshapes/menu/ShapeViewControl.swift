@@ -14,7 +14,7 @@ final class ShapeViewControl {
         self.menuShapeControl = menuShapeControl
         self.menuShapeControl?.delegate = self
     }
-    
+
     public func createShapeView(_ shapeview: ShapeView) {
         guard let shape = shapeview.shape, let type = shape.type else {
             shapeview.shape?.layerColors?.append(UIColor.random)
@@ -26,19 +26,19 @@ final class ShapeViewControl {
         self.createAlpha(shapeview, shape.alpha)
         self.createShadow(shapeview, shape.shadowRadius)
     }
-    
-    private func createPath(_ shapeview: ShapeView?, by type: ShapeType) {
+
+    private func createPath(_ shapeview: ShapeView?, by type: ShapeType, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         shape.type = type
         switch type {
         case ShapeType.circle:
-            self.createPathCircle(shapeview)
+            self.createPathCircle(shapeview, isSelected)
         case ShapeType.rectangle:
-            self.createPathRectangle(shapeview)
+            self.createPathRectangle(shapeview, isSelected)
         case ShapeType.triangle:
-            self.createPathTriangle(shapeview)
+            self.createPathTriangle(shapeview, isSelected)
         case ShapeType.polygon:
-            self.createPathPolygon(shapeview)
+            self.createPathPolygon(shapeview, isSelected)
         }
     }
 
@@ -89,11 +89,11 @@ final class ShapeViewControl {
         shapeview.alpha = value
     }
 
-    private func createPolygon(_ shapeview: ShapeView?, _ value: CGFloat) {
+    private func createPolygon(_ shapeview: ShapeView?, _ value: CGFloat, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         let vUInt = UInt32(value * 10)
-        guard let path = regularPolygonInRect(shapeview, vUInt) else {return}
-        changeShapeLayer(shapeview, path)
+        guard let path = regularPolygonInRect(shapeview, vUInt, isSelected) else {return}
+        changeShapeLayer(shapeview, path, isSelected)
         shape.polygon = value
     }
 
@@ -116,45 +116,56 @@ final class ShapeViewControl {
 // MARK: - Class methods
 
 extension ShapeViewControl {
-    private func createPathCircle(_ shapeview: ShapeView?) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
-        shape.polygon = 0
-        let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: shapeview.frame.origin.x + (shapeview.frame.size.width)/2,
-                                        y: shapeview.frame.origin.y + (shapeview.frame.size.height)/2),
-                    radius: shapeview.frame.size.width/2, startAngle: 0, endAngle: .pi*2, clockwise: true)
-        path.close()
-        changeShapeLayer(shapeview, path)
+    private func tempViewFrame() -> CGRect {
+        guard let menuShapeControl = self.menuShapeControl,
+              let view = menuShapeControl.wallshapeview, let tempview = view.tempView else {return CGRect.zero}
+        return tempview.frame
     }
 
-    private func createPathRectangle(_ shapeview: ShapeView?) {
+    private func createPathCircle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         shape.polygon = 0
+        let frame = isSelected ? tempViewFrame() : shapeview.frame
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: shapeview.frame.origin.x, y: shapeview.frame.origin.y))
-        path.addLine(to: CGPoint(x: shapeview.frame.origin.x, y: shapeview.frame.origin.y + shapeview.frame.size.height))
-        path.addLine(to: CGPoint(x: shapeview.frame.origin.x + shapeview.frame.size.width,
-                                 y: shapeview.frame.origin.y + shapeview.frame.size.height))
-        path.addLine(to: CGPoint(x: shapeview.frame.origin.x + shapeview.frame.size.width, y: shapeview.frame.origin.y))
+        path.addArc(withCenter: CGPoint(x: frame.origin.x + (frame.size.width)/2,
+                                        y: frame.origin.y + (frame.size.height)/2),
+                    radius: frame.size.width/2, startAngle: 0, endAngle: .pi*2, clockwise: true)
         path.close()
-        changeShapeLayer(shapeview, path)
+        changeShapeLayer(shapeview, path, isSelected)
     }
 
-    private func createPathTriangle(_ shapeview: ShapeView?) {
+    private func createPathRectangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         shape.polygon = 0
+        let frame = isSelected ? tempViewFrame() : shapeview.frame
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: shapeview.frame.width/2 + shapeview.frame.origin.x, y: shapeview.frame.origin.y))
-        path.addLine(to: CGPoint(x: shapeview.frame.origin.x, y: shapeview.frame.size.height + shapeview.frame.origin.y))
-        path.addLine(to: CGPoint(x: shapeview.frame.size.width + shapeview.frame.origin.x,
-                                 y: shapeview.frame.size.height + shapeview.frame.origin.y))
+        path.move(to: CGPoint(x: frame.origin.x, y: frame.origin.y))
+        path.addLine(to: CGPoint(x: frame.origin.x, y: frame.origin.y + frame.size.height))
+        path.addLine(to: CGPoint(x: frame.origin.x + frame.size.width,
+                                 y: frame.origin.y + frame.size.height))
+        path.addLine(to: CGPoint(x: frame.origin.x + frame.size.width, y: frame.origin.y))
         path.close()
-        changeShapeLayer(shapeview, path)
+        changeShapeLayer(shapeview, path, isSelected)
     }
 
-    private func changeShapeLayer(_ shapeview: ShapeView?, _ path: UIBezierPath) {
-        guard let shapeview = shapeview, let shape = shapeview.shape, let color = shape.layerColors?.first else {return}
-        guard let shapeLayer = createShapeLayers(shapeview, path, color: color) else {return}
+    private func createPathTriangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
+        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+        shape.polygon = 0
+        let frame = isSelected ? tempViewFrame() : shapeview.frame
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: frame.width/2 + frame.origin.x, y: frame.origin.y))
+        path.addLine(to: CGPoint(x: frame.origin.x, y: frame.size.height + frame.origin.y))
+        path.addLine(to: CGPoint(x: frame.size.width + frame.origin.x,
+                                 y: frame.size.height + frame.origin.y))
+        path.close()
+        changeShapeLayer(shapeview, path, isSelected)
+    }
+
+    private func changeShapeLayer(_ shapeview: ShapeView?, _ path: UIBezierPath, _ isSelected: Bool) {
+        guard let shapeview = shapeview,
+              let shape = shapeview.shape,
+              let color = shape.layerColors?.first,
+              let shapeLayer = createShapeLayers(shapeview, path, color: color, isSelected) else {return}
         if shape.layerType.isEqual(CAShapeLayer.self) {
             replaceShapeLayer(shapeview, shapeLayer)
         }
@@ -182,17 +193,16 @@ extension ShapeViewControl {
         shape.layerType = CAGradientLayer.self
     }
 
-    private func createShapeLayers(_ shapeview: ShapeView?, _ path: UIBezierPath, color: UIColor) -> CAShapeLayer? {
+    private func createShapeLayers(_ shapeview: ShapeView?, _ path: UIBezierPath,
+                                   color: UIColor, _ isSelected: Bool) -> CAShapeLayer? {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return nil}
         let shapeLayer = CAShapeLayer()
-        shapeLayer.frame = CGRect(origin: CGPoint(x: -shapeview.frame.minX,
-                                                  y: -shapeview.frame.minY),
-                                  size: shapeview.frame.size)
+        let frame = isSelected ? tempViewFrame() : shapeview.frame
+        shapeLayer.frame = CGRect(origin: CGPoint(x: -frame.minX,
+                                                  y: -frame.minY),
+                                  size: frame.size)
         shapeLayer.path = path.cgPath
         shapeLayer.fillColor = color.cgColor
-//        shapeLayer.lineDashPattern = [3, 3]
-//        shapeLayer.lineWidth = 5
-//        shapeLayer.strokeColor = UIColor.yellow.cgColor
         shapeLayer.mask = nil
         shape.layerColors?[0] = color
         shape.shapeLayer = shapeLayer
@@ -204,24 +214,48 @@ extension ShapeViewControl {
         guard let shapeview = shapeview else {return}
         shapeview.layer.sublayers?.removeAll()
         shapeview.layer.addSublayer(newLayer)
+        changeSelectedPath(newLayer)
+    }
+    
+    private func changeSelectedPath(_ newLayer: CALayer) {
+        guard let menuShapeControl = self.menuShapeControl,
+              let wallshapeview = menuShapeControl.wallshapeview,
+              let tempview = wallshapeview.tempView,
+              let selectedBorder = tempview.subviews.last,
+              let currLayer = selectedBorder.firstSublayer as? CAShapeLayer else {return}
+
+        if let shapelayer = newLayer as? CAShapeLayer {
+            CATransaction.removeAnimation {
+                currLayer.frame = shapelayer.frame
+                currLayer.path = shapelayer.path
+            }
+        }
+        if let gradientlayer = newLayer as? CAGradientLayer,
+           let shapelayer = gradientlayer.mask as? CAShapeLayer {
+            CATransaction.removeAnimation {
+                currLayer.frame = shapelayer.frame
+                currLayer.path = shapelayer.path
+            }
+        }
     }
 
-    private func createPathPolygon(_ shapeview: ShapeView?) {
+    private func createPathPolygon(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         let vUInt = UInt32(shape.polygon * 10)
-        guard let path = regularPolygonInRect(shapeview, vUInt) else {return}
-        changeShapeLayer(shapeview, path)
+        guard let path = regularPolygonInRect(shapeview, vUInt, isSelected) else {return}
+        changeShapeLayer(shapeview, path, isSelected)
     }
 
     private func pointFrom(_ angle: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
         return CGPoint(x: radius * cos(angle) + offset.x, y: radius * sin(angle) + offset.y)
     }
 
-    private func regularPolygonInRect(_ shapeview: ShapeView?, _ value: UInt32) -> UIBezierPath? {
+    private func regularPolygonInRect(_ shapeview: ShapeView?, _ value: UInt32, _ isSelected: Bool) -> UIBezierPath? {
         guard let shapeview = shapeview else {return nil}
+        let frame = isSelected ? tempViewFrame() : shapeview.frame
         let degree = value % 12 + 3
-        let center = CGPoint(x: (shapeview.frame.width/2) + shapeview.frame.origin.x,
-                             y: (shapeview.frame.height/2) + shapeview.frame.origin.y)
+        let center = CGPoint(x: (frame.width/2) + frame.origin.x,
+                             y: (frame.height/2) + frame.origin.y)
         var angle = -CGFloat(.pi / 2.0)
         let angleIncrement = CGFloat(.pi * 2.0 / Double(degree))
         let radius = shapeview.frame.width / 2.0
@@ -251,7 +285,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             shape.alpha = value
         case .polygon:
             let value = CGFloat(sender.value)
-            self.createPolygon(shapeView, value)
+            self.createPolygon(shapeView, value, true)
             shape.polygon = value
             shape.type = .polygon
         default:
@@ -290,21 +324,22 @@ extension ShapeViewControl: MenuShapeControlDelegate {
     func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>, shapeView: ShapeView) {
         guard let type = sender.type,
               let menuShapeControl = self.menuShapeControl,
-              let wallshapeview = menuShapeControl.wallshapeview else {return}
+              let wallshapeview = menuShapeControl.wallshapeview,
+              let tempView = wallshapeview.tempView else {return}
         switch type {
         case .bringToFront:
-            wallshapeview.insertSubview(shapeView, at: wallshapeview.subviews.count - 1)
+            wallshapeview.insertSubview(tempView, at: wallshapeview.subviews.count - 1)
         case .bringForward:
-            guard let index = wallshapeview.subviews.firstIndex(of: shapeView) else { return }
+            guard let index = wallshapeview.subviews.firstIndex(of: tempView) else { return }
             if index < wallshapeview.subviews.count {
-                wallshapeview.insertSubview(shapeView, at: index + 1)
+                wallshapeview.insertSubview(tempView, at: index + 1)
             }
         case .sendToBack:
-            wallshapeview.insertSubview(shapeView, at: 1)
+            wallshapeview.insertSubview(tempView, at: 1)
         case .sendBackward:
-            guard let index = wallshapeview.subviews.firstIndex(of: shapeView) else { return }
+            guard let index = wallshapeview.subviews.firstIndex(of: tempView) else { return }
             if index > 1 {
-                wallshapeview.insertSubview(shapeView, at: index - 1)
+                wallshapeview.insertSubview(tempView, at: index - 1)
             }
         }
     }
@@ -313,11 +348,11 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         guard let type = sender.type else {return}
         switch type {
         case .circle:
-            self.createPath(shapeView, by: .circle)
+            self.createPath(shapeView, by: .circle, true)
         case .square:
-            self.createPath(shapeView, by: .rectangle)
+            self.createPath(shapeView, by: .rectangle, true)
         case .triangle:
-            self.createPath(shapeView, by: .triangle)
+            self.createPath(shapeView, by: .triangle, true)
         case .polygon:
             guard let menuShapeControl = self.menuShapeControl,
                   let shape = shapeView.shape else {return}
@@ -326,13 +361,13 @@ extension ShapeViewControl: MenuShapeControlDelegate {
     }
     
     private func cloneShapeView(_ shapeView: ShapeView) {
-        guard let menuShapeControl = self.menuShapeControl,
-              let wallshapeview = menuShapeControl.wallshapeview else {return}
+        guard let menuShapeControl = self.menuShapeControl else {return}
         menuShapeControl.hideSlider()
         menuShapeControl.hideMenuArrange()
         menuShapeControl.hideShapeMenu()
         guard let clonedShapeView = self.clone(shapeView) else {return}
-        wallshapeview.addSubview(clonedShapeView)
+        self.unselectView()
+        menuShapeControl.selectShapeView(clonedShapeView)
     }
     
     private func selectSlider(_ shapeView: ShapeView, _ type: MainMenuTypeEnum, isSelected: Bool) {
@@ -360,6 +395,47 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             menuShapeControl.setupSlider(value: Float(shapeView.shape?.alpha ?? 1))
         case .polygon:
             menuShapeControl.setupSlider(value: Float(shapeView.shape?.polygon ?? 0))
+        }
+    }
+}
+
+extension ShapeViewControl {
+    public func selectView(_ shapeView: ShapeView) {
+        guard let menuShapeControl = self.menuShapeControl,
+              let wallshapeview = menuShapeControl.wallshapeview,
+              let tempView = wallshapeview.tempView,
+              let selectBorder = wallshapeview.selectBorder,
+              let shapelayer = selectBorder.firstSublayer as? CAShapeLayer,
+              let currLayer = shapeView.firstSublayer else { return }
+        CATransaction.removeAnimation {
+            if let shplayer = currLayer as? CAShapeLayer {
+                shapelayer.frame = shplayer.frame
+                shapelayer.path = shplayer.path
+            }
+            if let gradient = currLayer as? CAGradientLayer,
+               let shplayer = gradient.mask as? CAShapeLayer {
+                shapelayer.frame = shplayer.frame
+                shapelayer.path = shplayer.path
+            }
+            tempView.frame = shapeView.frame
+            selectBorder.frame.size = shapeView.frame.size
+            shapeView.frame.origin = CGPoint.zero
+            wallshapeview.insertSubview(tempView, aboveSubview: shapeView)
+            tempView.insertSubview(shapeView, belowSubview: selectBorder)
+            _ = tempView.subviews.map {$0.isHidden = false}
+        }
+    }
+
+    public func unselectView() {
+        guard let menuShapeControl = self.menuShapeControl,
+              let wallshapeview = menuShapeControl.wallshapeview,
+              let tempView = wallshapeview.tempView else {return}
+        let shapeView = (tempView.subviews.filter {type(of: $0) == ShapeView.self}).first
+        guard let shapeview = shapeView as? ShapeView else {return}
+        CATransaction.removeAnimation {
+            shapeview.frame = tempView.frame
+            wallshapeview.insertSubview(shapeview, aboveSubview: tempView)
+            _ = tempView.subviews.map {$0.isHidden = true}
         }
     }
 }

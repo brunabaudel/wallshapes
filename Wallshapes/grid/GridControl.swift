@@ -36,6 +36,7 @@ final class GridControl {
 
     private func initGridPath(frame: CGRect, wLines: CGFloat, hLines: CGFloat) -> UIBezierPath {
         let path = UIBezierPath()
+        if wLines < 1 && hLines < 1 {return path}
         for idx in 1...Int(wLines) {
             path.move(to: CGPoint(x: CGFloat(idx) * GAP, y: frame.minX))
             path.addLine(to: CGPoint(x: CGFloat(idx) * GAP, y: frame.maxY))

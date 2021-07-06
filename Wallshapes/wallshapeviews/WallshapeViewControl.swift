@@ -22,6 +22,7 @@ final class WallshapeViewControl {
         initContentView(with: wallshape.backgroundColors, size: wallshape.size)
         initShapes(shapes: wallshape.shapes)
         initGridView()
+        initSelectView()
     }
 
     private func initShapes(shapes: [Shape]) {
@@ -53,6 +54,22 @@ final class WallshapeViewControl {
         guard let gridControl = self.gridControl, let shapelayer = gridControl.shapelayer else { return }
         gridControl.isHidden = true
         contentView.layer.addSublayer(shapelayer)
+    }
+
+    private func initSelectView() {
+        guard let view = self.wallshapeview,
+              let selectBorder = view.selectBorder,
+              let tempView = view.tempView else { return }
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.lineDashPattern = [3, 3]
+        shapeLayer.lineWidth = 5
+        shapeLayer.strokeColor = UIColor.yellow.cgColor
+        selectBorder.frame = CGRect.zero
+        selectBorder.backgroundColor = .clear
+        selectBorder.layer.addSublayer(shapeLayer)
+        tempView.addSubview(selectBorder)
+        view.addSubview(tempView)
     }
 
     // MARK: - Colors
@@ -135,13 +152,17 @@ final class WallshapeViewControl {
         let frame = CGRect(x: size*1.75, y: size, width: size, height: size)
         let shapeView = ShapeView(frame: frame, shape: Shape())
         menuShapeControl.createShapeView(shapeView)
-        menuShapeControl.refShapeView(shapeView)
-        view.addSubview(shapeView)
+        menuShapeControl.unselectShapeView()
+        menuShapeControl.selectShapeView(shapeView)
     }
 
     public func clearShapes() {
         guard let view = self.wallshapeview else { return }
-        view.subviews.forEach { if !$0.isEqual(view.contentView) { $0.removeFromSuperview() } }
+        view.subviews.forEach { if type(of: $0) == ShapeView.self { $0.removeFromSuperview() } }
+        view.tempView?.subviews.forEach {
+            if type(of: $0) == ShapeView.self { $0.removeFromSuperview() }
+            $0.isHidden = true
+        }
         menuShapeControl?.hideMenu()
     }
 

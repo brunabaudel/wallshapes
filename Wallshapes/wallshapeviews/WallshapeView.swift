@@ -9,10 +9,14 @@ import UIKit
 
 final class WallshapeView: UIView {
     internal var contentView: UIView?
+    internal var selectBorder: UIView?
+    internal var tempView: UIView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.contentView = UIView(frame: frame)
+        self.selectBorder = UIView()
+        self.tempView = UIView()
         self.backgroundColor = .init(white: 0.15, alpha: 1)
     }
 
