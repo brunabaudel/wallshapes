@@ -12,7 +12,6 @@ protocol WallshapesNavigationControllerDelegate: AnyObject {
     func refreshGradientItemHandle()
     func refreshPlainColorItemHandle()
     func changeViewSizeHandle()
-    func gridViewHandle()
     func saveItemHandle()
     func clearItemHandle()
 }
@@ -62,26 +61,13 @@ final class WallshapesNavigationController: UINavigationController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
             configBarButtons("gradient", action: #selector(refreshGradientItemHandle)),
             configBarButtons("bucket", size: 23, action: #selector(refreshPlainColorItemHandle)),
-            configBarButtons("crop", action: #selector(changeViewSizeHandle)),
-            configBarButtons("add-grid", action: #selector(gridViewHandle(_:)))]
+            configBarButtons("crop", action: #selector(changeViewSizeHandle))]
 
         navItems.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveItemHandle)),
             UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle))]
     }
 
-    @objc private func gridViewHandle(_ sender: UIBarButtonItem) {
-        wallshapesDelegate?.gridViewHandle()
-        isSelected = !isSelected
-        if isSelected {
-            guard let iconUnselected = createIcon("sub-grid") else {return}
-            sender.image = iconUnselected
-        } else {
-            guard let iconSelected = createIcon("add-grid") else {return}
-            sender.image = iconSelected
-        }
-    }
-    
     @objc private func changeViewSizeHandle() {
         wallshapesDelegate?.changeViewSizeHandle()
     }

@@ -41,10 +41,6 @@ final class WallshapesViewController: UIViewController {
 }
 
 extension WallshapesViewController: WallshapesNavigationControllerDelegate {
-    func gridViewHandle() {
-        wallshapeViewControl?.gridView()
-    }
-
     func changeViewSizeHandle() {
         wallshapeViewControl?.resizeContentView()
     }

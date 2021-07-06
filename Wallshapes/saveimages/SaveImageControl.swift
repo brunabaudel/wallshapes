@@ -10,27 +10,25 @@ import UIKit
 final class SaveImage: NSObject {
     private static var renderIndicatorView: RenderIndicatorView?
 
-    static public func save(_ title: String, view: UIView, frame: CGRect,
-                            completion: @escaping () -> Void) {
+    static public func save(_ title: String, view: UIView, frame: CGRect) {
         if #available(iOS 14.0, *) {
             AuthorizationAssests().authorization { authorized in
                 if authorized {
                     DispatchQueue.main.async {
-                        self.willSaveImage(title, view: view, rect: frame, completionHandler: completion)
+                        self.willSaveImage(title, view: view, rect: frame)
                     }
                     return
                 }
                 self.showAppSettingsDialog()
             }
         } else {
-            self.willSaveImage(title, view: view, rect: frame, completionHandler: completion)
+            self.willSaveImage(title, view: view, rect: frame)
         }
     }
 
-    static private func willSaveImage(_ title: String, view: UIView, rect: CGRect,
-                                      completionHandler: @escaping () -> Void) {
+    static private func willSaveImage(_ title: String, view: UIView, rect: CGRect) {
         self.showIndicator(with: title)
-        guard let image = self.willPrepareImage(view, rect: rect, completionHandler: completionHandler) else {
+        guard let image = self.willPrepareImage(view, rect: rect) else {
             self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message)
             return
         }
@@ -52,10 +50,8 @@ final class SaveImage: NSObject {
         self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.success.message)
     }
 
-    static private func willPrepareImage(_ view: UIView, rect: CGRect,
-                                         completionHandler: @escaping () -> Void) -> UIImage? {
+    static private func willPrepareImage(_ view: UIView, rect: CGRect) -> UIImage? {
         let image = UIImage.imageWithView(view).toPNG()
-        completionHandler()
         guard let imagecropped = image?.crop(rect, sizeView: view.frame.size) else { return nil }
         guard let imagepng = imagecropped.toPNG() else { return nil }
         return imagepng

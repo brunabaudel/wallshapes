@@ -10,7 +10,6 @@ import UIKit
 final class WallshapeViewControl {
     private weak var wallshapeview: WallshapeView?
     private weak var menuShapeControl: MenuShapeControl?
-    private var gridControl: GridControl?
     private var modelControl: ModelControl?
 
     init(_ wallshapeView: WallshapeView, menuControl: MenuShapeControl) {
@@ -21,7 +20,6 @@ final class WallshapeViewControl {
         guard let wallshape = self.modelControl?.recover() else { return }
         initContentView(with: wallshape.backgroundColors, size: wallshape.size)
         initShapes(shapes: wallshape.shapes)
-        initGridView()
         initSelectView()
     }
 
@@ -46,14 +44,6 @@ final class WallshapeViewControl {
             resizeContentView()
         }
         view.addSubview(contentView)
-    }
-
-    private func initGridView() {
-        guard let view = self.wallshapeview, let contentView = view.contentView else { return }
-        gridControl = GridControl(frame: contentView.bounds)
-        guard let gridControl = self.gridControl, let shapelayer = gridControl.shapelayer else { return }
-        gridControl.isHidden = true
-        contentView.layer.addSublayer(shapelayer)
     }
 
     private func initSelectView() {
@@ -119,22 +109,17 @@ final class WallshapeViewControl {
 
     // MARK: - Navigationbar Functions
 
-    public func gridView() {
-        gridControl?.isHidden.toggle()
-    }
-
     public func resizeContentView() {
-        guard let view = self.wallshapeview else { return }
+        guard let view = self.wallshapeview, let contentView = view.contentView else { return }
         var newSize: CGRect = view.frame
-        if view.contentView?.frame.height != view.contentView?.frame.width {
+        if contentView.frame.height != contentView.frame.width {
             newSize = CGRect(origin: CGPoint.zero, size: self.squaredSize())
         }
-        self.wallshapeview?.contentView?.frame.origin = CGPoint.zero
-        self.wallshapeview?.contentView?.frame.size = newSize.size
-        self.wallshapeview?.contentView?.center = view.center
-        self.gridControl?.createGrid(frame: self.wallshapeview?.contentView?.bounds)
+        contentView.frame.origin = CGPoint.zero
+        contentView.frame.size = newSize.size
+        contentView.center = view.center
         CATransaction.removeAnimation {
-            self.wallshapeview?.contentView?.layer.sublayers?.first?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+            contentView.firstSublayer?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         }
     }
 
@@ -177,13 +162,7 @@ final class WallshapeViewControl {
 
     public func saveToPhotos(title: String) {
         guard let view = self.wallshapeview, let contentView = view.contentView else {return}
-        if let gridLayer = (contentView.layer.sublayers?.last) as? CAShapeLayer {
-            gridLayer.removeFromSuperlayer()
-        }
-        SaveImage.save(title, view: view, frame: contentView.frame) {
-            guard let gridControl = self.gridControl, let shapelayer = gridControl.shapelayer else { return }
-            contentView.layer.addSublayer(shapelayer)
-        }
+        SaveImage.save(title, view: view, frame: contentView.frame)
     }
 
     private func contentViewSize() -> WallshapeSize {
