@@ -161,8 +161,12 @@ final class WallshapeViewControl {
     }
 
     public func saveToPhotos(title: String) {
-        guard let view = self.wallshapeview, let contentView = view.contentView else {return}
-        SaveImage.save(title, view: view, frame: contentView.frame)
+        guard let view = self.wallshapeview, let contentView = view.contentView,
+              let selectedBorder = view.selectBorder, let sublayer = selectedBorder.firstSublayer else {return}
+        sublayer.isHidden = true
+        SaveImage.save(title, view: view, frame: contentView.frame) {
+            sublayer.isHidden = false
+        }
     }
 
     private func contentViewSize() -> WallshapeSize {
