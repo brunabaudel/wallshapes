@@ -164,7 +164,7 @@ extension ShapeGesturesControl {
             let location = recognizer.location(in: self.view)
             self.findSubview(location)
         case .changed:
-            if !self.isLongPress { self.showMiddleIndicators() }
+            if !self.isLongPress {self.showMiddleIndicators()}
             guard let _ = self.viewGesture, let view = self.view, let tempview = view.tempView else {return}
             if self.isLongPress { self.hoverDeleteView() }
             var translation = recognizer.translation(in: tempview)
@@ -329,11 +329,11 @@ extension ShapeGesturesControl {
     }
 
     private func showMiddleIndicators() {
-        guard let viewGesture = self.viewGesture, let view = self.view else {return}
-        let vert = (viewGesture.center.x > view.frame.midX-1 && viewGesture.center.x < view.frame.midX+1) &&
-            (viewGesture.center.y > 0 && viewGesture.center.y < view.frame.maxY)
-        let hor = (viewGesture.center.y > view.frame.midY-1 && viewGesture.center.y < view.frame.midY+1) &&
-            (viewGesture.center.x > 0 && viewGesture.center.x < view.frame.maxX)
+        guard let view = self.view, let temview = view.tempView else {return}
+        let vert = (temview.center.x > view.frame.midX-1 && temview.center.x < view.frame.midX+1) &&
+            (temview.center.y > 0 && temview.center.y < view.frame.maxY)
+        let hor = (temview.center.y > view.frame.midY-1 && temview.center.y < view.frame.midY+1) &&
+            (temview.center.x > 0 && temview.center.x < view.frame.maxX)
         self.verticalIndicatorView?.toggle(vert)
         self.horizontalIndicatorView?.toggle(hor)
     }
