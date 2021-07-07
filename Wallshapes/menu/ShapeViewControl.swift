@@ -107,7 +107,7 @@ final class ShapeViewControl {
         clonedShape.shadowRadius = shape.shadowRadius
         clonedShape.frame = shape.frame
         clonedShape.type = shape.type
-        let clonedShapeView = ShapeView(frame: shapeview.frame, shape: clonedShape)
+        let clonedShapeView = ShapeView(frame: shape.frame, shape: clonedShape)
         self.createShapeView(clonedShapeView)
         return clonedShapeView
     }
