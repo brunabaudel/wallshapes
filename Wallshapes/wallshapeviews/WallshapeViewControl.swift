@@ -66,7 +66,7 @@ final class WallshapeViewControl {
 
     public func chooseColors(_ count: Int) {
         let colors = self.randomColors(2)
-        guard let gradientLayer = (self.wallshapeview?.contentView?.layer.sublayers?.first) as? CAGradientLayer else {
+        guard let gradientLayer = (self.wallshapeview?.contentView?.firstSublayer) as? CAGradientLayer else {
             addGradientLayer(with: colors)
             return
         }
