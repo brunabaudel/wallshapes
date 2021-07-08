@@ -57,9 +57,27 @@ final class WallshapeViewControl {
         shapeLayer.strokeColor = UIColor.yellow.cgColor
         selectBorder.frame = CGRect.zero
         selectBorder.backgroundColor = .clear
+        selectBorder.isHidden = true
         selectBorder.layer.addSublayer(shapeLayer)
         tempView.addSubview(selectBorder)
         view.addSubview(tempView)
+        self.initDeleteButton()
+    }
+    
+    private func initDeleteButton() {
+        guard let view = self.wallshapeview,
+              let selectedBorder = view.selectBorder,
+              let btndelete = view.btndelete else { return }
+        btndelete.translatesAutoresizingMaskIntoConstraints = false
+        btndelete.addTarget(self, action: #selector(deleteShapeView(_:)), for: .touchUpInside)
+        btndelete.setImage(UIImage(named: "remove"), for: .normal)
+        btndelete.isHidden = true
+        selectedBorder.addSubview(btndelete)
+        
+        btndelete.centerXAnchor.constraint(equalTo: selectedBorder.centerXAnchor).isActive = true
+        btndelete.centerYAnchor.constraint(equalTo: selectedBorder.centerYAnchor).isActive = true
+        btndelete.heightAnchor.constraint(equalTo: selectedBorder.heightAnchor, multiplier: 0.3).isActive = true
+        btndelete.widthAnchor.constraint(equalTo: selectedBorder.widthAnchor, multiplier: 0.3).isActive = true
     }
 
     // MARK: - Colors
@@ -108,6 +126,38 @@ final class WallshapeViewControl {
     }
 
     // MARK: - Navigationbar Functions
+    
+    public func deleteShapeViews(_ isActive: Bool) {
+        guard let view = self.wallshapeview,
+              let menu = self.menuShapeControl,
+              let tempview = view.tempView,
+              let selectedBorder = view.selectBorder,
+              let btndelete = view.btndelete else {return}
+        btndelete.isHidden = !isActive
+        view.isDeleteActive = isActive
+        guard let isDeleteActive = view.isDeleteActive else {return}
+        if isDeleteActive {
+            menu.hideMenu()
+            view.selectedIndex = view.subviews.firstIndex(of: tempview)
+            view.insertSubview(tempview, at: view.subviews.count)
+        } else {
+            if !selectedBorder.isHidden {menu.showMenu()}
+            guard let index = view.selectedIndex else {return}
+            view.insertSubview(tempview, at: index)
+        }
+    }
+    
+    @objc private func deleteShapeView(_ sender: UIButton) {
+        guard let view = self.wallshapeview, let tempview = view.tempView,
+              let menu = self.menuShapeControl else {return}
+        tempview.subviews.forEach {
+            if type(of: $0) == ShapeView.self {
+                menu.unselectShapeView()
+                menu.hideMenu()
+                $0.removeFromSuperview()
+            }
+        }
+    }
 
     public func resizeContentView() {
         guard let view = self.wallshapeview, let contentView = view.contentView else { return }
@@ -162,10 +212,10 @@ final class WallshapeViewControl {
 
     public func saveToPhotos(title: String) {
         guard let view = self.wallshapeview, let contentView = view.contentView,
-              let selectedBorder = view.selectBorder, let sublayer = selectedBorder.firstSublayer else {return}
-        sublayer.isHidden = true
+              let selectedBorder = view.selectBorder else {return}
+        selectedBorder.isHidden = true
         SaveImage.save(title, view: view, frame: contentView.frame) {
-            sublayer.isHidden = false
+            selectedBorder.isHidden = false
         }
     }
 

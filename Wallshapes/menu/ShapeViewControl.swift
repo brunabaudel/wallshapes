@@ -406,7 +406,8 @@ extension ShapeViewControl {
               let tempView = wallshapeview.tempView,
               let selectBorder = wallshapeview.selectBorder,
               let shapelayer = selectBorder.firstSublayer as? CAShapeLayer,
-              let currLayer = shapeView.firstSublayer else { return }
+              let currLayer = shapeView.firstSublayer,
+              let isDeleteActive = wallshapeview.isDeleteActive else {return}
         CATransaction.removeAnimation {
             if let shplayer = currLayer as? CAShapeLayer {
                 shapelayer.frame = shplayer.frame
@@ -423,18 +424,30 @@ extension ShapeViewControl {
             wallshapeview.insertSubview(tempView, aboveSubview: shapeView)
             tempView.insertSubview(shapeView, belowSubview: selectBorder)
             _ = tempView.subviews.map {$0.isHidden = false}
+            if isDeleteActive {
+                menuShapeControl.hideMenu()
+                wallshapeview.selectedIndex = wallshapeview.subviews.firstIndex(of: tempView)
+                wallshapeview.insertSubview(tempView, at: wallshapeview.subviews.count)
+            }
         }
     }
 
     public func unselectView() {
         guard let menuShapeControl = self.menuShapeControl,
               let wallshapeview = menuShapeControl.wallshapeview,
-              let tempView = wallshapeview.tempView else {return}
+              let tempView = wallshapeview.tempView,
+              let isDeleteActive = wallshapeview.isDeleteActive,
+              let selectedIndex = wallshapeview.selectedIndex else {return}
         let shapeView = (tempView.subviews.filter {type(of: $0) == ShapeView.self}).first
         guard let shapeview = shapeView as? ShapeView else {return}
         CATransaction.removeAnimation {
             shapeview.frame = tempView.frame
-            wallshapeview.insertSubview(shapeview, aboveSubview: tempView)
+            if !isDeleteActive {
+                wallshapeview.insertSubview(shapeview, aboveSubview: tempView)
+            } else {
+                menuShapeControl.hideMenu()
+                wallshapeview.insertSubview(shapeview, at: selectedIndex)
+            }
             _ = tempView.subviews.map {$0.isHidden = true}
         }
     }

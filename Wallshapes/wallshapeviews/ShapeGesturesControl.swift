@@ -57,6 +57,7 @@ extension ShapeGesturesControl {
     private func didPinch(_ recognizer: UIPinchGestureRecognizer) {
         switch recognizer.state {
         case .began:
+            menuShapeControl?.hideMenu()
             let location = recognizer.location(in: self.view)
             self.findSubview(location)
             guard let view = self.view, let tempview = view.tempView else {return}
@@ -123,6 +124,7 @@ extension ShapeGesturesControl {
     private func setupSelectedBorderLayerScale(_ newFrame: CGRect, scaledPath: CGPath) {
         guard let view = self.view, let selectBorder = view.selectBorder,
               let borderLayer = selectBorder.firstSublayer as? CAShapeLayer else {return}
+        selectBorder.frame.size = newFrame.size
         borderLayer.path = scaledPath
         borderLayer.frame = newFrame
     }
@@ -135,6 +137,10 @@ extension ShapeGesturesControl {
         guard let viewGesture = self.viewGesture else {
             menuShapeControl?.hideMenu()
             menuShapeControl?.unselectShapeView()
+            return
+        }
+        if let isDeleteActive = self.menuShapeControl?.wallshapeview?.isDeleteActive, isDeleteActive {
+            self.clearSubview()
             return
         }
         menuShapeControl?.setupSliderMenuShape(viewGesture)
@@ -165,7 +171,6 @@ extension ShapeGesturesControl {
             self.clearMiddleIndicators()
             guard let viewGesture = self.viewGesture else {return}
             menuShapeControl?.setupSliderMenuShape(viewGesture)
-            menuShapeControl?.showMenu()
             self.clearSubview()
         default:
             break

@@ -12,6 +12,7 @@ protocol WallshapesNavigationControllerDelegate: AnyObject {
     func refreshGradientItemHandle()
     func refreshPlainColorItemHandle()
     func changeViewSizeHandle()
+    func deleteViewHandle(_ isActive: Bool)
     func saveItemHandle()
     func clearItemHandle()
 }
@@ -28,7 +29,12 @@ final class WallshapesNavigationController: UINavigationController {
         return true
     }
     
-    private var isSelected: Bool = false
+    private var isActive: Bool = false
+    
+    private var navItem: UINavigationItem? {
+        guard let visibleViewController = self.visibleViewController as? WallshapesViewController else {return nil}
+        return visibleViewController.navigationItem
+    }
 
     override init(rootViewController: UIViewController) {
         if #available(iOS 13.0, *) {
@@ -54,20 +60,28 @@ final class WallshapesNavigationController: UINavigationController {
     }
 
     private func setupNavigationItems() {
-        guard let visibleViewController = self.visibleViewController as? WallshapesViewController else {return}
-        let navItems = visibleViewController.navigationItem
-
-        navItems.rightBarButtonItems = [
+        guard let navItem = navItem else {return}
+        navItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
             configBarButtons("gradient", action: #selector(refreshGradientItemHandle)),
             configBarButtons("bucket", size: 23, action: #selector(refreshPlainColorItemHandle)),
-            configBarButtons("crop", action: #selector(changeViewSizeHandle))]
+            configBarButtons("crop", action: #selector(changeViewSizeHandle)),
+            configBarButtons("trash", action: #selector(deleteViewHandle))]
 
-        navItems.leftBarButtonItems = [
+        navItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveItemHandle)),
             UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle))]
     }
 
+    @objc private func deleteViewHandle(_ sender: UIBarButtonItem) {
+        isActive = !isActive
+        isEnableButtons()
+        let iconName = isActive ? "trash-open" : "trash"
+        guard let icon = createIcon(iconName) else {return}
+        sender.image = icon
+        wallshapesDelegate?.deleteViewHandle(isActive)
+    }
+    
     @objc private func changeViewSizeHandle() {
         wallshapesDelegate?.changeViewSizeHandle()
     }
@@ -92,6 +106,11 @@ final class WallshapesNavigationController: UINavigationController {
         wallshapesDelegate?.saveItemHandle()
     }
 
+    private func isEnableButtons() {
+        guard let navItem = navItem else {return}
+        navItem.leftBarButtonItems?[0].isEnabled = !isActive
+    }
+    
     private func configBarButtons(_ title: String, size: CGFloat = 20, action: Selector?) -> UIBarButtonItem {
         guard let icon = createIcon(title, size: size) else {return UIBarButtonItem()}
         return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
