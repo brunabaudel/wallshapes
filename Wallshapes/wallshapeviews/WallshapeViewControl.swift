@@ -53,7 +53,7 @@ final class WallshapeViewControl {
         let shapeLayer = CAShapeLayer()
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.lineDashPattern = [3, 3]
-        shapeLayer.lineWidth = 5
+        shapeLayer.lineWidth = 2
         shapeLayer.strokeColor = UIColor.yellow.cgColor
         selectBorder.frame = CGRect.zero
         selectBorder.backgroundColor = .clear

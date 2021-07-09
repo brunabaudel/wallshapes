@@ -66,7 +66,7 @@ extension ShapeGesturesControl {
             guard let view = self.view, let tempview = view.tempView else {return}
             self.scale = recognizer.scale
             let newSize = tempview.bounds.applying(tempview.transform.scaledBy(x: self.scale, y: self.scale))
-            if newSize.size.height > 10 {
+            if newSize.size.height > 15 {
                 tempview.bounds = newSize
                 self.updateShapeLayerFrameScale()
             }
