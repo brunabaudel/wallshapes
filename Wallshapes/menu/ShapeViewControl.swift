@@ -98,16 +98,19 @@ final class ShapeViewControl {
     }
 
     private func clone(_ shapeview: ShapeView?) -> ShapeView? {
-        guard let shapeview = shapeview, let shape = shapeview.shape else { return nil }
+        guard let shapeview = shapeview, let shape = shapeview.shape,
+              let menuShapeControl = self.menuShapeControl,
+              let view = menuShapeControl.wallshapeview,
+              let tempview = view.tempView else {return nil}
         let clonedShape = Shape()
         clonedShape.alpha = shape.alpha
         clonedShape.layerColors = shape.layerColors
         clonedShape.layerType = shape.layerType
         clonedShape.polygon = shape.polygon
         clonedShape.shadowRadius = shape.shadowRadius
-        clonedShape.frame = shape.frame
+        clonedShape.frame = tempview.frame
         clonedShape.type = shape.type
-        let clonedShapeView = ShapeView(frame: shape.frame, shape: clonedShape)
+        let clonedShapeView = ShapeView(frame: tempview.frame, shape: clonedShape)
         self.createShapeView(clonedShapeView)
         return clonedShapeView
     }
