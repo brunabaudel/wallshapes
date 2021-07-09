@@ -44,7 +44,7 @@ final class MenuShapeControl {
         sliderView.minimumValue = 0
         sliderView.maximumValue = 1
         sliderView.isHidden = true
-        sliderView.addTarget(self, action: #selector(onSliderValueChanged(_:)), for: .valueChanged)
+        sliderView.addTarget(self, action: #selector(onSliderValueChanged(_:_:)), for: .valueChanged)
 
         guard let window = UIApplication.window else {return}
         window.addSubview(sliderView)
@@ -151,9 +151,22 @@ extension MenuShapeControl {
 // MARK: - Slider methods
 
 extension MenuShapeControl {
-    @objc private func onSliderValueChanged(_ sender: SliderMenu) {
-        guard let shapeview = self.shapeview else {return}
-        delegate?.onSliderMenu(sender, shapeView: shapeview)
+    @objc private func onSliderValueChanged(_ sender: SliderMenu, _ event: UIEvent) {
+        guard let shapeview = self.shapeview, let view = wallshapeview,
+              let selectBorder = view.selectBorder else {return}
+        if let touchEvent = event.allTouches?.first {
+            switch touchEvent.phase {
+            case .began:
+                selectBorder.isHidden = true
+            case .moved:
+                delegate?.onSliderMenu(sender, shapeView: shapeview)
+            case .ended:
+                selectBorder.isHidden = false
+            default:
+                NSLog("Error")
+            }
+        }
+        
     }
 
     public func selectSlider(_ type: SliderType, value: Float, _ isSelected: Bool) {
