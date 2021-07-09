@@ -402,6 +402,8 @@ extension ShapeViewControl: MenuShapeControlDelegate {
     }
 }
 
+// MARK: - Select and Unselect
+
 extension ShapeViewControl {
     public func selectView(_ shapeView: ShapeView) {
         guard let menuShapeControl = self.menuShapeControl,
