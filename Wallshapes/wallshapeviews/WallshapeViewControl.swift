@@ -76,8 +76,8 @@ final class WallshapeViewControl {
         
         btndelete.centerXAnchor.constraint(equalTo: selectedBorder.centerXAnchor).isActive = true
         btndelete.centerYAnchor.constraint(equalTo: selectedBorder.centerYAnchor).isActive = true
-        btndelete.heightAnchor.constraint(equalTo: selectedBorder.heightAnchor, multiplier: 0.5).isActive = true
-        btndelete.widthAnchor.constraint(equalTo: selectedBorder.widthAnchor, multiplier: 0.5).isActive = true
+        btndelete.heightAnchor.constraint(equalTo: selectedBorder.heightAnchor, multiplier: 0.4).isActive = true
+        btndelete.widthAnchor.constraint(equalTo: selectedBorder.widthAnchor, multiplier: 0.4).isActive = true
     }
 
     // MARK: - Colors
