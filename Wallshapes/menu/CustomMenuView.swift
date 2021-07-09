@@ -62,7 +62,7 @@ final class CustomMenuView<T: CustomMenuDelegate>: UIView {
     }
 
     private func initStackView() {
-        stackView = StackView()
+        stackView = UIStackView()
         guard let stackView = self.stackView else {return}
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical

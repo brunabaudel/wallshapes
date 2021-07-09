@@ -36,7 +36,6 @@
 		4CB5EF7425ED8B4E00193A19 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF7325ED8B4E00193A19 /* UIColor+Extension.swift */; };
 		4CB5EF7925ED8BA100193A19 /* MenuShapeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */; };
 		4CB5EF7D25ED8BB500193A19 /* SlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF7C25ED8BB500193A19 /* SlideMenu.swift */; };
-		4CB5EF8125ED8C3000193A19 /* StackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8025ED8C3000193A19 /* StackView.swift */; };
 		4CB5EF8525ED9F9F00193A19 /* ShapeGesturesControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8425ED9F9F00193A19 /* ShapeGesturesControl.swift */; };
 		4CB5EF8925F1537100193A19 /* CGPath+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8825F1537100193A19 /* CGPath+Extension.swift */; };
 		4CB5EF8C25F154D800193A19 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5EF8B25F154D800193A19 /* UIView+Extension.swift */; };
@@ -82,7 +81,6 @@
 		4CB5EF7325ED8B4E00193A19 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuShapeControl.swift; sourceTree = "<group>"; };
 		4CB5EF7C25ED8BB500193A19 /* SlideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideMenu.swift; sourceTree = "<group>"; };
-		4CB5EF8025ED8C3000193A19 /* StackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackView.swift; sourceTree = "<group>"; };
 		4CB5EF8425ED9F9F00193A19 /* ShapeGesturesControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeGesturesControl.swift; sourceTree = "<group>"; };
 		4CB5EF8825F1537100193A19 /* CGPath+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPath+Extension.swift"; sourceTree = "<group>"; };
 		4CB5EF8B25F154D800193A19 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -229,7 +227,6 @@
 			isa = PBXGroup;
 			children = (
 				4CBE046E25FFCAD500C54C66 /* RenderIndicatorView.swift */,
-				4CB5EF8025ED8C3000193A19 /* StackView.swift */,
 			);
 			path = commonviews;
 			sourceTree = "<group>";
@@ -365,7 +362,6 @@
 				4CB5EF7D25ED8BB500193A19 /* SlideMenu.swift in Sources */,
 				4C0F7831262B9F10001C26A5 /* FileControl.swift in Sources */,
 				4C21D42626586CDB00116116 /* CustomMenuView.swift in Sources */,
-				4CB5EF8125ED8C3000193A19 /* StackView.swift in Sources */,
 				4CB5EF7925ED8BA100193A19 /* MenuShapeControl.swift in Sources */,
 				4CF48BDB26221FE5009822DA /* WallshapesNavigationController.swift in Sources */,
 				4CB5EF4625ED88E800193A19 /* SceneDelegate.swift in Sources */,
