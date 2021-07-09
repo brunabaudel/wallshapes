@@ -228,7 +228,8 @@ final class WallshapeViewControl {
     }
 
     private func subShapeViews() -> [ShapeView] {
-        guard let view = self.wallshapeview else { return [] }
+        guard let view = self.wallshapeview, let menu = menuShapeControl else { return [] }
+        menu.unselectShapeView()
         return view.subviews
             .filter { type(of: $0) == ShapeView.self }
             .compactMap { $0 as? ShapeView }
