@@ -348,13 +348,16 @@ extension ShapeViewControl: MenuShapeControlDelegate {
     }
     
     func onShapeMenu(_ sender: TypeButton<ShapeMenuView>, shapeView: ShapeView) {
-        guard let type = sender.type else {return}
+        guard let type = sender.type, let menuShapeControl = self.menuShapeControl else {return}
         switch type {
         case .circle:
+            menuShapeControl.hideSlider()
             self.createPath(shapeView, by: .circle, true)
         case .square:
+            menuShapeControl.hideSlider()
             self.createPath(shapeView, by: .rectangle, true)
         case .triangle:
+            menuShapeControl.hideSlider()
             self.createPath(shapeView, by: .triangle, true)
         case .polygon:
             guard let menuShapeControl = self.menuShapeControl,

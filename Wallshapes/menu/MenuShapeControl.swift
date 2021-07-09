@@ -158,10 +158,12 @@ extension MenuShapeControl {
             switch touchEvent.phase {
             case .began:
                 selectBorder.isHidden = true
+                self.hideMenuSlider()
             case .moved:
                 delegate?.onSliderMenu(sender, shapeView: shapeview)
             case .ended:
                 selectBorder.isHidden = false
+                self.showMenuSlider()
             default:
                 NSLog("Error")
             }
@@ -197,6 +199,19 @@ extension MenuShapeControl {
     public func setupSlider(value: Float) {
         guard let sliderView = self.sliderView else {return}
         sliderView.setValue(value, animated: true)
+    }
+    
+    public func hideMenuSlider() {
+        mainMenuView?.isHidden = true
+        shapeMenuView?.isHidden = true
+    }
+    
+    public func showMenuSlider() {
+        mainMenuView?.isHidden = false
+        if sliderView?.type == .polygon {
+            guard let shapeMenuView = self.shapeMenuView else {return}
+            shapeMenuView.isHidden = false
+        }
     }
 }
 

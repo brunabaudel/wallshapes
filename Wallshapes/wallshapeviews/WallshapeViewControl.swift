@@ -138,8 +138,15 @@ final class WallshapeViewControl {
         guard let isDeleteActive = view.isDeleteActive else {return}
         if isDeleteActive {
             menu.hideMenu()
-            view.selectedIndex = view.subviews.firstIndex(of: tempview)
-            view.insertSubview(tempview, at: view.subviews.count)
+            if (tempview.subviews.filter {type(of: $0) == ShapeView.self}).count > 0 {
+                view.selectedIndex = view.subviews.firstIndex(of: tempview)
+                view.insertSubview(tempview, at: view.subviews.count)
+                return
+            }
+            let shapeview = (view.subviews.filter {type(of: $0) == ShapeView.self}).last
+            if let shapeview = shapeview as? ShapeView {
+                menu.selectShapeView(shapeview)
+            }
         } else {
             if !selectedBorder.isHidden {menu.showMenu()}
             guard let index = view.selectedIndex else {return}
