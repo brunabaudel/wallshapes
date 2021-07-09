@@ -54,7 +54,7 @@ final class WallshapeViewControl {
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.lineDashPattern = [3, 3]
         shapeLayer.lineWidth = 2
-        shapeLayer.strokeColor = UIColor.yellow.cgColor
+        shapeLayer.strokeColor = UIColor.white.cgColor
         selectBorder.frame = CGRect.zero
         selectBorder.backgroundColor = .clear
         selectBorder.isHidden = true
@@ -76,8 +76,8 @@ final class WallshapeViewControl {
         
         btndelete.centerXAnchor.constraint(equalTo: selectedBorder.centerXAnchor).isActive = true
         btndelete.centerYAnchor.constraint(equalTo: selectedBorder.centerYAnchor).isActive = true
-        btndelete.heightAnchor.constraint(equalTo: selectedBorder.heightAnchor, multiplier: 0.3).isActive = true
-        btndelete.widthAnchor.constraint(equalTo: selectedBorder.widthAnchor, multiplier: 0.3).isActive = true
+        btndelete.heightAnchor.constraint(equalTo: selectedBorder.heightAnchor, multiplier: 0.5).isActive = true
+        btndelete.widthAnchor.constraint(equalTo: selectedBorder.widthAnchor, multiplier: 0.5).isActive = true
     }
 
     // MARK: - Colors
