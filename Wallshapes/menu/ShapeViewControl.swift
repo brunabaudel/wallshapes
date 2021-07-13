@@ -128,7 +128,7 @@ extension ShapeViewControl {
     private func createPathCircle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         shape.polygon = 0
-        let frame = isSelected ? tempViewFrame() : shapeview.frame
+        let frame = isSelected ? tempViewFrame() : shape.frame
         let path = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: frame.origin.x + (frame.size.width)/2,
                                         y: frame.origin.y + (frame.size.height)/2),
@@ -140,7 +140,7 @@ extension ShapeViewControl {
     private func createPathRectangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         shape.polygon = 0
-        let frame = isSelected ? tempViewFrame() : shapeview.frame
+        let frame = isSelected ? tempViewFrame() : shape.frame
         let path = UIBezierPath()
         path.move(to: CGPoint(x: frame.origin.x, y: frame.origin.y))
         path.addLine(to: CGPoint(x: frame.origin.x, y: frame.origin.y + frame.size.height))
@@ -154,7 +154,7 @@ extension ShapeViewControl {
     private func createPathTriangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
         shape.polygon = 0
-        let frame = isSelected ? tempViewFrame() : shapeview.frame
+        let frame = isSelected ? tempViewFrame() : shape.frame
         let path = UIBezierPath()
         path.move(to: CGPoint(x: frame.width/2 + frame.origin.x, y: frame.origin.y))
         path.addLine(to: CGPoint(x: frame.origin.x, y: frame.size.height + frame.origin.y))
@@ -200,7 +200,7 @@ extension ShapeViewControl {
                                    color: UIColor, _ isSelected: Bool) -> CAShapeLayer? {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return nil}
         let shapeLayer = CAShapeLayer()
-        let frame = isSelected ? tempViewFrame() : shapeview.frame
+        let frame = isSelected ? tempViewFrame() : shape.frame
         shapeLayer.frame = CGRect(origin: CGPoint(x: -frame.minX,
                                                   y: -frame.minY),
                                   size: frame.size)
@@ -254,14 +254,14 @@ extension ShapeViewControl {
     }
 
     private func regularPolygonInRect(_ shapeview: ShapeView?, _ value: UInt32, _ isSelected: Bool) -> UIBezierPath? {
-        guard let shapeview = shapeview else {return nil}
-        let frame = isSelected ? tempViewFrame() : shapeview.frame
+        guard let shapeview = shapeview, let shape = shapeview.shape else {return nil}
+        let frame = isSelected ? tempViewFrame() : shape.frame
         let degree = value % 12 + 3
         let center = CGPoint(x: (frame.width/2) + frame.origin.x,
                              y: (frame.height/2) + frame.origin.y)
         var angle = -CGFloat(.pi / 2.0)
         let angleIncrement = CGFloat(.pi * 2.0 / Double(degree))
-        let radius = shapeview.frame.width / 2.0
+        let radius = frame.width / 2.0
 
         let path = UIBezierPath()
         path.move(to: pointFrom(angle, radius: radius, offset: center))
@@ -373,7 +373,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         menuShapeControl.hideShapeMenu()
         guard let clonedShapeView = self.clone(shapeView) else {return}
         self.unselectView()
-        menuShapeControl.selectShapeView(clonedShapeView)
+        self.selectView(clonedShapeView)
     }
     
     private func selectSlider(_ shapeView: ShapeView, _ type: MainMenuTypeEnum, isSelected: Bool) {
@@ -432,12 +432,13 @@ extension ShapeViewControl {
             wallshapeview.insertSubview(tempView, aboveSubview: shapeView)
             tempView.insertSubview(shapeView, belowSubview: selectBorder)
             _ = tempView.subviews.map {$0.isHidden = false}
+            wallshapeview.selectedIndex = (wallshapeview.subviews.firstIndex(of: tempView) ?? 1) - 1
             if isDeleteActive {
                 menuShapeControl.hideMenu()
-                wallshapeview.selectedIndex = wallshapeview.subviews.firstIndex(of: tempView)
                 wallshapeview.insertSubview(tempView, at: wallshapeview.subviews.count)
             }
         }
+        wallshapeview.isSelected = true
     }
 
     public func unselectView() {
@@ -458,5 +459,6 @@ extension ShapeViewControl {
             }
             _ = tempView.subviews.map {$0.isHidden = true}
         }
+        wallshapeview.isSelected = false
     }
 }

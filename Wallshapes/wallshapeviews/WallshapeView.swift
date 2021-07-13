@@ -9,6 +9,7 @@ import UIKit
 
 final class WallshapeView: UIView {
     internal var contentView: UIView?
+    internal var isSelected: Bool?
     internal var selectBorder: UIView?
     internal var tempView: UIView?
     internal var btndelete: UIButton?
@@ -23,6 +24,7 @@ final class WallshapeView: UIView {
         self.tempView = UIView()
         self.selectedIndex = 0
         self.isDeleteActive = false
+        self.isSelected = false
         self.backgroundColor = .init(white: 0.15, alpha: 1)
     }
 

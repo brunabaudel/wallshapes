@@ -218,11 +218,13 @@ final class WallshapeViewControl {
     }
 
     public func saveToPhotos(title: String) {
-        guard let view = self.wallshapeview, let contentView = view.contentView,
-              let selectedBorder = view.selectBorder else {return}
+        guard let view = self.wallshapeview,
+              let contentView = view.contentView,
+              let selectedBorder = view.selectBorder,
+              let isSelected = view.isSelected else {return}
         selectedBorder.isHidden = true
         SaveImage.save(title, view: view, frame: contentView.frame) {
-            selectedBorder.isHidden = false
+            if isSelected { selectedBorder.isHidden = false }
         }
     }
 
@@ -235,11 +237,24 @@ final class WallshapeViewControl {
     }
 
     private func subShapeViews() -> [ShapeView] {
-        guard let view = self.wallshapeview, let menu = menuShapeControl else { return [] }
-        menu.unselectShapeView()
-        return view.subviews
-            .filter { type(of: $0) == ShapeView.self }
+        guard let view = self.wallshapeview,
+              let tempview = view.tempView,
+              let index = view.selectedIndex else {return []}
+        let shapeView = (tempview.subviews.filter {type(of: $0) == ShapeView.self}).first
+        var shapeViews = view.subviews
+            .filter {
+                if let shapeview = $0 as? ShapeView {
+                    shapeview.shape?.frame = shapeview.frame
+                    return true
+                }
+                return false
+            }
             .compactMap { $0 as? ShapeView }
+        if let shapeview = shapeView as? ShapeView {
+            shapeview.shape?.frame = tempview.frame
+            shapeViews.insert(shapeview, at: index)
+        }
+        return shapeViews
     }
 
     private func backgroundUIColors() -> [UIColor] {
