@@ -9,7 +9,7 @@ import UIKit
 
 final class ShapeViewControl {
     private weak var menuShapeControl: MenuShapeControl?
-    
+
     init(_ menuShapeControl: MenuShapeControl) {
         self.menuShapeControl = menuShapeControl
         self.menuShapeControl?.delegate = self
@@ -219,7 +219,7 @@ extension ShapeViewControl {
         shapeview.layer.addSublayer(newLayer)
         changeSelectedPath(newLayer)
     }
-    
+
     private func changeSelectedPath(_ newLayer: CALayer) {
         guard let menuShapeControl = self.menuShapeControl,
               let wallshapeview = menuShapeControl.wallshapeview,
@@ -295,7 +295,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             break
         }
     }
-    
+
     func onMainMenu(_ sender: TypeButton<MainMenuView>, shapeView: ShapeView) {
         guard let type = sender.type, let menuShapeControl = self.menuShapeControl else {return}
         switch type {
@@ -323,7 +323,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
            menuShapeControl.showShapeMenu()
         }
     }
-    
+
     func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>, shapeView: ShapeView) {
         guard let type = sender.type,
               let menuShapeControl = self.menuShapeControl,
@@ -346,7 +346,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             }
         }
     }
-    
+
     func onShapeMenu(_ sender: TypeButton<ShapeMenuView>, shapeView: ShapeView) {
         guard let type = sender.type, let menuShapeControl = self.menuShapeControl else {return}
         switch type {
@@ -365,7 +365,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             menuShapeControl.selectSlider(.polygon, value: Float(shape.polygon), sender.isSelected)
         }
     }
-    
+
     private func cloneShapeView(_ shapeView: ShapeView) {
         guard let menuShapeControl = self.menuShapeControl else {return}
         menuShapeControl.hideSlider()
@@ -375,7 +375,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         self.unselectView()
         self.selectView(clonedShapeView)
     }
-    
+
     private func selectSlider(_ shapeView: ShapeView, _ type: MainMenuTypeEnum, isSelected: Bool) {
         guard let menuShapeControl = self.menuShapeControl else {return}
         menuShapeControl.hideMenuArrange()
@@ -391,7 +391,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             NSLog("Error")
         }
     }
-    
+
     public func setupSliderMenuShape(_ shapeView: ShapeView) {
         guard let menuShapeControl = self.menuShapeControl, let type = menuShapeControl.typeSlider() else {return}
         switch type {

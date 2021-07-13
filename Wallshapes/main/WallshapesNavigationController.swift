@@ -28,11 +28,11 @@ final class WallshapesNavigationController: UINavigationController {
         }
         return true
     }
-    
+
     private var isActive: Bool = false
     private var navigationRightItems: [UIBarButtonItem] = []
     private var navigationLeftItems: [UIBarButtonItem] = []
-    
+
     private var navItem: UINavigationItem? {
         guard let visibleViewController = self.visibleViewController as? WallshapesViewController else {return nil}
         return visibleViewController.navigationItem
@@ -62,7 +62,7 @@ final class WallshapesNavigationController: UINavigationController {
         self.navigationLeftItems = setupNavigationLeftItems()
         setupNavigationItems()
     }
-    
+
     private func setupNavigationRightItems() -> [UIBarButtonItem] {
         return [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
                 configBarButtons("gradient", action: #selector(refreshGradientItemHandle)),
@@ -81,7 +81,7 @@ final class WallshapesNavigationController: UINavigationController {
         navItem.rightBarButtonItems = self.navigationRightItems
         navItem.leftBarButtonItems = self.navigationLeftItems
     }
-    
+
     private func setupNavigationItemsDelete() {
         guard let navItem = navItem else {return}
         navItem.rightBarButtonItems = [
@@ -98,7 +98,7 @@ final class WallshapesNavigationController: UINavigationController {
         }
         wallshapesDelegate?.deleteViewHandle(isActive)
     }
-    
+
     @objc private func changeViewSizeHandle() {
         wallshapesDelegate?.changeViewSizeHandle()
     }
@@ -127,7 +127,7 @@ final class WallshapesNavigationController: UINavigationController {
         guard let icon = createIcon(title, size: size) else {return UIBarButtonItem()}
         return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
     }
-    
+
     private func createIcon(_ title: String, size: CGFloat = 20) -> UIImage? {
         return UIImage(named: title)?
             .resize(targetSize: CGSize(width: size, height: size))

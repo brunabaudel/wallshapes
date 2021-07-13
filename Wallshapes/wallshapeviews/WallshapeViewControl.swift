@@ -16,7 +16,7 @@ final class WallshapeViewControl {
         self.wallshapeview = wallshapeView
         self.modelControl = ModelControl()
         self.menuShapeControl = menuControl
-        
+
         guard let wallshape = self.modelControl?.recover() else { return }
         initContentView(with: wallshape.backgroundColors, size: wallshape.size)
         initShapes(shapes: wallshape.shapes)
@@ -63,7 +63,7 @@ final class WallshapeViewControl {
         view.addSubview(tempView)
         self.initDeleteButton()
     }
-    
+
     private func initDeleteButton() {
         guard let view = self.wallshapeview,
               let selectedBorder = view.selectBorder,
@@ -73,7 +73,7 @@ final class WallshapeViewControl {
         btndelete.setImage(UIImage(named: "remove"), for: .normal)
         btndelete.isHidden = true
         selectedBorder.addSubview(btndelete)
-        
+
         btndelete.centerXAnchor.constraint(equalTo: selectedBorder.centerXAnchor).isActive = true
         btndelete.centerYAnchor.constraint(equalTo: selectedBorder.centerYAnchor).isActive = true
         btndelete.heightAnchor.constraint(equalTo: selectedBorder.heightAnchor, multiplier: 0.4).isActive = true
@@ -88,7 +88,7 @@ final class WallshapeViewControl {
             addGradientLayer(with: colors)
             return
         }
-        let cgColors = colors.map{$0.cgColor}
+        let cgColors = colors.map {$0.cgColor}
         gradientLayer.colors = cgColors
     }
 
@@ -106,7 +106,7 @@ final class WallshapeViewControl {
 
     private func initGradientLayer(_ colors: [UIColor]) -> CAGradientLayer {
         let gradientLayer = CAGradientLayer()
-        let cgColors = colors.map{$0.cgColor}
+        let cgColors = colors.map {$0.cgColor}
         gradientLayer.frame = self.wallshapeview?.contentView?.bounds ?? CGRect.zero
         gradientLayer.colors = cgColors
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
@@ -126,7 +126,7 @@ final class WallshapeViewControl {
     }
 
     // MARK: - Navigationbar Functions
-    
+
     public func deleteShapeViews(_ isActive: Bool) {
         guard let view = self.wallshapeview,
               let menu = self.menuShapeControl,
@@ -153,7 +153,7 @@ final class WallshapeViewControl {
             view.insertSubview(tempview, at: index)
         }
     }
-    
+
     @objc private func deleteShapeView(_ sender: UIButton) {
         guard let view = self.wallshapeview, let tempview = view.tempView,
               let menu = self.menuShapeControl else {return}

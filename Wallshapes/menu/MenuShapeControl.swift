@@ -16,10 +16,10 @@ protocol MenuShapeControlDelegate: AnyObject {
 
 final class MenuShapeControl {
     internal weak var delegate: MenuShapeControlDelegate?
-    
+
     private weak var shapeview: ShapeView?
     private(set) weak var wallshapeview: WallshapeView?
-    
+
     private var sliderView: SliderMenu?
     private var mainMenuView: CustomMenuView<MainMenuView>?
     private var shapeMenuView: CustomMenuView<ShapeMenuView>?
@@ -86,7 +86,7 @@ final class MenuShapeControl {
         menuArrangeView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.6).isActive = true
         menuArrangeView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
-    
+
     private func initShapeMenuOnWindow() {
         shapeMenuView = CustomMenuView<ShapeMenuView>(frame: CGRect.zero)
         guard let shapeMenuView = self.shapeMenuView, let mainMenuView = self.mainMenuView else {return}
@@ -168,7 +168,6 @@ extension MenuShapeControl {
                 NSLog("Error")
             }
         }
-        
     }
 
     public func selectSlider(_ type: SliderType, value: Float, _ isSelected: Bool) {
@@ -200,12 +199,12 @@ extension MenuShapeControl {
         guard let sliderView = self.sliderView else {return}
         sliderView.setValue(value, animated: true)
     }
-    
+
     public func hideMenuSlider() {
         mainMenuView?.isHidden = true
         shapeMenuView?.isHidden = true
     }
-    
+
     public func showMenuSlider() {
         mainMenuView?.isHidden = false
         if sliderView?.type == .polygon {

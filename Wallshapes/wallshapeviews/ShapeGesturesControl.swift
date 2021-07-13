@@ -120,7 +120,7 @@ extension ShapeGesturesControl {
             setupSelectedBorderLayerScale(frameLayer, scaledPath: scaledPath)
         }
     }
-    
+
     private func setupSelectedBorderLayerScale(_ newFrame: CGRect, scaledPath: CGPath) {
         guard let view = self.view, let selectBorder = view.selectBorder,
               let borderLayer = selectBorder.firstSublayer as? CAShapeLayer else {return}
@@ -210,7 +210,7 @@ extension ShapeGesturesControl {
         }
     }
 }
-    
+
 extension ShapeGesturesControl {
     private func findSubview(_ location: CGPoint) {
         guard let view = self.view, let tempView = view.tempView else {return}

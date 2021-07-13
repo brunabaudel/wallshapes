@@ -23,7 +23,7 @@ extension UIImage {
 //        }
 //        return UIImage(cgImage: cgImage)
 //    }
-    
+
     class func imageWithView(_ view: UIView) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
         return renderer.image { _ in

@@ -21,7 +21,7 @@ final class MainMenuView: CustomMenuDelegate {
                                     .plainColor: "bucket",
                                     .shadow: "shadow",
                                     .transparency: "transparency",
-                                    .arrangeSet: "arrange-set",
+                                    .arrangeSet: "arrange-set"
                                     ]
 
     static func allCases() -> [EnumType] {
