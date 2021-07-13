@@ -26,7 +26,7 @@ final class WallshapeViewControl {
     private func initShapes(shapes: [Shape]) {
         guard let view = self.wallshapeview else { return }
         for shape in shapes {
-            let shapeView = ShapeView(frame: shape.frame, shape: shape)
+            let shapeView = ShapeView(shape: shape)
             menuShapeControl?.createShapeView(shapeView)
             view.addSubview(shapeView)
         }
@@ -192,7 +192,9 @@ final class WallshapeViewControl {
         menuShapeControl.showMenu()
         let size = view.bounds.width > view.bounds.height ? view.bounds.midY/2 : view.bounds.midX/2
         let frame = CGRect(x: size*1.75, y: size, width: size, height: size)
-        let shapeView = ShapeView(frame: frame, shape: Shape())
+        let shape = Shape()
+        shape.frame = frame
+        let shapeView = ShapeView(shape: shape)
         menuShapeControl.createShapeView(shapeView)
         menuShapeControl.unselectShapeView()
         menuShapeControl.selectShapeView(shapeView)

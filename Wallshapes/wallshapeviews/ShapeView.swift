@@ -10,9 +10,9 @@ import UIKit
 final class ShapeView: UIView {
     internal var shape: Shape?
 
-    init(frame: CGRect, shape: Shape) {
-        super.init(frame: frame)
+    init(shape: Shape) {
         self.shape = shape
+        super.init(frame: shape.frame)
     }
 
     required init?(coder: NSCoder) {
