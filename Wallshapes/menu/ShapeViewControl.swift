@@ -432,7 +432,7 @@ extension ShapeViewControl {
             wallshapeview.insertSubview(tempView, aboveSubview: shapeView)
             tempView.insertSubview(shapeView, belowSubview: selectBorder)
             _ = tempView.subviews.map {$0.isHidden = false}
-            wallshapeview.selectedIndex = (wallshapeview.subviews.firstIndex(of: tempView) ?? 1) - 1
+            wallshapeview.selectedIndex = (wallshapeview.subviews.firstIndex(of: tempView) ?? 1)
             if isDeleteActive {
                 menuShapeControl.hideMenu()
                 wallshapeview.insertSubview(tempView, at: wallshapeview.subviews.count)
