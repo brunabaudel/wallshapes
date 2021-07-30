@@ -19,13 +19,8 @@ final class ShapeViewControl {
     }
 
     public func createShapeView(_ shapeview: ShapeView) {
-        guard let layout = self.layoutShapeView else {return}
-        guard let shape = shapeview.shape, let type = shape.type else {
-            shapeview.shape?.layerColors?.append(UIColor.random)
-            shapeview.shape?.layerColors?.append(UIColor.random)
-            layout.createPath(shapeview, by: ShapeType.circle)
-            return
-        }
+        guard let layout = self.layoutShapeView, let shape = shapeview.shape,
+              let type = shape.type else {return}
         layout.createPath(shapeview, by: type)
         self.createAlpha(shapeview, shape.alpha)
         self.createShadow(shapeview, shape.shadowRadius)

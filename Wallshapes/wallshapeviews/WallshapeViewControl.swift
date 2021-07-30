@@ -191,9 +191,11 @@ final class WallshapeViewControl {
               let menuShapeControl = self.menuShapeControl else { return }
         menuShapeControl.showMenu()
         let size = view.bounds.width > view.bounds.height ? view.bounds.midY/2 : view.bounds.midX/2
-        let frame = CGRect(x: size*1.75, y: size, width: size, height: size)
         let shape = Shape()
-        shape.frame = frame
+        shape.frame = CGRect(x: size*1.75, y: size, width: size, height: size)
+        shape.type = ShapeType.circle
+        shape.layerColors?.append(UIColor.random)
+        shape.layerColors?.append(UIColor.random)
         let shapeView = ShapeView(shape: shape)
         menuShapeControl.createShapeView(shapeView)
         menuShapeControl.unselectShapeView()
