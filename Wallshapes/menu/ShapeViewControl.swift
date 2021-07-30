@@ -9,37 +9,26 @@ import UIKit
 
 final class ShapeViewControl {
     private weak var menuShapeControl: MenuShapeControl?
+    private var layoutShapeView: LayoutShapeView?
 
     init(_ menuShapeControl: MenuShapeControl) {
         self.menuShapeControl = menuShapeControl
         self.menuShapeControl?.delegate = self
+        guard let menu = self.menuShapeControl else {return}
+        self.layoutShapeView = LayoutShapeView(menu: menu)
     }
 
     public func createShapeView(_ shapeview: ShapeView) {
+        guard let layout = self.layoutShapeView else {return}
         guard let shape = shapeview.shape, let type = shape.type else {
             shapeview.shape?.layerColors?.append(UIColor.random)
             shapeview.shape?.layerColors?.append(UIColor.random)
-            self.createPath(shapeview, by: ShapeType.circle)
+            layout.createPath(shapeview, by: ShapeType.circle)
             return
         }
-        self.createPath(shapeview, by: type)
+        layout.createPath(shapeview, by: type)
         self.createAlpha(shapeview, shape.alpha)
         self.createShadow(shapeview, shape.shadowRadius)
-    }
-
-    private func createPath(_ shapeview: ShapeView?, by type: ShapeType, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
-        shape.type = type
-        switch type {
-        case ShapeType.circle:
-            self.createPathCircle(shapeview, isSelected)
-        case ShapeType.rectangle:
-            self.createPathRectangle(shapeview, isSelected)
-        case ShapeType.triangle:
-            self.createPathTriangle(shapeview, isSelected)
-        case ShapeType.polygon:
-            self.createPathPolygon(shapeview, isSelected)
-        }
     }
 
     private func createPlainColor(_ shapeview: ShapeView?) {
@@ -59,16 +48,14 @@ final class ShapeViewControl {
         guard let shapeview = shapeview, let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
             let colors = [UIColor.random, UIColor.random]
-            let cgColors = colors.map {$0.cgColor}
-            gradient.colors = cgColors
-            gradient.mask = shapeLayer
-            self.replaceLayer(shapeview, gradient)
-            shape.gradientLayer = gradient
-            shape.layerColors = colors
-            shape.layerType = CAGradientLayer.self
-            return
+            self.replaceGradientLayer(shapeview, shapeLayer, gradient, colors: colors)
         }
-        replaceGradientLayer(shapeview, shapeLayer)
+        let gradient = CAGradientLayer()
+        shapeLayer.fillColor = UIColor.white.cgColor
+        gradient.bounds = shapeview.bounds
+        gradient.position = CGPoint(x: shapeview.bounds.midX, y: shapeview.bounds.midY)
+        guard let colors = shape.layerColors else {return}
+        self.replaceGradientLayer(shapeview, shapeLayer, gradient, colors: colors)
     }
 
     private func createShadow(_ shapeview: ShapeView?, _ value: CGFloat) {
@@ -90,10 +77,9 @@ final class ShapeViewControl {
     }
 
     private func createPolygon(_ shapeview: ShapeView?, _ value: CGFloat, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+        guard let layout = self.layoutShapeView, let shapeview = shapeview, let shape = shapeview.shape else {return}
         let vUInt = UInt32(value * 10)
-        guard let path = regularPolygonInRect(shapeview, vUInt, isSelected) else {return}
-        changeShapeLayer(shapeview, path, isSelected)
+        layout.changePolygon(shapeview, value: vUInt, isSelected: isSelected)
         shape.polygon = value
     }
 
@@ -114,163 +100,22 @@ final class ShapeViewControl {
         self.createShapeView(clonedShapeView)
         return clonedShapeView
     }
-}
-
-// MARK: - Class methods
-
-extension ShapeViewControl {
-    private func tempViewFrame() -> CGRect {
-        guard let menuShapeControl = self.menuShapeControl,
-              let view = menuShapeControl.wallshapeview, let tempview = view.tempView else {return CGRect.zero}
-        return tempview.frame
+    
+    private func replaceLayer(_ shapeview: ShapeView, _ newLayer: CALayer) {
+        shapeview.layer.sublayers?.removeAll()
+        shapeview.layer.addSublayer(newLayer)
     }
-
-    private func createPathCircle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
+    
+    private func replaceGradientLayer(_ shapeview: ShapeView?, _ shapeLayer: CAShapeLayer,
+                                      _ gradient: CAGradientLayer, colors: [UIColor]) {
         guard let shapeview = shapeview, let shape = shapeview.shape else {return}
-        shape.polygon = 0
-        let frame = isSelected ? tempViewFrame() : shape.frame
-        let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: frame.origin.x + (frame.size.width)/2,
-                                        y: frame.origin.y + (frame.size.height)/2),
-                    radius: frame.size.width/2, startAngle: 0, endAngle: .pi*2, clockwise: true)
-        path.close()
-        changeShapeLayer(shapeview, path, isSelected)
-    }
-
-    private func createPathRectangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
-        shape.polygon = 0
-        let frame = isSelected ? tempViewFrame() : shape.frame
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: frame.origin.x, y: frame.origin.y))
-        path.addLine(to: CGPoint(x: frame.origin.x, y: frame.origin.y + frame.size.height))
-        path.addLine(to: CGPoint(x: frame.origin.x + frame.size.width,
-                                 y: frame.origin.y + frame.size.height))
-        path.addLine(to: CGPoint(x: frame.origin.x + frame.size.width, y: frame.origin.y))
-        path.close()
-        changeShapeLayer(shapeview, path, isSelected)
-    }
-
-    private func createPathTriangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
-        shape.polygon = 0
-        let frame = isSelected ? tempViewFrame() : shape.frame
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: frame.width/2 + frame.origin.x, y: frame.origin.y))
-        path.addLine(to: CGPoint(x: frame.origin.x, y: frame.size.height + frame.origin.y))
-        path.addLine(to: CGPoint(x: frame.size.width + frame.origin.x,
-                                 y: frame.size.height + frame.origin.y))
-        path.close()
-        changeShapeLayer(shapeview, path, isSelected)
-    }
-
-    private func changeShapeLayer(_ shapeview: ShapeView?, _ path: UIBezierPath, _ isSelected: Bool) {
-        guard let shapeview = shapeview,
-              let shape = shapeview.shape,
-              let color = shape.layerColors?.first,
-              let shapeLayer = createShapeLayers(shapeview, path, color: color, isSelected) else {return}
-        if shape.layerType.isEqual(CAShapeLayer.self) {
-            replaceShapeLayer(shapeview, shapeLayer)
-        }
-        if shape.layerType.isEqual(CAGradientLayer.self) {
-            replaceGradientLayer(shapeview, shapeLayer)
-        }
-    }
-
-    private func replaceShapeLayer(_ shapeview: ShapeView?, _ shapeLayer: CAShapeLayer) {
-        self.replaceLayer(shapeview, shapeLayer)
-    }
-
-    private func replaceGradientLayer(_ shapeview: ShapeView?, _ shapeLayer: CAShapeLayer) {
-        guard let shapeview = shapeview, let shape = shapeview.shape, let colors = shape.layerColors else {return}
-        let gradient = CAGradientLayer()
         let cgColors = colors.map {$0.cgColor}
-        shapeLayer.fillColor = UIColor.white.cgColor
-        gradient.bounds = shapeview.bounds
-        gradient.position = CGPoint(x: shapeview.bounds.midX, y: shapeview.bounds.midY)
         gradient.colors = cgColors
         gradient.mask = shapeLayer
         self.replaceLayer(shapeview, gradient)
         shape.gradientLayer = gradient
         shape.layerColors = colors
         shape.layerType = CAGradientLayer.self
-    }
-
-    private func createShapeLayers(_ shapeview: ShapeView?, _ path: UIBezierPath,
-                                   color: UIColor, _ isSelected: Bool) -> CAShapeLayer? {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return nil}
-        let shapeLayer = CAShapeLayer()
-        let frame = isSelected ? tempViewFrame() : shape.frame
-        shapeLayer.frame = CGRect(origin: CGPoint(x: -frame.minX,
-                                                  y: -frame.minY),
-                                  size: frame.size)
-        shapeLayer.path = path.cgPath
-        shapeLayer.fillColor = color.cgColor
-        shapeLayer.mask = nil
-        shape.layerColors?[0] = color
-        shape.shapeLayer = shapeLayer
-        shape.gradientLayer = nil
-        return shapeLayer
-    }
-
-    private func replaceLayer(_ shapeview: ShapeView?, _ newLayer: CALayer) {
-        guard let shapeview = shapeview else {return}
-        shapeview.layer.sublayers?.removeAll()
-        shapeview.layer.addSublayer(newLayer)
-        changeSelectedPath(newLayer)
-    }
-
-    private func changeSelectedPath(_ newLayer: CALayer) {
-        guard let menuShapeControl = self.menuShapeControl,
-              let wallshapeview = menuShapeControl.wallshapeview,
-              let tempview = wallshapeview.tempView,
-              let selectedBorder = tempview.subviews.last,
-              let currLayer = selectedBorder.firstSublayer as? CAShapeLayer else {return}
-
-        if let shapelayer = newLayer as? CAShapeLayer {
-            CATransaction.removeAnimation {
-                currLayer.frame = shapelayer.frame
-                currLayer.path = shapelayer.path
-            }
-        }
-        if let gradientlayer = newLayer as? CAGradientLayer,
-           let shapelayer = gradientlayer.mask as? CAShapeLayer {
-            CATransaction.removeAnimation {
-                currLayer.frame = shapelayer.frame
-                currLayer.path = shapelayer.path
-            }
-        }
-    }
-
-    private func createPathPolygon(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
-        let vUInt = UInt32(shape.polygon * 10)
-        guard let path = regularPolygonInRect(shapeview, vUInt, isSelected) else {return}
-        changeShapeLayer(shapeview, path, isSelected)
-    }
-
-    private func pointFrom(_ angle: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
-        return CGPoint(x: radius * cos(angle) + offset.x, y: radius * sin(angle) + offset.y)
-    }
-
-    private func regularPolygonInRect(_ shapeview: ShapeView?, _ value: UInt32, _ isSelected: Bool) -> UIBezierPath? {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return nil}
-        let frame = isSelected ? tempViewFrame() : shape.frame
-        let degree = value % 12 + 3
-        let center = CGPoint(x: (frame.width/2) + frame.origin.x,
-                             y: (frame.height/2) + frame.origin.y)
-        var angle = -CGFloat(.pi / 2.0)
-        let angleIncrement = CGFloat(.pi * 2.0 / Double(degree))
-        let radius = frame.width / 2.0
-
-        let path = UIBezierPath()
-        path.move(to: pointFrom(angle, radius: radius, offset: center))
-        for _ in 1...degree - 1 {
-            angle += angleIncrement
-            path.addLine(to: pointFrom(angle, radius: radius, offset: center))
-        }
-        path.close()
-        return path
     }
 }
 
@@ -348,21 +193,21 @@ extension ShapeViewControl: MenuShapeControlDelegate {
     }
 
     func onShapeMenu(_ sender: TypeButton<ShapeMenuView>, shapeView: ShapeView) {
-        guard let type = sender.type, let menuShapeControl = self.menuShapeControl else {return}
+        guard let type = sender.type, let menu = self.menuShapeControl,
+              let layout = self.layoutShapeView else {return}
         switch type {
         case .circle:
-            menuShapeControl.hideSlider()
-            self.createPath(shapeView, by: .circle, true)
+            menu.hideSlider()
+            layout.createPath(shapeView, by: .circle, true)
         case .square:
-            menuShapeControl.hideSlider()
-            self.createPath(shapeView, by: .rectangle, true)
+            menu.hideSlider()
+            layout.createPath(shapeView, by: .rectangle, true)
         case .triangle:
-            menuShapeControl.hideSlider()
-            self.createPath(shapeView, by: .triangle, true)
+            menu.hideSlider()
+            layout.createPath(shapeView, by: .triangle, true)
         case .polygon:
-            guard let menuShapeControl = self.menuShapeControl,
-                  let shape = shapeView.shape else {return}
-            menuShapeControl.selectSlider(.polygon, value: Float(shape.polygon), sender.isSelected)
+            guard let shape = shapeView.shape else {return}
+            menu.selectSlider(.polygon, value: Float(shape.polygon), sender.isSelected)
         }
     }
 

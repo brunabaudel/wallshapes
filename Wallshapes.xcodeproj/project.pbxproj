@@ -20,6 +20,7 @@
 		4C5E8AB62629B05600247C9F /* WallshapeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AB52629B05600247C9F /* WallshapeData.swift */; };
 		4C5E8ABE2629BD2800247C9F /* wallshape.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E8AAD2629AF3D00247C9F /* wallshape.json */; };
 		4C5E8AC22629C25200247C9F /* WallshapeModelHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E8AC12629C25200247C9F /* WallshapeModelHandler.swift */; };
+		4C6D313926B4889B00486429 /* LayoutShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D313826B4889B00486429 /* LayoutShapeView.swift */; };
 		4C8092D5264B49E600DDD590 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8092D4264B49E600DDD590 /* UIButton+Extension.swift */; };
 		4C837A722661782C001869DA /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C837A712661782C001869DA /* MainMenuView.swift */; };
 		4C83C27D266ABE61008E97FE /* GridControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C83C27C266ABE61008E97FE /* GridControl.swift */; };
@@ -63,6 +64,7 @@
 		4C5E8AB22629B02400247C9F /* Codable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Extension.swift"; sourceTree = "<group>"; };
 		4C5E8AB52629B05600247C9F /* WallshapeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeData.swift; sourceTree = "<group>"; };
 		4C5E8AC12629C25200247C9F /* WallshapeModelHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapeModelHandler.swift; sourceTree = "<group>"; };
+		4C6D313826B4889B00486429 /* LayoutShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutShapeView.swift; sourceTree = "<group>"; };
 		4C8092D4264B49E600DDD590 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		4C837A712661782C001869DA /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		4C83C27C266ABE61008E97FE /* GridControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridControl.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 				4C837A712661782C001869DA /* MainMenuView.swift */,
 				4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */,
 				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
+				4C6D313826B4889B00486429 /* LayoutShapeView.swift */,
 			);
 			path = menu;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				4C50EEF7261F50920096D630 /* WallshapesViewController.swift in Sources */,
 				4CB5EF8C25F154D800193A19 /* UIView+Extension.swift in Sources */,
 				4C8092D5264B49E600DDD590 /* UIButton+Extension.swift in Sources */,
+				4C6D313926B4889B00486429 /* LayoutShapeView.swift in Sources */,
 				4CB5EF5E25ED8A0600193A19 /* Array+Extension.swift in Sources */,
 				4CB5EF6325ED8A2900193A19 /* UIImage+Extension.swift in Sources */,
 				4CF48BD82621F380009822DA /* SaveImageControl.swift in Sources */,
