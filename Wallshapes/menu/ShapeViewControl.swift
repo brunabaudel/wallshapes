@@ -26,8 +26,8 @@ final class ShapeViewControl {
         self.createShadow(shapeview, shape.shadowRadius)
     }
 
-    private func createPlainColor(_ shapeview: ShapeView?) {
-        guard let shapeview = shapeview, let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
+    private func createPlainColor(_ shapeview: ShapeView) {
+        guard let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
         let color = UIColor.random
         CATransaction.removeAnimation {
             shapeLayer.fillColor = color.cgColor
@@ -39,8 +39,8 @@ final class ShapeViewControl {
         shape.layerType = CAShapeLayer.self
     }
 
-    private func createGradientColors(_ shapeview: ShapeView?) {
-        guard let shapeview = shapeview, let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
+    private func createGradientColors(_ shapeview: ShapeView) {
+        guard let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
             let colors = [UIColor.random, UIColor.random]
             self.replaceGradientLayer(shapeview, shapeLayer, gradient, colors: colors)
@@ -53,8 +53,8 @@ final class ShapeViewControl {
         self.replaceGradientLayer(shapeview, shapeLayer, gradient, colors: colors)
     }
 
-    private func createShadow(_ shapeview: ShapeView?, _ value: CGFloat) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+    private func createShadow(_ shapeview: ShapeView, _ value: CGFloat) {
+        guard let shape = shapeview.shape else {return}
         shapeview.layer.shadowRadius = value * 100
         shapeview.layer.shadowOpacity = 0.5
         shapeview.layer.shadowOffset = .zero
@@ -65,21 +65,21 @@ final class ShapeViewControl {
         shape.shadowRadius = value
     }
 
-    private func createAlpha(_ shapeview: ShapeView?, _ value: CGFloat) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+    private func createAlpha(_ shapeview: ShapeView, _ value: CGFloat) {
+        guard let shape = shapeview.shape else {return}
         shape.alpha = value
         shapeview.alpha = value
     }
 
-    private func createPolygon(_ shapeview: ShapeView?, _ value: CGFloat, _ isSelected: Bool = false) {
-        guard let layout = self.layoutShapeView, let shapeview = shapeview, let shape = shapeview.shape else {return}
+    private func createPolygon(_ shapeview: ShapeView, _ value: CGFloat, _ isSelected: Bool = false) {
+        guard let layout = self.layoutShapeView, let shape = shapeview.shape else {return}
         let vUInt = UInt32(value * 10)
         layout.changePolygon(shapeview, value: vUInt, isSelected: isSelected)
         shape.polygon = value
     }
 
-    private func clone(_ shapeview: ShapeView?) -> ShapeView? {
-        guard let shapeview = shapeview, let shape = shapeview.shape,
+    private func clone(_ shapeview: ShapeView) -> ShapeView? {
+        guard let shape = shapeview.shape,
               let menuShapeControl = self.menuShapeControl,
               let view = menuShapeControl.wallshapeview,
               let tempview = view.tempView else {return nil}
@@ -101,9 +101,9 @@ final class ShapeViewControl {
         shapeview.layer.addSublayer(newLayer)
     }
     
-    private func replaceGradientLayer(_ shapeview: ShapeView?, _ shapeLayer: CAShapeLayer,
+    private func replaceGradientLayer(_ shapeview: ShapeView, _ shapeLayer: CAShapeLayer,
                                       _ gradient: CAGradientLayer, colors: [UIColor]) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+        guard let shape = shapeview.shape else {return}
         let cgColors = colors.map {$0.cgColor}
         gradient.colors = cgColors
         gradient.mask = shapeLayer

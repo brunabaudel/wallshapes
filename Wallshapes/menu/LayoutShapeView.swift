@@ -15,8 +15,8 @@ final class LayoutShapeView {
         self.menuShapeControl = menu
     }
     
-    public func createPath(_ shapeview: ShapeView?, by type: ShapeType, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+    public func createPath(_ shapeview: ShapeView, by type: ShapeType, _ isSelected: Bool = false) {
+        guard let shape = shapeview.shape else {return}
         shape.type = type
         switch type {
         case ShapeType.circle:
@@ -36,8 +36,8 @@ final class LayoutShapeView {
         return tempview.frame
     }
 
-    private func createPathCircle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+    private func createPathCircle(_ shapeview: ShapeView, _ isSelected: Bool = false) {
+        guard let shape = shapeview.shape else {return}
         shape.polygon = 0
         let frame = isSelected ? tempViewFrame() : shape.frame
         let path = UIBezierPath()
@@ -48,8 +48,8 @@ final class LayoutShapeView {
         changeShapeLayer(shapeview, path, isSelected)
     }
 
-    private func createPathRectangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+    private func createPathRectangle(_ shapeview: ShapeView, _ isSelected: Bool = false) {
+        guard let shape = shapeview.shape else {return}
         shape.polygon = 0
         let frame = isSelected ? tempViewFrame() : shape.frame
         let path = UIBezierPath()
@@ -62,8 +62,8 @@ final class LayoutShapeView {
         changeShapeLayer(shapeview, path, isSelected)
     }
 
-    private func createPathTriangle(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+    private func createPathTriangle(_ shapeview: ShapeView, _ isSelected: Bool = false) {
+        guard let shape = shapeview.shape else {return}
         shape.polygon = 0
         let frame = isSelected ? tempViewFrame() : shape.frame
         let path = UIBezierPath()
@@ -75,9 +75,8 @@ final class LayoutShapeView {
         changeShapeLayer(shapeview, path, isSelected)
     }
 
-    private func changeShapeLayer(_ shapeview: ShapeView?, _ path: UIBezierPath, _ isSelected: Bool) {
-        guard let shapeview = shapeview,
-              let shape = shapeview.shape,
+    private func changeShapeLayer(_ shapeview: ShapeView, _ path: UIBezierPath, _ isSelected: Bool) {
+        guard let shape = shapeview.shape,
               let color = shape.layerColors?.first,
               let shapeLayer = createShapeLayers(shapeview, path, color: color, isSelected) else {return}
         if shape.layerType.isEqual(CAShapeLayer.self) {
@@ -88,12 +87,12 @@ final class LayoutShapeView {
         }
     }
 
-    private func replaceShapeLayer(_ shapeview: ShapeView?, _ shapeLayer: CAShapeLayer) {
+    private func replaceShapeLayer(_ shapeview: ShapeView, _ shapeLayer: CAShapeLayer) {
         self.replaceLayer(shapeview, shapeLayer)
     }
 
-    private func replaceGradientLayer(_ shapeview: ShapeView?, _ shapeLayer: CAShapeLayer) {
-        guard let shapeview = shapeview, let shape = shapeview.shape, let colors = shape.layerColors else {return}
+    private func replaceGradientLayer(_ shapeview: ShapeView, _ shapeLayer: CAShapeLayer) {
+        guard let shape = shapeview.shape, let colors = shape.layerColors else {return}
         let gradient = CAGradientLayer()
         let cgColors = colors.map {$0.cgColor}
         shapeLayer.fillColor = UIColor.white.cgColor
@@ -107,9 +106,9 @@ final class LayoutShapeView {
         shape.layerType = CAGradientLayer.self
     }
 
-    private func createShapeLayers(_ shapeview: ShapeView?, _ path: UIBezierPath,
+    private func createShapeLayers(_ shapeview: ShapeView, _ path: UIBezierPath,
                                    color: UIColor, _ isSelected: Bool) -> CAShapeLayer? {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return nil}
+        guard let shape = shapeview.shape else {return nil}
         let shapeLayer = CAShapeLayer()
         let frame = isSelected ? tempViewFrame() : shape.frame
         shapeLayer.frame = CGRect(origin: CGPoint(x: -frame.minX,
@@ -124,8 +123,7 @@ final class LayoutShapeView {
         return shapeLayer
     }
 
-    private func replaceLayer(_ shapeview: ShapeView?, _ newLayer: CALayer) {
-        guard let shapeview = shapeview else {return}
+    private func replaceLayer(_ shapeview: ShapeView, _ newLayer: CALayer) {
         shapeview.layer.sublayers?.removeAll()
         shapeview.layer.addSublayer(newLayer)
         changeSelectedPath(newLayer)
@@ -136,8 +134,8 @@ final class LayoutShapeView {
         self.changeShapeLayer(shapeview, path, isSelected)
     }
 
-    private func createPathPolygon(_ shapeview: ShapeView?, _ isSelected: Bool = false) {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return}
+    private func createPathPolygon(_ shapeview: ShapeView, _ isSelected: Bool = false) {
+        guard let shape = shapeview.shape else {return}
         let vUInt = UInt32(shape.polygon * 10)
         guard let path = regularPolygonInRect(shapeview, vUInt, isSelected) else {return}
         changeShapeLayer(shapeview, path, isSelected)
@@ -147,8 +145,8 @@ final class LayoutShapeView {
         return CGPoint(x: radius * cos(angle) + offset.x, y: radius * sin(angle) + offset.y)
     }
 
-    private func regularPolygonInRect(_ shapeview: ShapeView?, _ value: UInt32, _ isSelected: Bool) -> UIBezierPath? {
-        guard let shapeview = shapeview, let shape = shapeview.shape else {return nil}
+    private func regularPolygonInRect(_ shapeview: ShapeView, _ value: UInt32, _ isSelected: Bool) -> UIBezierPath? {
+        guard let shape = shapeview.shape else {return nil}
         let frame = isSelected ? tempViewFrame() : shape.frame
         let degree = value % 12 + 3
         let center = CGPoint(x: (frame.width/2) + frame.origin.x,
