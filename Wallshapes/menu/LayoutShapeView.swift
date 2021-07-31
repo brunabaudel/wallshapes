@@ -8,7 +8,6 @@
 import UIKit
 
 final class LayoutShapeView {
-    
     private var menuShapeControl: MenuShapeControl?
     
     init(menu: MenuShapeControl) {

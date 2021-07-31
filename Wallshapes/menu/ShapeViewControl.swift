@@ -213,7 +213,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         menuShapeControl.hideShapeMenu()
         guard let clonedShapeView = self.clone(shapeView) else {return}
         self.unselectView()
-        self.selectView(clonedShapeView)
+        menuShapeControl.selectShapeView(clonedShapeView)
     }
 
     private func selectSlider(_ shapeView: ShapeView, _ type: MainMenuTypeEnum, isSelected: Bool) {
