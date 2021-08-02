@@ -256,7 +256,7 @@ final class WallshapeViewControl {
             .compactMap { $0 as? ShapeView }
         if let shapeview = shapeView as? ShapeView {
             shapeview.shape?.frame = tempview.frame
-            shapeViews.insert(shapeview, at: index)
+            shapeViews.insert(shapeview, at: index - 1)
         }
         return shapeViews
     }
