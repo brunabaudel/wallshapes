@@ -221,7 +221,7 @@ final class WallshapeViewControl {
         modelControl?.save()
     }
 
-    public func saveToPhotos(title: String) {
+    public func saveToPhotos(title: String, completion: @escaping () -> Void) {
         guard let view = self.wallshapeview,
               let contentView = view.contentView,
               let selectedBorder = view.selectBorder,
@@ -229,6 +229,9 @@ final class WallshapeViewControl {
         selectedBorder.isHidden = true
         SaveImage.save(title, view: view, frame: contentView.frame) {
             if isSelected { selectedBorder.isHidden = false }
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
 

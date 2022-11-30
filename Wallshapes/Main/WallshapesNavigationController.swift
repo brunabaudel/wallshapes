@@ -13,7 +13,7 @@ protocol WallshapesNavigationControllerDelegate: AnyObject {
     func refreshPlainColorItemHandle()
     func changeViewSizeHandle()
     func deleteViewHandle(_ isActive: Bool)
-    func saveItemHandle()
+    func saveItemHandle(completion: @escaping () -> Void)
     func clearItemHandle()
 }
 
@@ -32,6 +32,8 @@ final class WallshapesNavigationController: UINavigationController {
     private var isActive: Bool = false
     private var navigationRightItems: [UIBarButtonItem] = []
     private var navigationLeftItems: [UIBarButtonItem] = []
+    
+    var doneAction: (() -> Void)? = nil
 
     private var navItem: UINavigationItem? {
         guard let visibleViewController = self.visibleViewController as? WallshapesViewController else {return nil}
@@ -67,12 +69,12 @@ final class WallshapesNavigationController: UINavigationController {
         return [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
                 configBarButtons("gradient", action: #selector(refreshGradientItemHandle)),
                 configBarButtons("bucket", size: 23, action: #selector(refreshPlainColorItemHandle)),
-                configBarButtons("crop", action: #selector(changeViewSizeHandle)),
+//                configBarButtons("crop", action: #selector(changeViewSizeHandle)),
                 configBarButtons("trash", action: #selector(deleteViewHandle))]
     }
 
     private func setupNavigationLeftItems() -> [UIBarButtonItem] {
-        return [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveItemHandle)),
+        return [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveItemHandle)),
                 UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle))]
     }
 
@@ -120,7 +122,7 @@ final class WallshapesNavigationController: UINavigationController {
     }
 
     @objc private func saveItemHandle() {
-        wallshapesDelegate?.saveItemHandle()
+        wallshapesDelegate?.saveItemHandle(completion: doneAction!)
     }
 
     private func configBarButtons(_ title: String, size: CGFloat = 20, action: Selector?) -> UIBarButtonItem {

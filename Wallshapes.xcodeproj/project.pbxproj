@@ -48,6 +48,10 @@
 		4CF48BDB26221FE5009822DA /* WallshapesNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BDA26221FE5009822DA /* WallshapesNavigationController.swift */; };
 		4CF48BDF26222504009822DA /* UIAlertController+Extenison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */; };
 		4CF48BF12624FB90009822DA /* AuthorizationAssests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BF02624FB90009822DA /* AuthorizationAssests.swift */; };
+		F8B67A1A2936521300A71EAD /* Wallshapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A192936521300A71EAD /* Wallshapes.swift */; };
+		F8B67A1C2936524200A71EAD /* MainGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A1B2936524200A71EAD /* MainGridView.swift */; };
+		F8B67A1E29365A1B00A71EAD /* FileItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A1D29365A1B00A71EAD /* FileItemView.swift */; };
+		F8B67A2029365BDC00A71EAD /* UIWallshapesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A1F29365BDC00A71EAD /* UIWallshapesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +98,10 @@
 		4CF48BDA26221FE5009822DA /* WallshapesNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapesNavigationController.swift; sourceTree = "<group>"; };
 		4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extenison.swift"; sourceTree = "<group>"; };
 		4CF48BF02624FB90009822DA /* AuthorizationAssests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationAssests.swift; sourceTree = "<group>"; };
+		F8B67A192936521300A71EAD /* Wallshapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallshapes.swift; sourceTree = "<group>"; };
+		F8B67A1B2936524200A71EAD /* MainGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGridView.swift; sourceTree = "<group>"; };
+		F8B67A1D29365A1B00A71EAD /* FileItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileItemView.swift; sourceTree = "<group>"; };
+		F8B67A1F29365BDC00A71EAD /* UIWallshapesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWallshapesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +173,7 @@
 				4CB5EF6625ED8A6100193A19 /* Views */,
 				4CB5EF7725ED8B8800193A19 /* Menu */,
 				4CB5EF5A25ED89C100193A19 /* Main */,
+				F8B67A192936521300A71EAD /* Wallshapes.swift */,
 				4CB5EF4325ED88E800193A19 /* AppDelegate.swift */,
 				4CB5EF4525ED88E800193A19 /* SceneDelegate.swift */,
 				4CB5EF4C25ED88EA00193A19 /* Assets.xcassets */,
@@ -179,6 +188,9 @@
 			children = (
 				4C50EEF6261F50920096D630 /* WallshapesViewController.swift */,
 				4CF48BDA26221FE5009822DA /* WallshapesNavigationController.swift */,
+				F8B67A1B2936524200A71EAD /* MainGridView.swift */,
+				F8B67A1D29365A1B00A71EAD /* FileItemView.swift */,
+				F8B67A1F29365BDC00A71EAD /* UIWallshapesView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -338,6 +350,7 @@
 				4CD45EC8267D043700333086 /* ShapeMenuView.swift in Sources */,
 				4C51FFA1260413320064CE04 /* ShapeViewControl.swift in Sources */,
 				4C90E1B626308D0B0043696C /* ModelControl.swift in Sources */,
+				F8B67A1A2936521300A71EAD /* Wallshapes.swift in Sources */,
 				4C50EEF7261F50920096D630 /* WallshapesViewController.swift in Sources */,
 				4CB5EF8C25F154D800193A19 /* UIView+Extension.swift in Sources */,
 				4C8092D5264B49E600DDD590 /* UIButton+Extension.swift in Sources */,
@@ -354,13 +367,16 @@
 				4CB5EF8525ED9F9F00193A19 /* ShapeGesturesControl.swift in Sources */,
 				4C5E8AB32629B02400247C9F /* Codable+Extension.swift in Sources */,
 				4C51FFA92605214F0064CE04 /* MiddleIndicatorView.swift in Sources */,
+				F8B67A2029365BDC00A71EAD /* UIWallshapesView.swift in Sources */,
 				4CB5EF4425ED88E800193A19 /* AppDelegate.swift in Sources */,
 				4C5E8AB62629B05600247C9F /* WallshapeData.swift in Sources */,
 				4C21D428265872E100116116 /* ArrangeMenuView.swift in Sources */,
 				4C837A722661782C001869DA /* MainMenuView.swift in Sources */,
 				4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */,
 				4CB5EF8925F1537100193A19 /* CGPath+Extension.swift in Sources */,
+				F8B67A1C2936524200A71EAD /* MainGridView.swift in Sources */,
 				4CB5EF6E25ED8ABB00193A19 /* ShapeView.swift in Sources */,
+				F8B67A1E29365A1B00A71EAD /* FileItemView.swift in Sources */,
 				4C83C27D266ABE61008E97FE /* GridControl.swift in Sources */,
 				4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */,
 				4CB5EF7D25ED8BB500193A19 /* SlideMenu.swift in Sources */,
@@ -520,6 +536,7 @@
 				CURRENT_PROJECT_VERSION = 1.7;
 				DEVELOPMENT_TEAM = 3F274MB2RL;
 				INFOPLIST_FILE = Wallshapes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,6 +561,7 @@
 				CURRENT_PROJECT_VERSION = 1.7;
 				DEVELOPMENT_TEAM = 3F274MB2RL;
 				INFOPLIST_FILE = Wallshapes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

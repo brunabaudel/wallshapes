@@ -67,9 +67,9 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
         }.showAlert(self)
     }
 
-    func saveItemHandle() {
+    func saveItemHandle(completion: @escaping () -> Void) {
         wallshapeViewControl?.saveFile()
-        wallshapeViewControl?.saveToPhotos(title: "Saving...")
+        wallshapeViewControl?.saveToPhotos(title: "Saving...", completion: completion)
     }
 
     func saveFileHandle() {

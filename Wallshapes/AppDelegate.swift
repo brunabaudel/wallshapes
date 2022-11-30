@@ -7,7 +7,7 @@
 
 import UIKit
 
-@main
+//@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
@@ -17,10 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions
                         launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        initialViewController = WallshapesViewController()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = WallshapesNavigationController(rootViewController: initialViewController)
-        window?.makeKeyAndVisible()
+//        initialViewController = WallshapesViewController()
+//        window = UIWindow(frame: UIScreen.main.bounds)
+//        window?.rootViewController = WallshapesNavigationController(rootViewController: initialViewController)
+//        window?.makeKeyAndVisible()
 
         return true
     }
