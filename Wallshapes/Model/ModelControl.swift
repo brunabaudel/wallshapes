@@ -13,13 +13,18 @@ final class ModelControl {
     private var backgroundColors: [UIColor] = []
 
     // MARK: - Get/Set data from json
-
-    public func recover() -> Wallshape? {
-        return WallshapeModelHandler.restore()
+    
+    static public func recoverAll() -> [Wallshape] {
+        return WallshapeModelHandler.restoreAll()
     }
 
-    public func save() {
-        return WallshapeModelHandler.store(wallshape: wallshape())
+    public func save(wallshape: Wallshape) {
+        return WallshapeModelHandler.store(wallshape: Wallshape(name: wallshape.name,
+                                                                fileName: wallshape.fileName,
+                                                                thumbnail: Data(),
+                                                                backgroundColors: self.backgroundColors,
+                                                                shapes: self.shapes(),
+                                                                size: self.size))
     }
 
     // MARK: - Get data from user
@@ -38,10 +43,6 @@ final class ModelControl {
 }
 
 extension ModelControl {
-    private func wallshape() -> Wallshape {
-        return Wallshape(backgroundColors: self.backgroundColors, shapes: self.shapes(), size: self.size)
-    }
-
     private func shapes() -> [Shape] {
         var shapes: [Shape] = []
         shapeViews.enumerated().forEach { (idx, shapeView) in

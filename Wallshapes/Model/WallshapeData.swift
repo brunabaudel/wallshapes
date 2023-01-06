@@ -9,6 +9,7 @@ import UIKit
 
 struct WallshapeData: Codable {
     var name: String
+    var fileName: String
     var size: String
     var backgroundColor: [ColorData]
     var shapes: [ShapeData]?

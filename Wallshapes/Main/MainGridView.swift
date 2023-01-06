@@ -9,7 +9,11 @@ import SwiftUI
 
 struct MainGridView: View {
     
-    let wallshapes = [1,2,3,4,5,6,7,8]
+    @State var wallshapes: [Wallshape] = []
+    @State private var showingAlert = false
+    @State private var isShowView = false
+    @State private var isValid = false
+    @State private var name = ""
 
     let columns = [
             GridItem(.flexible()),
@@ -20,24 +24,60 @@ struct MainGridView: View {
     var body: some View {
         NavigationView {
             ScrollView(.vertical) {
-                
-                Text("Wallshapes")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                NavigationLink(destination: WallshapesView(wallshape: Wallshape(name: name)), isActive: $isShowView) {
+                    EmptyView()
+                }
                 
                 LazyVGrid(columns: columns, alignment: .center) {
-                    ForEach(0..<wallshapes.count, id: \.self) { item in
-                        NavigationLink(destination: WallshapesView()) {
-                            FileItemView(array: wallshapes, at: item)
+                    ForEach(wallshapes) { item in
+                        NavigationLink(destination: WallshapesView(wallshape: item)) {
+                            ItemGridView(item: item)
                         }
-                        .padding(.vertical, 4)
+                        .padding(4)
                     }
                 }
                 .padding()
             }
-            .navigationTitle("")
+            .navigationTitle("Wallshapes")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showingAlert.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
         }
+        .alert("Wallshape", isPresented: $showingAlert) {
+            TextField("Wallshape name", text: $name.onChange(nameChanged))
+                .disabled(isValid)
+            
+            Button("Ok") {
+                if name.count > 1 {
+                    isShowView = true
+                }
+            }
+        }
+        .onAppear {
+            self.wallshapes = ModelControl.recoverAll()
+        }
+    }
+    
+    func nameChanged(to value: String) {
+        isValid = value.count > 10
+        print("Name changed to \(name)!", isValid)
+    }
+}
+
+extension Binding {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        Binding(
+            get: { self.wrappedValue },
+            set: { newValue in
+                self.wrappedValue = newValue
+                handler(newValue)
+            }
+        )
     }
 }

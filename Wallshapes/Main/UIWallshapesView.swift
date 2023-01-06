@@ -9,18 +9,25 @@ import SwiftUI
 import UIKit
 
 struct WallshapesView: View {
+    
+    @State var wallshape: Wallshape
+    
     var body: some View {
-        UIWallshapesView()
+        UIWallshapesView(wallshape: wallshape)
             .ignoresSafeArea()
             .navigationBarBackButtonHidden(true)
     }
 }
 
 struct UIWallshapesView: UIViewControllerRepresentable {
+    
+    var wallshape: Wallshape
 
     func makeUIViewController(context: Context) -> WallshapesNavigationController {
-        let wallshapesViewController = WallshapesNavigationController(rootViewController: WallshapesViewController())
-        return wallshapesViewController
+        let wallshapesViewController = WallshapesViewController()
+        wallshapesViewController.wallshape = wallshape
+        let wallshapesNavigationController = WallshapesNavigationController(rootViewController: wallshapesViewController)
+        return wallshapesNavigationController
     }
 
     func updateUIViewController(_ viewController: WallshapesNavigationController, context: Context) {

@@ -12,19 +12,20 @@ final class WallshapesViewController: UIViewController {
     private var wallshapeViewControl: WallshapeViewControl?
     private var gesturesControl: ShapeGesturesControl?
     private var menuShapeControl: MenuShapeControl?
+    public var wallshape: Wallshape?
 
     override var prefersStatusBarHidden: Bool {
       return true
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let nav = self.navigationController as? WallshapesNavigationController else {return}
         nav.wallshapesDelegate = self
         guard let wallshapeView = self.wallshapeView else {return}
         self.menuShapeControl = MenuShapeControl(wallshapeView)
-        guard let menuShapeControl = self.menuShapeControl else {return}
-        self.wallshapeViewControl = WallshapeViewControl(wallshapeView, menuControl: menuShapeControl)
+        guard let menuShapeControl = self.menuShapeControl, let wallshape = self.wallshape else {return}
+        self.wallshapeViewControl = WallshapeViewControl(wallshapeView, wih: wallshape, menuControl: menuShapeControl)
         self.gesturesControl = ShapeGesturesControl(wallshapeView, menuControl: menuShapeControl)
     }
 
@@ -68,11 +69,14 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     }
 
     func saveItemHandle(completion: @escaping () -> Void) {
-        wallshapeViewControl?.saveFile()
-        wallshapeViewControl?.saveToPhotos(title: "Saving...", completion: completion)
+        guard let wallshape = self.wallshape else { return }
+        wallshape.fileName = wallshape.name.lowercased().replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespacesAndNewlines)
+        wallshapeViewControl?.saveFile(wallshape: wallshape)
+        wallshapeViewControl?.saveToPhotos(name: wallshape.fileName, message: "Saving...", completion: completion)
     }
 
     func saveFileHandle() {
-        wallshapeViewControl?.saveFile()
+        guard let wallshape = self.wallshape else { return }
+        wallshapeViewControl?.saveFile(wallshape: wallshape)
     }
 }

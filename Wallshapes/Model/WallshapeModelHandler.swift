@@ -8,28 +8,51 @@
 import UIKit
 
 final class WallshapeModelHandler {
-    static private let dirName = "wallshape"
-    static private let dirExt = "json"
-
     static public func store(wallshape: Wallshape) {
         let size = wallshape.size.rawValue
         let backgroundColor = uicolorToColordata(wallshape.backgroundColors)
         let shapes = shapeToShapedata(wallshape.shapes)
-        let wallshapeData = WallshapeData(name: dirName, size: size, backgroundColor: backgroundColor, shapes: shapes)
+        let wallshapeData = WallshapeData(name: wallshape.name, fileName: wallshape.fileName, size: size, backgroundColor: backgroundColor, shapes: shapes)
         guard let data = JsonControl.encodeParse(object: wallshapeData) else { return }
         guard let string = String(data: data, encoding: .utf8) else { return }
-        let url = FileControl.findURL(fileName: dirName, ext: dirExt)
-        FileControl.write(url: url, content: string)
+        FileControl.write(string, fileName: wallshape.fileName, ext: "json")
     }
-
-    static public func restore() -> Wallshape? {
-        let url = FileControl.findURL(fileName: dirName, ext: dirExt)
+    
+    static public func restoreAll() -> [Wallshape] {
+        let urls = FileControl.findAllURLs().filter({ $0.pathExtension == "json" })
+        var wallshapes: [Wallshape] = []
+        
+        for url in urls {
+            if let wallshape = restore(fileName: url.deletingPathExtension().lastPathComponent) {
+                wallshapes.append(wallshape)
+            }
+        }
+        return wallshapes
+    }
+    
+    static private func restore(fileName: String) -> Wallshape? {
+        let url = FileControl.findURL(fileName: fileName, ext: "json")
         guard let wallshapeData = JsonControl.decodeParse(url: url, type: WallshapeData.self) else { return nil }
         guard let size = WallshapeSize(rawValue: wallshapeData.size) else { return nil }
         let backgroundColors = colordataToUIColor(wallshapeData.backgroundColor)
         let shapes = shapedataToShape(wallshapeData.shapes)
-        let wallshape = Wallshape(backgroundColors: backgroundColors, shapes: shapes, size: size)
-        return wallshape
+        
+        guard let urlThumbnail = FileControl.findURL(fileName: wallshapeData.fileName, ext: "png") else {
+            return Wallshape(name: wallshapeData.name, backgroundColors: backgroundColors, shapes: shapes, size: size)
+        }
+        
+        do {
+            let thumbnail = try Data(contentsOf: urlThumbnail)
+            return Wallshape(name: wallshapeData.name,
+                             fileName: wallshapeData.fileName,
+                             thumbnail: thumbnail,
+                             backgroundColors: backgroundColors,
+                             shapes: shapes,
+                             size: size)
+        } catch {
+            NSLog("Something went wrong")
+        }
+        return nil
     }
 }
 

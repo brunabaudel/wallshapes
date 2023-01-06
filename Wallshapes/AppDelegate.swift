@@ -16,19 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions
                         launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-//        initialViewController = WallshapesViewController()
-//        window = UIWindow(frame: UIScreen.main.bounds)
-//        window?.rootViewController = WallshapesNavigationController(rootViewController: initialViewController)
-//        window?.makeKeyAndVisible()
-
         return true
     }
 
     func application(_ application: UIApplication,
                      willFinishLaunchingWithOptions
                         launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        FileControl.copyToDocuments(fileName: "wallshape", ext: "json")
         return true
     }
 

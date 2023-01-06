@@ -12,8 +12,7 @@ extension Decodable {
         do {
             guard let url = url else { return nil }
             let data = try Data(contentsOf: url)
-            let output = try JSONDecoder().decode(self, from: data)
-            return output
+            return try JSONDecoder().decode(self, from: data)
         } catch {
             NSLog(error.localizedDescription)
         }

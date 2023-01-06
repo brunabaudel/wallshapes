@@ -43,7 +43,7 @@ final class RenderIndicatorView: UIView {
     }
 
     private func initSpinner(with message: String) {
-        self.spinner = UIActivityIndicatorView(style: .whiteLarge)
+        self.spinner = UIActivityIndicatorView(style: .large)
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.startAnimating()
         addSubview(spinner)
@@ -74,7 +74,7 @@ final class RenderIndicatorView: UIView {
         label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 
-    public func finishAnimation(_ message: String) {
+    public func finishAnimation(_ message: String, competionHandler: @escaping () -> Void) {
         DispatchQueue.main.async {
             self.spinner.removeFromSuperview()
             self.labelSpinner.removeFromSuperview()
@@ -83,6 +83,8 @@ final class RenderIndicatorView: UIView {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.removeFromSuperview()
+            competionHandler()
         }
+        
     }
 }

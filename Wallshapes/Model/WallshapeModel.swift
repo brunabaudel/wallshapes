@@ -15,15 +15,30 @@ enum WallshapeSize: String {
     case small, medium, normal
 }
 
-final class Wallshape {
+final class Wallshape: Identifiable {
+    let id = UUID()
+    var name: String = ""
+    var fileName: String = ""
+    var thumbnail: Data?
     var size: WallshapeSize = .normal
     var backgroundColors: [UIColor] = []
     var shapes: [Shape] = []
 
-    init(backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
+    init(name: String, backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
+        self.name = name
         self.size = size
         self.backgroundColors = backgroundColors
         self.shapes = shapes
+    }
+    
+    convenience init(name: String, fileName: String, thumbnail: Data, backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
+        self.init(name: name, backgroundColors: backgroundColors, shapes: shapes, size: size)
+        self.thumbnail = thumbnail
+        self.fileName = fileName
+    }
+    
+    init(name: String) {
+        self.name = name
     }
 }
 

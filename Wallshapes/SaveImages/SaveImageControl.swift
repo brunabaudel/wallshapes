@@ -9,53 +9,41 @@ import UIKit
 
 final class SaveImage: NSObject {
     private static var renderIndicatorView: RenderIndicatorView?
+    private static var completion: () -> Void = {}
 
-    static public func save(_ title: String, view: UIView, frame: CGRect,
+    static public func save(_ name: String, message: String, view: UIView, frame: CGRect,
                             completion: @escaping () -> Void) {
-        if #available(iOS 14.0, *) {
-            AuthorizationAssests().authorization { authorized in
-                if authorized {
-                    DispatchQueue.main.async {
-                        self.willSaveImage(title, view: view, rect: frame, completionHandler: completion)
-                    }
-                    return
-                }
-                self.showAppSettingsDialog()
-            }
-        } else {
-            self.willSaveImage(title, view: view, rect: frame, completionHandler: completion)
-        }
+        self.completion = completion
+        self.willSaveImage(name, message: message, view: view, rect: frame)
     }
 
-    static private func willSaveImage(_ title: String, view: UIView, rect: CGRect,
-                                      completionHandler: @escaping () -> Void) {
-        self.showIndicator(with: title)
-        guard let image = self.willPrepareImage(view, rect: rect, completionHandler: completionHandler) else {
-            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message)
+    static private func willSaveImage(_ name: String, message: String, view: UIView, rect: CGRect) {
+        self.showIndicator(with: message)
+        guard let image = self.willPrepareImage(view, rect: rect) else {
+            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message, competionHandler: completion)
             return
         }
+        self.createThumbnail(image: image, name: name)
         self.writeToPhotoAlbum(image)
     }
 
     static private func writeToPhotoAlbum(_ image: UIImage) {
-       UIImageWriteToSavedPhotosAlbum(image, self, #selector(writeToPhotoAlbumHandler), nil)
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(writeToPhotoAlbumHandler), nil)
    }
 
     @objc static private func writeToPhotoAlbumHandler(_ image: UIImage, didFinishSavingWithError error: Error?,
                                                        contextInfo: UnsafeRawPointer) {
         if let error = error {
             NSLog(error.localizedDescription)
-            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message)
+            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message, competionHandler: completion)
             self.showAppSettingsDialog()
             return
         }
-        self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.success.message)
+        self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.success.message, competionHandler: completion)
     }
 
-    static private func willPrepareImage(_ view: UIView, rect: CGRect,
-                                         completionHandler: @escaping () -> Void) -> UIImage? {
+    static private func willPrepareImage(_ view: UIView, rect: CGRect) -> UIImage? {
         let image = UIImage.imageWithView(view).toPNG()
-        completionHandler()
         guard let imagecropped = image?.crop(rect, sizeView: view.frame.size) else { return nil }
         guard let imagepng = imagecropped.toPNG() else { return nil }
         return imagepng
@@ -74,5 +62,10 @@ final class SaveImage: NSObject {
             message: "This lets you save your Wallshapes arts into Photos.",
             titleOK: "Open Settings"
         )
+    }
+    
+    static private func createThumbnail(image: UIImage, name: String) {
+        guard let thumbmnail = image.preparingThumbnail(of: CGSize(width: 80, height: 220))?.toData() else { return }
+        FileControl.write(thumbmnail, fileName: name, ext: "png")
     }
 }

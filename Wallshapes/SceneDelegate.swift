@@ -16,12 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
-//        guard let windowScene = (scene as? UIWindowScene) else { return }
-//
-//        initialViewController = WallshapesViewController()
-//        window = UIWindow(windowScene: windowScene)
-//        window?.rootViewController = WallshapesNavigationController(rootViewController: initialViewController)
-//        window?.makeKeyAndVisible()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {

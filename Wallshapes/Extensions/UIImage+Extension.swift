@@ -57,6 +57,29 @@ extension UIImage {
         }
         return nil
     }
+    
+    func toData() -> Data? {
+        if let data = self.pngData() {
+            return data
+        }
+        return nil
+    }
+    
+    func createThumbnail() -> UIImage? {
+        let options = [
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceThumbnailMaxPixelSize: 100] as CFDictionary
+
+        guard let imageData = self.pngData(),
+              let imageSource = CGImageSourceCreateWithData(imageData as NSData, nil),
+              let image = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options)
+        else {
+            return nil
+        }
+
+        return UIImage(cgImage: image)
+    }
 
     func crop(_ cropRect: CGRect, sizeView: CGSize) -> UIImage? {
         let imageViewScale = max(self.size.width / sizeView.width, self.size.height / sizeView.height)

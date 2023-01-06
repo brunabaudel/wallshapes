@@ -12,35 +12,34 @@ final class WallshapeViewControl {
     private weak var menuShapeControl: MenuShapeControl?
     private var modelControl: ModelControl?
 
-    init(_ wallshapeView: WallshapeView, menuControl: MenuShapeControl) {
+    init(_ wallshapeView: WallshapeView, wih wallshape: Wallshape, menuControl: MenuShapeControl) {
         self.wallshapeview = wallshapeView
         self.modelControl = ModelControl()
         self.menuShapeControl = menuControl
-
-        guard let wallshape = self.modelControl?.recover() else { return }
-        initContentView(with: wallshape.backgroundColors, size: wallshape.size)
-        initShapes(shapes: wallshape.shapes)
+        
+        initContentView(with: wallshape)
+        initShapes(with: wallshape)
         initSelectView()
     }
 
-    private func initShapes(shapes: [Shape]) {
+    private func initShapes(with wallshape: Wallshape) {
         guard let view = self.wallshapeview else { return }
-        for shape in shapes {
+        for shape in wallshape.shapes {
             let shapeView = ShapeView(shape: shape)
             menuShapeControl?.createShapeView(shapeView)
             view.addSubview(shapeView)
         }
     }
 
-    private func initContentView(with colors: [UIColor], size: WallshapeSize) {
+    private func initContentView(with wallshape: Wallshape) {
         guard let view = self.wallshapeview else { return }
         guard let contentView = view.contentView else { return }
-        if colors.count == 1 {
-            contentView.backgroundColor = colors.first
+        if wallshape.backgroundColors.count == 1 {
+            contentView.backgroundColor = wallshape.backgroundColors.first
         } else {
-            addGradientLayer(with: colors)
+            addGradientLayer(with: wallshape.backgroundColors)
         }
-        if size == .small {
+        if wallshape.size == .small {
             resizeContentView()
         }
         view.addSubview(contentView)
@@ -214,24 +213,23 @@ final class WallshapeViewControl {
 
     // MARK: - Save file
 
-    public func saveFile() {
+    public func saveFile(wallshape: Wallshape) {
         modelControl?.wallshapeSize(contentViewSize())
         modelControl?.updateBackgroundColors(backgroundUIColors())
         modelControl?.addShapeViews(subShapeViews())
-        modelControl?.save()
+        modelControl?.save(wallshape: wallshape)
+        menuShapeControl?.hideMenu()
     }
 
-    public func saveToPhotos(title: String, completion: @escaping () -> Void) {
+    public func saveToPhotos(name: String, message: String, completion: @escaping () -> Void) {
         guard let view = self.wallshapeview,
               let contentView = view.contentView,
               let selectedBorder = view.selectBorder,
               let isSelected = view.isSelected else {return}
         selectedBorder.isHidden = true
-        SaveImage.save(title, view: view, frame: contentView.frame) {
+        SaveImage.save(name, message: message, view: view, frame: contentView.frame) {
             if isSelected { selectedBorder.isHidden = false }
-            DispatchQueue.main.async {
-                completion()
-            }
+            completion()
         }
     }
 
