@@ -48,8 +48,9 @@
 		4CF48BDF26222504009822DA /* UIAlertController+Extenison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */; };
 		4CF48BF12624FB90009822DA /* AuthorizationAssests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BF02624FB90009822DA /* AuthorizationAssests.swift */; };
 		F874060A294CA45100C3A6A0 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = F8740609294CA45100C3A6A0 /* TODO.md */; };
+		F8808CB52968C5B8003CB3E8 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8808CB42968C5B8003CB3E8 /* GridView.swift */; };
 		F8B67A1A2936521300A71EAD /* WallshapesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A192936521300A71EAD /* WallshapesApp.swift */; };
-		F8B67A1C2936524200A71EAD /* MainGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A1B2936524200A71EAD /* MainGridView.swift */; };
+		F8B67A1C2936524200A71EAD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A1B2936524200A71EAD /* MainView.swift */; };
 		F8B67A1E29365A1B00A71EAD /* ItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A1D29365A1B00A71EAD /* ItemGridView.swift */; };
 		F8B67A2029365BDC00A71EAD /* UIWallshapesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A1F29365BDC00A71EAD /* UIWallshapesView.swift */; };
 /* End PBXBuildFile section */
@@ -98,8 +99,9 @@
 		4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extenison.swift"; sourceTree = "<group>"; };
 		4CF48BF02624FB90009822DA /* AuthorizationAssests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationAssests.swift; sourceTree = "<group>"; };
 		F8740609294CA45100C3A6A0 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		F8808CB42968C5B8003CB3E8 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		F8B67A192936521300A71EAD /* WallshapesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapesApp.swift; sourceTree = "<group>"; };
-		F8B67A1B2936524200A71EAD /* MainGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGridView.swift; sourceTree = "<group>"; };
+		F8B67A1B2936524200A71EAD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F8B67A1D29365A1B00A71EAD /* ItemGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemGridView.swift; sourceTree = "<group>"; };
 		F8B67A1F29365BDC00A71EAD /* UIWallshapesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWallshapesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -177,8 +179,7 @@
 		4CB5EF5A25ED89C100193A19 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				F8B67A1B2936524200A71EAD /* MainGridView.swift */,
-				F8B67A1D29365A1B00A71EAD /* ItemGridView.swift */,
+				F8B67A1B2936524200A71EAD /* MainView.swift */,
 				F8B67A1F29365BDC00A71EAD /* UIWallshapesView.swift */,
 				4C50EEF6261F50920096D630 /* WallshapesViewController.swift */,
 				4CF48BDA26221FE5009822DA /* WallshapesNavigationController.swift */,
@@ -206,6 +207,7 @@
 		4CB5EF6625ED8A6100193A19 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F8808CB32968C597003CB3E8 /* ViewsUI */,
 				4CB5EF6725ED8A7200193A19 /* WallshapeView.swift */,
 				4CB5EF6D25ED8ABB00193A19 /* ShapeView.swift */,
 				4C570DB9262F369300FF2AF8 /* WallshapeViewControl.swift */,
@@ -254,6 +256,15 @@
 				4C5E8AAE2629AFEE00247C9F /* JsonControl.swift */,
 			);
 			path = Controls;
+			sourceTree = "<group>";
+		};
+		F8808CB32968C597003CB3E8 /* ViewsUI */ = {
+			isa = PBXGroup;
+			children = (
+				F8B67A1D29365A1B00A71EAD /* ItemGridView.swift */,
+				F8808CB42968C5B8003CB3E8 /* GridView.swift */,
+			);
+			path = ViewsUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,13 +385,14 @@
 				4C837A722661782C001869DA /* MainMenuView.swift in Sources */,
 				4CB5EF9025F1570800193A19 /* CALayer+Extension.swift in Sources */,
 				4CB5EF8925F1537100193A19 /* CGPath+Extension.swift in Sources */,
-				F8B67A1C2936524200A71EAD /* MainGridView.swift in Sources */,
+				F8B67A1C2936524200A71EAD /* MainView.swift in Sources */,
 				4CB5EF6E25ED8ABB00193A19 /* ShapeView.swift in Sources */,
 				F8B67A1E29365A1B00A71EAD /* ItemGridView.swift in Sources */,
 				4C83C27D266ABE61008E97FE /* GridControl.swift in Sources */,
 				4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */,
 				4CB5EF7D25ED8BB500193A19 /* SlideMenu.swift in Sources */,
 				4C0F7831262B9F10001C26A5 /* FileControl.swift in Sources */,
+				F8808CB52968C5B8003CB3E8 /* GridView.swift in Sources */,
 				4C21D42626586CDB00116116 /* CustomMenuView.swift in Sources */,
 				4CB5EF7925ED8BA100193A19 /* MenuShapeControl.swift in Sources */,
 				4CF48BDB26221FE5009822DA /* WallshapesNavigationController.swift in Sources */,

@@ -19,20 +19,22 @@ final class Wallshape: Identifiable {
     let id = UUID()
     var name: String = ""
     var fileName: String = ""
+    var modifiedAt: Date?
     var thumbnail: Data?
     var size: WallshapeSize = .normal
     var backgroundColors: [UIColor] = []
     var shapes: [Shape] = []
 
-    init(name: String, backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
+    init(name: String, modifiedAt: Date, backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
         self.name = name
+        self.modifiedAt = modifiedAt
         self.size = size
         self.backgroundColors = backgroundColors
         self.shapes = shapes
     }
     
-    convenience init(name: String, fileName: String, thumbnail: Data, backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
-        self.init(name: name, backgroundColors: backgroundColors, shapes: shapes, size: size)
+    convenience init(name: String, fileName: String, modifiedAt: Date, thumbnail: Data, backgroundColors: [UIColor], shapes: [Shape], size: WallshapeSize) {
+        self.init(name: name, modifiedAt: modifiedAt, backgroundColors: backgroundColors, shapes: shapes, size: size)
         self.thumbnail = thumbnail
         self.fileName = fileName
     }

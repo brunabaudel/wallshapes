@@ -14,7 +14,7 @@ struct WallshapesApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainGridView()
+            MainView()
         }
     }
 }

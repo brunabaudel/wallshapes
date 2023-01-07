@@ -12,7 +12,7 @@ final class WallshapeModelHandler {
         let size = wallshape.size.rawValue
         let backgroundColor = uicolorToColordata(wallshape.backgroundColors)
         let shapes = shapeToShapedata(wallshape.shapes)
-        let wallshapeData = WallshapeData(name: wallshape.name, fileName: wallshape.fileName, size: size, backgroundColor: backgroundColor, shapes: shapes)
+        let wallshapeData = WallshapeData(name: wallshape.name, fileName: wallshape.fileName, modifiedAt: Date(), size: size, backgroundColor: backgroundColor, shapes: shapes)
         guard let data = JsonControl.encodeParse(object: wallshapeData) else { return }
         guard let string = String(data: data, encoding: .utf8) else { return }
         FileControl.write(string, fileName: wallshape.fileName, ext: "json")
@@ -27,24 +27,29 @@ final class WallshapeModelHandler {
                 wallshapes.append(wallshape)
             }
         }
+        
+        wallshapes = wallshapes.sorted(by: {
+            $0.modifiedAt?.compare($1.modifiedAt!) == .orderedDescending
+        })
         return wallshapes
     }
     
     static private func restore(fileName: String) -> Wallshape? {
         let url = FileControl.findURL(fileName: fileName, ext: "json")
         guard let wallshapeData = JsonControl.decodeParse(url: url, type: WallshapeData.self) else { return nil }
-        guard let size = WallshapeSize(rawValue: wallshapeData.size) else { return nil }
+        guard let size = WallshapeSize(rawValue: wallshapeData.size ?? "normal") else { return nil }
         let backgroundColors = colordataToUIColor(wallshapeData.backgroundColor)
         let shapes = shapedataToShape(wallshapeData.shapes)
         
         guard let urlThumbnail = FileControl.findURL(fileName: wallshapeData.fileName, ext: "png") else {
-            return Wallshape(name: wallshapeData.name, backgroundColors: backgroundColors, shapes: shapes, size: size)
+            return Wallshape(name: wallshapeData.name, modifiedAt: wallshapeData.modifiedAt, backgroundColors: backgroundColors, shapes: shapes, size: size)
         }
         
         do {
             let thumbnail = try Data(contentsOf: urlThumbnail)
             return Wallshape(name: wallshapeData.name,
                              fileName: wallshapeData.fileName,
+                             modifiedAt: wallshapeData.modifiedAt,
                              thumbnail: thumbnail,
                              backgroundColors: backgroundColors,
                              shapes: shapes,

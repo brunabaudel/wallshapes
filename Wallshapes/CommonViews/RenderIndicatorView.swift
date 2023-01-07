@@ -45,6 +45,7 @@ final class RenderIndicatorView: UIView {
     private func initSpinner(with message: String) {
         self.spinner = UIActivityIndicatorView(style: .large)
         spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.color = .white
         spinner.startAnimating()
         addSubview(spinner)
         spinner.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true

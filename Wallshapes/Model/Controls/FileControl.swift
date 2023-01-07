@@ -53,6 +53,22 @@ final class FileControl {
         return ""
     }
 
+    static func deleteFiles(fileName: String, exts: String...) {
+        for ext in exts {
+            guard let url = findURL(fileName: fileName, ext: ext) else {
+                NSLog("Unable to find the directory")
+                return
+            }
+            if FileManager.default.fileExists(atPath: url.path) {
+                do {
+                    try FileManager.default.removeItem(atPath: url.path)
+                } catch {
+                    NSLog("Could not delete file, probably read-only filesystem")
+                }
+            }
+        }
+    }
+    
     static func copyToDocuments(fileName: String, ext: String) {
         guard let documentsURL = findURL(fileName: fileName, ext: ext) else { return }
         guard let sourceURL = Bundle.main.url(forResource: fileName, withExtension: ext) else {

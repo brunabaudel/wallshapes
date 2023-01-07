@@ -19,12 +19,10 @@ final class ModelControl {
     }
 
     public func save(wallshape: Wallshape) {
-        return WallshapeModelHandler.store(wallshape: Wallshape(name: wallshape.name,
-                                                                fileName: wallshape.fileName,
-                                                                thumbnail: Data(),
-                                                                backgroundColors: self.backgroundColors,
-                                                                shapes: self.shapes(),
-                                                                size: self.size))
+        wallshape.backgroundColors = self.backgroundColors
+        wallshape.shapes = self.shapes()
+        wallshape.size = self.size
+        return WallshapeModelHandler.store(wallshape: wallshape)
     }
 
     // MARK: - Get data from user

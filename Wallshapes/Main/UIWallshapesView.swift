@@ -27,10 +27,9 @@ struct UIWallshapesView: UIViewControllerRepresentable {
         let wallshapesViewController = WallshapesViewController()
         wallshapesViewController.wallshape = wallshape
         let wallshapesNavigationController = WallshapesNavigationController(rootViewController: wallshapesViewController)
+        wallshapesNavigationController.doneAction = context.environment.dismiss.callAsFunction
         return wallshapesNavigationController
     }
 
-    func updateUIViewController(_ viewController: WallshapesNavigationController, context: Context) {
-        viewController.doneAction = context.environment.dismiss.callAsFunction
-    }
+    func updateUIViewController(_ viewController: WallshapesNavigationController, context: Context) {}
 }
