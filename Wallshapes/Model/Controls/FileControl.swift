@@ -8,6 +8,9 @@
 import Foundation
 
 final class FileControl {
+    
+    static private let nameFolder = "Wallshapes"
+    
     static private var documentDirectoryURL: URL? {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             NSLog("Unable to find the document directory")
@@ -85,16 +88,27 @@ final class FileControl {
     }
 
     static func findURL(fileName: String, ext: String) -> URL? {
-        return documentDirectoryURL?.appendingPathComponent(fileName).appendingPathExtension(ext)
+        return documentDirectoryURL?.appendingPathComponent(nameFolder).appendingPathComponent(fileName).appendingPathExtension(ext)
     }
     
     static func findAllURLs() -> [URL] {
         do {
-            return try FileManager.default.contentsOfDirectory(at: documentDirectoryURL ?? URL(fileURLWithPath: ""),
+            createDirectory()
+            return try FileManager.default.contentsOfDirectory(at: documentDirectoryURL?.appendingPathComponent(nameFolder) ?? URL(fileURLWithPath: ""),
                                                                includingPropertiesForKeys: nil)
         } catch {
             NSLog("Unable to find the directory")
         }
         return []
+    }
+    
+    static func createDirectory() {
+        do {
+            if !FileManager.default.fileExists(atPath: documentDirectoryURL?.appendingPathComponent(nameFolder).path ?? "") {
+                try FileManager.default.createDirectory(at: documentDirectoryURL?.appendingPathComponent(nameFolder) ??  URL(fileURLWithPath: ""), withIntermediateDirectories: false)
+            }
+        } catch {
+            NSLog("Unable to create the directory")
+        }
     }
 }

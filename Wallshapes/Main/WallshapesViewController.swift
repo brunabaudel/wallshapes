@@ -25,6 +25,7 @@ final class WallshapesViewController: UIViewController {
         guard let wallshapeView = self.wallshapeView else {return}
         self.menuShapeControl = MenuShapeControl(wallshapeView)
         guard let menuShapeControl = self.menuShapeControl, let wallshape = self.wallshape else {return}
+        wallshape.fileName = wallshape.name.lowercased().replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespacesAndNewlines)
         self.wallshapeViewControl = WallshapeViewControl(wallshapeView, wih: wallshape, menuControl: menuShapeControl)
         self.gesturesControl = ShapeGesturesControl(wallshapeView, menuControl: menuShapeControl)
     }
@@ -70,14 +71,11 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
 
     func saveToPhotosHandle(completion: @escaping () -> Void) {
         guard let wallshape = self.wallshape else { return }
-        wallshape.fileName = wallshape.name.lowercased().replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespacesAndNewlines)
-        wallshapeViewControl?.saveFile(wallshape: wallshape)
         wallshapeViewControl?.saveToPhotos(name: wallshape.fileName, message: "Saving...", completion: completion)
     }
 
     func saveFileHandle(completion: @escaping () -> Void) {
         guard let wallshape = self.wallshape else { return }
-        wallshape.fileName = wallshape.name.lowercased().replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespacesAndNewlines)
         wallshapeViewControl?.saveFile(wallshape: wallshape)
         wallshapeViewControl?.saveThumbnail(name: wallshape.fileName, completion: completion)
     }

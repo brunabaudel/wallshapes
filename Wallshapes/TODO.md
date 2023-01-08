@@ -12,13 +12,15 @@
 
 - [x] Save only the file+thumbnail
 
-- [x] Save when close app
+- [x] Save when close the app
+
+- [x] Create Wallshapes folder in Dococuments Directory
+
+- [ ] Find how to show all the funcs in the navigationbar
 
 - [ ] Save to photos
 
 - [ ] Fix limit characters on name
-
-- [ ] create folder in DocDir
 
 
 Issues:

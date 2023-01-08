@@ -71,8 +71,4 @@ class ViewModel: ObservableObject {
             wallshapes = wallshapes.filter { $0 !== wallshape }
         }
     }
-    
-    public func save() {
-        
-    }
 }
