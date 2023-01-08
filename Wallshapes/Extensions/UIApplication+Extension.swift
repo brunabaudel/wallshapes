@@ -9,7 +9,7 @@ import UIKit
 
 extension UIApplication {
     internal class var window: UIWindow? {
-        guard let window = UIApplication.shared.windows.filter({$0.isKeyWindow}).first else {return nil}
-        return window
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        return windowScene?.windows.first
     }
 }

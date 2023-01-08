@@ -220,6 +220,19 @@ final class WallshapeViewControl {
         modelControl?.save(wallshape: wallshape)
         menuShapeControl?.hideMenu()
     }
+    
+    public func saveThumbnail(name: String, completion: @escaping () -> Void) {
+        guard let view = self.wallshapeview,
+              let contentView = view.contentView,
+              let selectedBorder = view.selectBorder,
+              let isSelected = view.isSelected else {return}
+        selectedBorder.isHidden = true
+        let image = SaveImage.createImage(view: view, rect: contentView.frame)
+        guard let thumbmnail = image?.preparingThumbnail(of: CGSize(width: 80, height: 220))?.toData() else { return }
+        FileControl.write(thumbmnail, fileName: name, ext: "png")
+        if isSelected { selectedBorder.isHidden = false }
+        completion()
+    }
 
     public func saveToPhotos(name: String, message: String, completion: @escaping () -> Void) {
         guard let view = self.wallshapeview,

@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct MainView: View {
-    
     @ObservedObject private var viewModel = ViewModel()
-    
+
     @State private var isShowAlert = false
     @State private var isShowView = false
     @State private var name = ""
@@ -47,7 +46,7 @@ struct MainView: View {
                 
                 Button("Ok") {
                     if name.trimmingCharacters(in: .whitespacesAndNewlines)
-                        .range(of: "^[a-zA-Z0-9]+$", options: .regularExpression) != nil && name.count > 1 {
+                        .range(of: "^[a-zA-Z0-9_\\s]*$", options: .regularExpression) != nil && name.count >= 1 {
                         isShowView = true
                     }
                 }
@@ -71,5 +70,9 @@ class ViewModel: ObservableObject {
             FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json", "png")
             wallshapes = wallshapes.filter { $0 !== wallshape }
         }
+    }
+    
+    public func save() {
+        
     }
 }

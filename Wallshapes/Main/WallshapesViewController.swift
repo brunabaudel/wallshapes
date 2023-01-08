@@ -68,15 +68,17 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
         }.showAlert(self)
     }
 
-    func saveItemHandle(completion: @escaping () -> Void) {
+    func saveToPhotosHandle(completion: @escaping () -> Void) {
         guard let wallshape = self.wallshape else { return }
         wallshape.fileName = wallshape.name.lowercased().replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespacesAndNewlines)
         wallshapeViewControl?.saveFile(wallshape: wallshape)
         wallshapeViewControl?.saveToPhotos(name: wallshape.fileName, message: "Saving...", completion: completion)
     }
 
-    func saveFileHandle() {
+    func saveFileHandle(completion: @escaping () -> Void) {
         guard let wallshape = self.wallshape else { return }
+        wallshape.fileName = wallshape.name.lowercased().replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespacesAndNewlines)
         wallshapeViewControl?.saveFile(wallshape: wallshape)
+        wallshapeViewControl?.saveThumbnail(name: wallshape.fileName, completion: completion)
     }
 }

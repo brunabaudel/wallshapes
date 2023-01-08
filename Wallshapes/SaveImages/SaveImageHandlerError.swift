@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SaveImageHandlerError {
+public enum SaveImageError: Error {
     case success
     case failed
     case unknown

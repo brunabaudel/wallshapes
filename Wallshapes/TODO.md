@@ -10,9 +10,15 @@
 
 - [x] Change color name of wallshapes on grid
 
+- [x] Save only the file+thumbnail
+
+- [x] Save when close app
+
+- [ ] Save to photos
+
 - [ ] Fix limit characters on name
 
-- [ ] Save when close app
+- [ ] create folder in DocDir
 
 
 Issues:

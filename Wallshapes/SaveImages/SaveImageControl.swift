@@ -17,14 +17,19 @@ final class SaveImage: NSObject {
         self.willSaveImage(name, message: message, view: view, rect: frame)
     }
 
+    static public func createImage(view: UIView, rect: CGRect) -> UIImage? {
+        guard let image = self.willPrepareImage(view, rect: rect) else {
+            self.renderIndicatorView?.finishAnimation(SaveImageError.failed.message, competionHandler: completion)
+            return nil
+        }
+        return image
+    }
+    
     static private func willSaveImage(_ name: String, message: String, view: UIView, rect: CGRect) {
         self.showIndicator(with: message)
-        guard let image = self.willPrepareImage(view, rect: rect) else {
-            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message, competionHandler: completion)
-            return
+        if let image = self.createImage(view: view, rect: rect) {
+            self.writeToPhotoAlbum(image)
         }
-        self.createThumbnail(image: image, name: name)
-        self.writeToPhotoAlbum(image)
     }
 
     static private func writeToPhotoAlbum(_ image: UIImage) {
@@ -35,11 +40,11 @@ final class SaveImage: NSObject {
                                                        contextInfo: UnsafeRawPointer) {
         if let error = error {
             NSLog(error.localizedDescription)
-            self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.failed.message, competionHandler: completion)
+            self.renderIndicatorView?.finishAnimation(SaveImageError.failed.message, competionHandler: completion)
             self.showAppSettingsDialog()
             return
         }
-        self.renderIndicatorView?.finishAnimation(SaveImageHandlerError.success.message, competionHandler: completion)
+        self.renderIndicatorView?.finishAnimation(SaveImageError.success.message, competionHandler: completion)
     }
 
     static private func willPrepareImage(_ view: UIView, rect: CGRect) -> UIImage? {
@@ -62,10 +67,5 @@ final class SaveImage: NSObject {
             message: "This lets you save your Wallshapes arts into Photos.",
             titleOK: "Open Settings"
         )
-    }
-    
-    static private func createThumbnail(image: UIImage, name: String) {
-        guard let thumbmnail = image.preparingThumbnail(of: CGSize(width: 80, height: 220))?.toData() else { return }
-        FileControl.write(thumbmnail, fileName: name, ext: "png")
     }
 }

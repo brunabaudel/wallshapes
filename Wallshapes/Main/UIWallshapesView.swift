@@ -12,19 +12,28 @@ struct WallshapesView: View {
     
     @State var wallshape: Wallshape
     
+    @Environment(\.scenePhase) var scenePhase
+    
+    let wallshapesViewController = WallshapesViewController()
+    
     var body: some View {
-        UIWallshapesView(wallshape: wallshape)
+        UIWallshapesView(wallshape: wallshape, wallshapesViewController: wallshapesViewController)
             .ignoresSafeArea()
             .navigationBarBackButtonHidden(true)
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .inactive {
+                    wallshapesViewController.saveFileHandle(completion: {})
+                }
+            }
     }
 }
 
 struct UIWallshapesView: UIViewControllerRepresentable {
     
     var wallshape: Wallshape
+    let wallshapesViewController: WallshapesViewController
 
     func makeUIViewController(context: Context) -> WallshapesNavigationController {
-        let wallshapesViewController = WallshapesViewController()
         wallshapesViewController.wallshape = wallshape
         let wallshapesNavigationController = WallshapesNavigationController(rootViewController: wallshapesViewController)
         wallshapesNavigationController.doneAction = context.environment.dismiss.callAsFunction

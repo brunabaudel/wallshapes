@@ -12,7 +12,8 @@ final class WallshapeModelHandler {
         let size = wallshape.size.rawValue
         let backgroundColor = uicolorToColordata(wallshape.backgroundColors)
         let shapes = shapeToShapedata(wallshape.shapes)
-        let wallshapeData = WallshapeData(name: wallshape.name, fileName: wallshape.fileName, modifiedAt: Date(), size: size, backgroundColor: backgroundColor, shapes: shapes)
+        let wallshapeData = WallshapeData(name: wallshape.name, fileName: wallshape.fileName,
+                                          modifiedAt: Date(), size: size, backgroundColor: backgroundColor, shapes: shapes)
         guard let data = JsonControl.encodeParse(object: wallshapeData) else { return }
         guard let string = String(data: data, encoding: .utf8) else { return }
         FileControl.write(string, fileName: wallshape.fileName, ext: "json")

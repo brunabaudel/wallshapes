@@ -13,7 +13,8 @@ protocol WallshapesNavigationControllerDelegate: AnyObject {
     func refreshPlainColorItemHandle()
     func changeViewSizeHandle()
     func deleteViewHandle(_ isActive: Bool)
-    func saveItemHandle(completion: @escaping () -> Void)
+    func saveToPhotosHandle(completion: @escaping () -> Void)
+    func saveFileHandle(completion: @escaping () -> Void)
     func clearItemHandle()
 }
 
@@ -74,7 +75,7 @@ final class WallshapesNavigationController: UINavigationController {
     }
 
     private func setupNavigationLeftItems() -> [UIBarButtonItem] {
-        return [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveItemHandle)),
+        return [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveFileHandle)),
                 UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle))]
     }
 
@@ -121,8 +122,8 @@ final class WallshapesNavigationController: UINavigationController {
         wallshapesDelegate?.clearItemHandle()
     }
 
-    @objc private func saveItemHandle() {
-        wallshapesDelegate?.saveItemHandle(completion: doneAction!)
+    @objc private func saveFileHandle() {
+        wallshapesDelegate?.saveFileHandle(completion: doneAction!)
     }
 
     private func configBarButtons(_ title: String, size: CGFloat = 20, action: Selector?) -> UIBarButtonItem {
