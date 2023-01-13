@@ -56,7 +56,7 @@ final class FileControl {
         return ""
     }
 
-    static func deleteFiles(fileName: String, exts: String...) {
+    static func deleteFiles(fileName: String, exts: String..., completion: @escaping () -> Void = {}) {
         for ext in exts {
             guard let url = findURL(fileName: fileName, ext: ext) else {
                 NSLog("Unable to find the directory")
@@ -65,6 +65,7 @@ final class FileControl {
             if FileManager.default.fileExists(atPath: url.path) {
                 do {
                     try FileManager.default.removeItem(atPath: url.path)
+                    completion()
                 } catch {
                     NSLog("Could not delete file, probably read-only filesystem")
                 }

@@ -12,11 +12,17 @@ final class WallshapeViewControl {
     private weak var menuShapeControl: MenuShapeControl?
     private var modelControl: ModelControl?
 
-    init(_ wallshapeView: WallshapeView, wih wallshape: Wallshape, menuControl: MenuShapeControl) {
+    init(_ wallshapeView: WallshapeView, with wallshape: Wallshape, menuControl: MenuShapeControl) {
         self.wallshapeview = wallshapeView
         self.modelControl = ModelControl()
         self.menuShapeControl = menuControl
         
+        self.initWallshape(with: wallshape)
+    }
+    
+    private func initWallshape(with wallshape: Wallshape) {
+        
+        wallshape.fileName = wallshape.fileName == "" ? UUID().uuidString : wallshape.fileName
         initContentView(with: wallshape)
         initShapes(with: wallshape)
         initSelectView()
@@ -213,37 +219,59 @@ final class WallshapeViewControl {
 
     // MARK: - Save file
 
-    public func saveFile(wallshape: Wallshape) {
+    public func saveFile(wallshape: Wallshape, completion: (() -> Void)? = {}) {
         modelControl?.wallshapeSize(contentViewSize())
         modelControl?.updateBackgroundColors(backgroundUIColors())
         modelControl?.addShapeViews(subShapeViews())
         modelControl?.save(wallshape: wallshape)
         menuShapeControl?.hideMenu()
+        (completion ?? {})()
     }
     
-    public func saveThumbnail(name: String, completion: @escaping () -> Void) {
-        guard let view = self.wallshapeview,
-              let contentView = view.contentView,
-              let selectedBorder = view.selectBorder,
-              let isSelected = view.isSelected else {return}
-        selectedBorder.isHidden = true
-        let image = SaveImage.createImage(view: view, rect: contentView.frame)
-        guard let thumbmnail = image?.preparingThumbnail(of: CGSize(width: 80, height: 220))?.toData() else { return }
-        FileControl.write(thumbmnail, fileName: name, ext: "png")
-        if isSelected { selectedBorder.isHidden = false }
-        completion()
+    public func saveFileAndThumbnail(wallshape: Wallshape, completion: (() -> Void)? = {}) {
+        self.saveThumbnail(fileName: wallshape.fileName)
+        self.saveFile(wallshape: wallshape, completion: completion)
     }
 
-    public func saveToPhotos(name: String, message: String, completion: @escaping () -> Void) {
+    public func saveToPhotos(wallshape: Wallshape, message: String, completion: @escaping () -> Void) {
         guard let view = self.wallshapeview,
               let contentView = view.contentView,
               let selectedBorder = view.selectBorder,
               let isSelected = view.isSelected else {return}
         selectedBorder.isHidden = true
-        SaveImage.save(name, message: message, view: view, frame: contentView.frame) {
+        SaveImage.save(wallshape.fileName, message: message, view: view, frame: contentView.frame) {
             if isSelected { selectedBorder.isHidden = false }
             completion()
         }
+    }
+    
+    public func delete(wallshape: Wallshape, completion: @escaping () -> Void) {
+        FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json", "png") {
+            completion()
+        }
+    }
+    
+    public func rename(wallshape: Wallshape, completion: @escaping () -> Void) {
+        FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json", "png") {
+            self.saveFile(wallshape: wallshape)
+        }
+    }
+    
+    public func createImage(fileName: String) -> UIImage? {
+        guard let view = self.wallshapeview,
+              let contentView = view.contentView,
+              let selectedBorder = view.selectBorder,
+              let isSelected = view.isSelected else {return nil}
+        selectedBorder.isHidden = true
+        let image = SaveImage.createImage(view: view, rect: contentView.frame)
+        if isSelected { selectedBorder.isHidden = false }
+        return image
+    }
+    
+    private func saveThumbnail(fileName: String) {
+        let image = self.createImage(fileName: fileName)
+        guard let thumbmnail = image?.preparingThumbnail(of: CGSize(width: 80, height: 220))?.toData() else { return }
+        FileControl.write(thumbmnail, fileName: fileName, ext: "png")
     }
 
     private func contentViewSize() -> WallshapeSize {

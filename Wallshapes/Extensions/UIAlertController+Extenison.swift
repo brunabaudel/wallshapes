@@ -25,4 +25,23 @@ extension UIAlertController {
     func showAlert(_ vcr: UIViewController) {
         vcr.present(self, animated: true)
     }
+    
+    class func alertWithTextField(_ title: String,
+                                  message: String = "",
+                                  titleCancel: String = "Cancel",
+                                  titleOK: String = "OK",
+                                  isCancel: Bool = false,
+                                  textField: UITextField) -> UIAlertController {
+        let alert = Self(title: title, message: message, preferredStyle: .alert)
+        
+        if isCancel {
+            alert.addAction(UIAlertAction(title: titleCancel, style: .cancel))
+        }
+        
+        alert.addTextField { (uiTextField : UITextField!) in
+            uiTextField.placeholder = textField.placeholder
+            uiTextField.delegate = textField.delegate
+        }
+        return alert
+    }
 }

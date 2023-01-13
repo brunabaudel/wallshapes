@@ -12,6 +12,7 @@ struct MainView: View {
 
     @State private var isShowAlert = false
     @State private var isShowView = false
+    @State private var isValid = false
     @State private var name = ""
     
     var body: some View {
@@ -28,6 +29,7 @@ struct MainView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
+                        name = ""
                         isShowAlert = true
                     } label: {
                         Image(systemName: "plus")
@@ -39,8 +41,6 @@ struct MainView: View {
             }
             .alert("Wallshape", isPresented: $isShowAlert) {
                 TextField("Wallshape name", text: $name)
-                    .foregroundColor(.black)
-                    .disabled(name.count > 10)
 
                 Button("Cancel") {}
                 
@@ -66,6 +66,13 @@ class ViewModel: ObservableObject {
     }
     
     public func delete(wallshape: Wallshape) {
+        withAnimation {
+            FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json", "png")
+            wallshapes = wallshapes.filter { $0 !== wallshape }
+        }
+    }
+    
+    public func rename(wallshape: Wallshape) {
         withAnimation {
             FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json", "png")
             wallshapes = wallshapes.filter { $0 !== wallshape }

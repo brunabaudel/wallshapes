@@ -6,16 +6,20 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol WallshapesNavigationControllerDelegate: AnyObject {
     func addItemHandle()
     func refreshGradientItemHandle()
     func refreshPlainColorItemHandle()
     func changeViewSizeHandle()
+    func clearItemHandle()
+    func shareHandle()
     func deleteViewHandle(_ isActive: Bool)
     func saveToPhotosHandle(completion: @escaping () -> Void)
     func saveFileHandle(completion: @escaping () -> Void)
-    func clearItemHandle()
+    func deleteHandle(completion: @escaping () -> Void)
+    func renameHandle(completion: @escaping () -> Void)
 }
 
 final class WallshapesNavigationController: UINavigationController {
@@ -71,12 +75,17 @@ final class WallshapesNavigationController: UINavigationController {
                 configBarButtons("gradient", action: #selector(refreshGradientItemHandle)),
                 configBarButtons("bucket", size: 23, action: #selector(refreshPlainColorItemHandle)),
 //                configBarButtons("crop", action: #selector(changeViewSizeHandle)),
-                configBarButtons("trash", action: #selector(deleteViewHandle))]
+//                configBarButtons("trash", action: #selector(deleteViewHandle))
+        ]
     }
 
     private func setupNavigationLeftItems() -> [UIBarButtonItem] {
-        return [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveFileHandle)),
-                UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle))]
+        return [
+//            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveFileHandle)),
+//                UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle)),
+                UIBarButtonItem(title: "Done", primaryAction: nil, menu: createAttributeMenu()),
+                configBarButtons("square.and.arrow.up", isSystemSymbol: true, action: #selector(shareHandle))
+        ]
     }
 
     private func setupNavigationItems() {
@@ -121,18 +130,37 @@ final class WallshapesNavigationController: UINavigationController {
     @objc private func clearItemHandle() {
         wallshapesDelegate?.clearItemHandle()
     }
-
-    @objc private func saveFileHandle() {
-        wallshapesDelegate?.saveFileHandle(completion: doneAction!)
+    
+    @objc private func shareHandle() {
+        wallshapesDelegate?.shareHandle()
     }
-
-    private func configBarButtons(_ title: String, size: CGFloat = 20, action: Selector?) -> UIBarButtonItem {
-        guard let icon = createIcon(title, size: size) else {return UIBarButtonItem()}
+    
+    private func configBarButtons(_ title: String, size: CGFloat = 20, isSystemSymbol: Bool = false, action: Selector?) -> UIBarButtonItem {
+        guard let icon = createIcon(title, size: size, isSystemSymbol: isSystemSymbol) else {return UIBarButtonItem()}
         return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
     }
 
-    private func createIcon(_ title: String, size: CGFloat = 20) -> UIImage? {
-        return UIImage(named: title)?
-            .resize(targetSize: CGSize(width: size, height: size))
+    private func createIcon(_ title: String, size: CGFloat = 20, isSystemSymbol: Bool) -> UIImage? {
+        return isSystemSymbol ? UIImage(systemName: title) :
+                                UIImage(named: title)?.resize(targetSize: CGSize(width: size, height: size))
+    }
+    
+    func createAttributeMenu() -> UIMenu  {
+        let menuActions: [UIAction] = [
+                UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down"), handler: { (_) in
+                    self.wallshapesDelegate?.saveFileHandle(completion: self.doneAction!)
+                }),
+                UIAction(title: "Save to Photos", image: UIImage(systemName: "square.and.arrow.down.on.square"), handler: { (_) in
+                    self.wallshapesDelegate?.saveToPhotosHandle(completion: self.doneAction!)
+                }),
+                UIAction(title: "Rename", image: UIImage(systemName: "pencil"), handler: { (_) in
+                    self.wallshapesDelegate?.renameHandle(completion: self.doneAction!)
+                }),
+                UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { (_) in
+                    self.wallshapesDelegate?.deleteHandle(completion: self.doneAction!)
+                })
+        ]
+        
+        return UIMenu(title: "", children: menuActions)
     }
 }
