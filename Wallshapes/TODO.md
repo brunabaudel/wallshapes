@@ -9,15 +9,16 @@
 - [x] Create "Wallshapes" folder in Dococuments Directory
 - [x] Find a way to show all the tools in the navigationbar
 - [x] Random name files
-- [x] Share
+- [x] Share button
 - [x] Menu:
         Save x
         Save to photos x
         Rename x
         Delete x
-        
+- [x] Add remove one shape on menu
+
+
 - [ ] Fix limit characters on name
-- [ ] Add remove one shape on menu
 
 
 Issues:

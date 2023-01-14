@@ -67,7 +67,7 @@ final class MenuShapeControl {
 
         mainMenuView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
         mainMenuView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
-        mainMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.5).isActive = true
+        mainMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.65).isActive = true
         mainMenuView.widthAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.075).isActive = true
     }
 
@@ -108,13 +108,15 @@ final class MenuShapeControl {
     }
 
     public func hideMenu() {
-        mainMenuView?.isHidden = true
-        shapeMenuView?.isHidden = true
-        menuArrangeView?.isHidden = true
-        mainMenuView?.unselectAllButtons()
-        shapeMenuView?.unselectAllButtons()
-        menuArrangeView?.unselectAllButtons()
-        hideSlider()
+        CATransaction.removeAnimation {
+            mainMenuView?.isHidden = true
+            shapeMenuView?.isHidden = true
+            menuArrangeView?.isHidden = true
+            mainMenuView?.unselectAllButtons()
+            shapeMenuView?.unselectAllButtons()
+            menuArrangeView?.unselectAllButtons()
+            hideSlider()
+        }
     }
 }
 

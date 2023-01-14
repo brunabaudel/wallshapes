@@ -15,7 +15,6 @@ protocol WallshapesNavigationControllerDelegate: AnyObject {
     func changeViewSizeHandle()
     func clearItemHandle()
     func shareHandle()
-    func deleteViewHandle(_ isActive: Bool)
     func saveToPhotosHandle(completion: @escaping () -> Void)
     func saveFileHandle(completion: @escaping () -> Void)
     func deleteHandle(completion: @escaping () -> Void)
@@ -75,7 +74,6 @@ final class WallshapesNavigationController: UINavigationController {
                 configBarButtons("gradient", action: #selector(refreshGradientItemHandle)),
                 configBarButtons("bucket", size: 23, action: #selector(refreshPlainColorItemHandle)),
 //                configBarButtons("crop", action: #selector(changeViewSizeHandle)),
-//                configBarButtons("trash", action: #selector(deleteViewHandle))
         ]
     }
 
@@ -92,23 +90,6 @@ final class WallshapesNavigationController: UINavigationController {
         guard let navItem = navItem else {return}
         navItem.rightBarButtonItems = self.navigationRightItems
         navItem.leftBarButtonItems = self.navigationLeftItems
-    }
-
-    private func setupNavigationItemsDelete() {
-        guard let navItem = navItem else {return}
-        navItem.rightBarButtonItems = [
-            UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(deleteViewHandle))]
-        navItem.leftBarButtonItems = []
-    }
-
-    @objc private func deleteViewHandle(_ sender: UIBarButtonItem) {
-        isActive = !isActive
-        if isActive {
-            setupNavigationItemsDelete()
-        } else {
-            setupNavigationItems()
-        }
-        wallshapesDelegate?.deleteViewHandle(isActive)
     }
 
     @objc private func changeViewSizeHandle() {

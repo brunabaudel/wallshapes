@@ -96,6 +96,11 @@ final class ShapeViewControl {
         return clonedShapeView
     }
     
+    private func delete(_ shapeview: ShapeView) {
+        self.unselectView()
+        shapeview.removeFromSuperview()
+    }
+    
     private func replaceLayer(_ shapeview: ShapeView, _ newLayer: CALayer) {
         shapeview.layer.sublayers?.removeAll()
         shapeview.layer.addSublayer(newLayer)
@@ -161,6 +166,11 @@ extension ShapeViewControl: MenuShapeControlDelegate {
            menuShapeControl.hideMenuArrange()
            menuShapeControl.hideSlider()
            menuShapeControl.showShapeMenu()
+        case .delete:
+            menuShapeControl.hideMenu()
+            self.delete(shapeView)
+        case .none:
+            NSLog("Something went wrong")
         }
     }
 
@@ -184,6 +194,8 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             if index > 1 {
                 wallshapeview.insertSubview(tempView, at: index - 1)
             }
+        case .none:
+            NSLog("Something went wrong")
         }
     }
 
@@ -203,6 +215,8 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         case .polygon:
             guard let shape = shapeView.shape else {return}
             menu.selectSlider(.polygon, value: Float(shape.polygon), sender.isSelected)
+        case .none:
+            NSLog("Something went wrong")
         }
     }
 
@@ -254,8 +268,7 @@ extension ShapeViewControl {
               let tempView = wallshapeview.tempView,
               let selectBorder = wallshapeview.selectBorder,
               let shapelayer = selectBorder.firstSublayer as? CAShapeLayer,
-              let currLayer = shapeView.firstSublayer,
-              let isDeleteActive = wallshapeview.isDeleteActive else {return}
+              let currLayer = shapeView.firstSublayer else {return}
         CATransaction.removeAnimation {
             if let shplayer = currLayer as? CAShapeLayer {
                 shapelayer.frame = shplayer.frame
@@ -272,11 +285,6 @@ extension ShapeViewControl {
             wallshapeview.insertSubview(tempView, aboveSubview: shapeView)
             tempView.insertSubview(shapeView, belowSubview: selectBorder)
             _ = tempView.subviews.map {$0.isHidden = false}
-            wallshapeview.selectedIndex = (wallshapeview.subviews.firstIndex(of: tempView) ?? 1)
-            if isDeleteActive {
-                menuShapeControl.hideMenu()
-                wallshapeview.insertSubview(tempView, at: wallshapeview.subviews.count)
-            }
         }
         wallshapeview.isSelected = true
     }
@@ -284,19 +292,12 @@ extension ShapeViewControl {
     public func unselectView() {
         guard let menuShapeControl = self.menuShapeControl,
               let wallshapeview = menuShapeControl.wallshapeview,
-              let tempView = wallshapeview.tempView,
-              let isDeleteActive = wallshapeview.isDeleteActive,
-              let selectedIndex = wallshapeview.selectedIndex else {return}
+              let tempView = wallshapeview.tempView else {return}
         let shapeView = (tempView.subviews.filter {type(of: $0) == ShapeView.self}).first
         guard let shapeview = shapeView as? ShapeView else {return}
         CATransaction.removeAnimation {
             shapeview.frame = tempView.frame
-            if !isDeleteActive {
-                wallshapeview.insertSubview(shapeview, aboveSubview: tempView)
-            } else {
-                menuShapeControl.hideMenu()
-                wallshapeview.insertSubview(shapeview, at: selectedIndex)
-            }
+            wallshapeview.insertSubview(shapeview, aboveSubview: tempView)
             _ = tempView.subviews.map {$0.isHidden = true}
         }
         wallshapeview.isSelected = false

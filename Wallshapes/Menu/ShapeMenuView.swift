@@ -7,25 +7,25 @@
 
 import UIKit
 
-enum ShapeMenuTypeEnum: Int, IntegerProtocol {
-    case circle, square, triangle, polygon
+enum ShapeMenuTypeEnum: String, CaseIterable {
+    case circle = "circle",
+         square = "square-of-rounded-corners",
+         triangle = "bleach",
+         polygon = "hexagonal",
+         none = ""
 }
 
 final class ShapeMenuView: CustomMenuDelegate {
     typealias EnumType = ShapeMenuTypeEnum
 
-    static private let typeImage = [EnumType.circle: "circle",
-                                    .square: "square-of-rounded-corners",
-                                    .triangle: "bleach",
-                                    .polygon: "hexagonal"
-                                    ]
-
     static func allCases() -> [EnumType] {
-        return (typeImage.map {$0.key}).sorted { $0.rawValue < $1.rawValue }
+        return EnumType.allCases.filter {!extraCases().contains($0) && $0 != .none}
     }
+    
+    static func extraCases() -> [EnumType] { return []}
 
     static func imageNameBy(_ type: EnumType) -> String {
-        return typeImage[type] ?? ""
+        return type.rawValue
     }
 
     static func state(_ type: EnumType) -> UIControl.State {
@@ -34,6 +34,8 @@ final class ShapeMenuView: CustomMenuDelegate {
             return .highlighted
         case .polygon:
             return .selected
+        case .none:
+            return .normal
         }
     }
 }

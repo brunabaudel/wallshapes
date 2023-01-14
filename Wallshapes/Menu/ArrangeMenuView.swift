@@ -7,25 +7,25 @@
 
 import UIKit
 
-enum ArrangeMenuTypeEnum: Int, IntegerProtocol {
-    case bringToFront, sendToBack, bringForward, sendBackward
+enum ArrangeMenuTypeEnum: String, CaseIterable {
+    case bringToFront = "bring-front",
+         sendToBack = "send-back",
+         bringForward = "bring-forward",
+         sendBackward = "send-backward",
+         none = ""
 }
 
 final class ArrangeMenuView: CustomMenuDelegate {
     typealias EnumType = ArrangeMenuTypeEnum
 
-    static private let typeImage = [EnumType.bringToFront: "bring-front",
-                                    .sendToBack: "send-back",
-                                    .bringForward: "bring-forward",
-                                    .sendBackward: "send-backward"
-                                    ]
-
     static func allCases() -> [EnumType] {
-        return (typeImage.map {$0.key}).sorted { $0.rawValue < $1.rawValue }
+        return ArrangeMenuTypeEnum.allCases.filter {!extraCases().contains($0) && $0 != .none}
     }
+    
+    static func extraCases() -> [EnumType] { return []}
 
     static func imageNameBy(_ type: EnumType) -> String {
-        return typeImage[type] ?? ""
+        return type.rawValue
     }
 
     static func state(_ type: EnumType) -> UIControl.State {

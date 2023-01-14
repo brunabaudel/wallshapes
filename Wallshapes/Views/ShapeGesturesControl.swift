@@ -139,10 +139,6 @@ extension ShapeGesturesControl {
             menuShapeControl?.unselectShapeView()
             return
         }
-        if let isDeleteActive = self.menuShapeControl?.wallshapeview?.isDeleteActive, isDeleteActive {
-            self.clearSubview()
-            return
-        }
         menuShapeControl?.setupSliderMenuShape(viewGesture)
         menuShapeControl?.showMenu()
         self.clearSubview()

@@ -7,37 +7,41 @@
 
 import UIKit
 
-enum MainMenuTypeEnum: Int, IntegerProtocol {
-    case clone, shapes, gradient,
-         plainColor, shadow, transparency, arrangeSet
+enum MainMenuTypeEnum: String, CaseIterable {
+    case clone = "copy",
+         shapes = "shapes",
+         gradient = "gradient",
+         plainColor = "bucket",
+         shadow = "shadow",
+         transparency = "transparency",
+         arrangeSet = "arrange-set",
+         delete = "trash",
+         none = ""
 }
 
 final class MainMenuView: CustomMenuDelegate {
     typealias EnumType = MainMenuTypeEnum
 
-    static private let typeImage = [EnumType.clone: "copy",
-                                    .shapes: "shapes",
-                                    .gradient: "gradient",
-                                    .plainColor: "bucket",
-                                    .shadow: "shadow",
-                                    .transparency: "transparency",
-                                    .arrangeSet: "arrange-set"
-                                    ]
-
     static func allCases() -> [EnumType] {
-        return (typeImage.map {$0.key}).sorted {$0.rawValue < $1.rawValue}
+        return EnumType.allCases.filter {!extraCases().contains($0) && $0 != .none}
+    }
+    
+    static func extraCases() -> [EnumType] {
+        return [.delete]
     }
 
     static func imageNameBy(_ type: EnumType) -> String {
-        return typeImage[type] ?? ""
+        return type.rawValue
     }
 
     static func state(_ type: EnumType) -> UIControl.State {
         switch type {
-        case .clone, .gradient, .plainColor:
+        case .clone, .gradient, .plainColor, .delete:
             return .highlighted
         case .shapes, .shadow, .transparency, .arrangeSet:
             return .selected
+        case .none:
+            return .normal
         }
     }
 }

@@ -42,10 +42,6 @@ final class WallshapesViewController: UIViewController {
 }
 
 extension WallshapesViewController: WallshapesNavigationControllerDelegate {
-    func deleteViewHandle(_ isActive: Bool) {
-        wallshapeViewControl?.deleteShapeViews(isActive)
-    }
-
     func changeViewSizeHandle() {
         wallshapeViewControl?.resizeContentView()
     }
