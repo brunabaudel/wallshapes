@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 final class ShapeViewControl {
     private weak var menuShapeControl: MenuShapeControl?
     private var layoutShapeView: LayoutShapeView?
+    private var cancellable: AnyCancellable?
+    private var gradientColors: [UIColor] = [.white, .white]
 
     init(_ menuShapeControl: MenuShapeControl) {
         self.menuShapeControl = menuShapeControl
@@ -25,10 +28,43 @@ final class ShapeViewControl {
         self.createAlpha(shapeview, shape.alpha)
         self.createShadow(shapeview, shape.shadowRadius)
     }
+    
+    private func openColorPicker(_ shapeview: ShapeView, sender: TypeButton<ColorMenuView>) -> UIColorPickerViewController? {
+        guard let shape = shapeview.shape else {return nil}
+        let picker = UIColorPickerViewController()
+        
+        picker.selectedColor = sender.color ?? shape.layerColors?.first ?? .white
+        
+        cancellable = picker.publisher(for: \.selectedColor)
+            .sink { color in
+                DispatchQueue.main.async {
+                    sender.color = color
+                    let image = sender.currentImage?.tinted(with: color)
+                    sender.setImage(nil, for: .normal)
+                    sender.setImage(image, for: .normal)
+                    
+                    if sender.type == .plain {
+                        self.createPlainColor(shapeview, color: color)
+                    }
+                    
+                    if sender.type == .gradient1 {
+                        self.gradientColors.remove(at: 0)
+                        self.gradientColors.insert(color, at: 0)
+                        self.createGradientColors(shapeview, colors: self.gradientColors)
+                    }
+                    
+                    if sender.type == .gradient2 {
+                        self.gradientColors.remove(at: 1)
+                        self.gradientColors.insert(color, at: 1)
+                        self.createGradientColors(shapeview, colors: self.gradientColors)
+                    }
+                }
+            }
+        return picker
+    }
 
-    private func createPlainColor(_ shapeview: ShapeView) {
+    private func createPlainColor(_ shapeview: ShapeView, color: UIColor) {
         guard let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
-        let color = UIColor.random
         CATransaction.removeAnimation {
             shapeLayer.fillColor = color.cgColor
             self.replaceLayer(shapeview, shapeLayer)
@@ -39,10 +75,9 @@ final class ShapeViewControl {
         shape.layerType = CAShapeLayer.self
     }
 
-    private func createGradientColors(_ shapeview: ShapeView) {
+    private func createGradientColors(_ shapeview: ShapeView, colors: [UIColor]) {
         guard let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
-            let colors = [UIColor.random, UIColor.random]
             self.replaceGradientLayer(shapeview, shapeLayer, gradient, colors: colors)
         }
         let gradient = CAGradientLayer()
@@ -146,26 +181,23 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         switch type {
         case .clone:
             self.cloneShapeView(shapeView)
-        case .gradient:
-           menuShapeControl.hideSlider()
-           menuShapeControl.hideShapeMenu()
-           menuShapeControl.hideMenuArrange()
-            self.createGradientColors(shapeView)
-        case .plainColor:
-           menuShapeControl.hideSlider()
-           menuShapeControl.hideShapeMenu()
-           menuShapeControl.hideMenuArrange()
-           self.createPlainColor(shapeView)
+        case .color:
+            menuShapeControl.hideSlider()
+            menuShapeControl.hideShapeMenu()
+            menuShapeControl.hideMenuArrange()
+            menuShapeControl.showColorMenu()
         case .shadow, .transparency:
             self.selectSlider(shapeView, type, isSelected: sender.isSelected)
         case .arrangeSet:
-           menuShapeControl.hideShapeMenu()
-           menuShapeControl.hideSlider()
-           menuShapeControl.showArrangeMenu()
+            menuShapeControl.hideShapeMenu()
+            menuShapeControl.hideMenuColor()
+            menuShapeControl.hideSlider()
+            menuShapeControl.showArrangeMenu()
         case .shapes:
-           menuShapeControl.hideMenuArrange()
-           menuShapeControl.hideSlider()
-           menuShapeControl.showShapeMenu()
+            menuShapeControl.hideMenuArrange()
+            menuShapeControl.hideMenuColor()
+            menuShapeControl.hideSlider()
+            menuShapeControl.showShapeMenu()
         case .delete:
             menuShapeControl.hideMenu()
             self.delete(shapeView)
@@ -219,12 +251,24 @@ extension ShapeViewControl: MenuShapeControlDelegate {
             NSLog("Something went wrong")
         }
     }
+    
+    func onColorMenu(_ sender: TypeButton<ColorMenuView>, wallshapesViewController: WallshapesViewController, shapeView: ShapeView) {
+        guard let type = sender.type else {return}
+        switch type {
+        case .plain, .gradient1, .gradient2:
+            guard let picker = openColorPicker(shapeView, sender: sender) else {return}
+            wallshapesViewController.present(picker, animated: true)
+        case .none:
+            NSLog("Something went wrong")
+        }
+    }
 
     private func cloneShapeView(_ shapeView: ShapeView) {
         guard let menuShapeControl = self.menuShapeControl else {return}
         menuShapeControl.hideSlider()
         menuShapeControl.hideMenuArrange()
         menuShapeControl.hideShapeMenu()
+        menuShapeControl.hideMenuColor()
         guard let clonedShapeView = self.clone(shapeView) else {return}
         self.unselectView()
         menuShapeControl.selectShapeView(clonedShapeView)
@@ -234,6 +278,7 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         guard let menuShapeControl = self.menuShapeControl else {return}
         menuShapeControl.hideMenuArrange()
         menuShapeControl.hideShapeMenu()
+        menuShapeControl.hideMenuColor()
         switch type {
         case .shadow:
             guard let value = shapeView.shape?.shadowRadius else {return}

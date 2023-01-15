@@ -7,15 +7,16 @@
 
 import UIKit
 
-enum ShapeMenuTypeEnum: String, CaseIterable {
-    case circle = "circle",
-         square = "square-of-rounded-corners",
-         triangle = "bleach",
-         polygon = "hexagonal",
-         none = ""
-}
-
 final class ShapeMenuView: CustomMenuDelegate {
+    
+    enum ShapeMenuTypeEnum: String, CaseIterable {
+        case circle = "circle",
+             square = "square-of-rounded-corners",
+             triangle = "bleach",
+             polygon = "hexagonal",
+             none = ""
+    }
+    
     typealias EnumType = ShapeMenuTypeEnum
 
     static func allCases() -> [EnumType] {

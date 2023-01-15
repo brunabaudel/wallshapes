@@ -137,6 +137,9 @@ final class WallshapesNavigationController: UINavigationController {
                 UIAction(title: "Rename", image: UIImage(systemName: "pencil"), handler: { (_) in
                     self.wallshapesDelegate?.renameHandle(completion: self.doneAction!)
                 }),
+                UIAction(title: "Cancel", image: UIImage(systemName: "xmark.circle"), attributes: .destructive, handler: { (_) in
+                    self.doneAction!()
+                }),
                 UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { (_) in
                     self.wallshapesDelegate?.deleteHandle(completion: self.doneAction!)
                 })

@@ -241,7 +241,7 @@ final class WallshapeViewControl {
         guard let view = self.wallshapeview,
               let menuShapeControl = self.menuShapeControl else {return []}
         menuShapeControl.unselectShapeView()
-        var shapeViews = view.subviews
+        let shapeViews = view.subviews
             .filter {
                 if let shapeview = $0 as? ShapeView {
                     shapeview.shape?.frame = shapeview.frame

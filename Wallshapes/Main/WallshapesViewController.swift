@@ -23,7 +23,7 @@ final class WallshapesViewController: UIViewController {
         guard let nav = self.navigationController as? WallshapesNavigationController else {return}
         nav.wallshapesDelegate = self
         guard let wallshapeView = self.wallshapeView else {return}
-        self.menuShapeControl = MenuShapeControl(wallshapeView)
+        self.menuShapeControl = MenuShapeControl(self, wallshapeview: wallshapeView)
         guard let menuShapeControl = self.menuShapeControl, let wallshape = self.wallshape else {return}
         self.wallshapeViewControl = WallshapeViewControl(wallshapeView, with: wallshape, menuControl: menuShapeControl)
         self.gesturesControl = ShapeGesturesControl(wallshapeView, menuControl: menuShapeControl)
@@ -76,15 +76,16 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
     }
     
     func renameHandle(completion: @escaping () -> Void) {
+        guard let wallshape = self.wallshape else { return }
         let textField = UITextField()
+        textField.text = wallshape.name
         textField.delegate = self
-        textField.placeholder = "name"
+        textField.placeholder = "Wallshape name"
         
         let alert = UIAlertController.alertWithTextField("Rename", isCancel: true, textField: textField)
         
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { okAction -> Void in
             if let textFields = alert.textFields, let textField = textFields.first {
-                guard let wallshape = self.wallshape else { return }
                 wallshape.name = textField.text ?? ""
                 self.wallshapeViewControl?.rename(wallshape: wallshape, completion: completion)
             }

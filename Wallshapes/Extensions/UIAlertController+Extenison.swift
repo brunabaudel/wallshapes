@@ -39,6 +39,7 @@ extension UIAlertController {
         }
         
         alert.addTextField { (uiTextField : UITextField!) in
+            uiTextField.text = textField.text
             uiTextField.placeholder = textField.placeholder
             uiTextField.delegate = textField.delegate
         }

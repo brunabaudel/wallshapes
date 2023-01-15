@@ -10,8 +10,7 @@ import UIKit
 enum MainMenuTypeEnum: String, CaseIterable {
     case clone = "copy",
          shapes = "shapes",
-         gradient = "gradient",
-         plainColor = "bucket",
+         color = "bucket",
          shadow = "shadow",
          transparency = "transparency",
          arrangeSet = "arrange-set",
@@ -36,9 +35,9 @@ final class MainMenuView: CustomMenuDelegate {
 
     static func state(_ type: EnumType) -> UIControl.State {
         switch type {
-        case .clone, .gradient, .plainColor, .delete:
+        case .clone, .delete:
             return .highlighted
-        case .shapes, .shadow, .transparency, .arrangeSet:
+        case .shapes, .shadow, .transparency, .arrangeSet, .color:
             return .selected
         case .none:
             return .normal

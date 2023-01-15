@@ -17,6 +17,7 @@ protocol CustomMenuDelegate: AnyObject {
 
 final class TypeButton<T: CustomMenuDelegate>: UIButton {
     var type: T.EnumType?
+    var color: UIColor?
 }
 
 protocol CustomMenuViewDelegate: AnyObject {
@@ -29,6 +30,10 @@ final class CustomMenuView<T: CustomMenuDelegate>: UIView {
     internal weak var delegate: CustomMenuViewDelegate?
 
     private var selectedButtons: [UIButton] = []
+    private var mainMenu: UIView?
+    private var extraMenu: UIView?
+    
+    private var mainMenuHeightMultiplier: Double = 1.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -54,7 +59,8 @@ final class CustomMenuView<T: CustomMenuDelegate>: UIView {
     }
 
     private func initAllButtonsStackView() {
-        let mainMenu = createMenu()
+        self.mainMenu = createMenu()
+        guard let mainMenu = self.mainMenu else {return}
         let stackView = createStackView(menu: mainMenu)
         
         for caseType in CustomMenu.allCases() {
@@ -64,22 +70,27 @@ final class CustomMenuView<T: CustomMenuDelegate>: UIView {
         }
         
         mainMenu.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        mainMenu.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.80).isActive = true
+        mainMenu.heightAnchor.constraint(equalTo: heightAnchor, multiplier: mainMenuHeightMultiplier).isActive = true
     }
     
     private func initExtraButtonsStackView() {
-        let extraMenu = createMenu()
+        self.extraMenu = createMenu()
+        guard let extraMenu = self.extraMenu else {return}
         
         if CustomMenu.extraCases().count == 1 {
-            let button = createButton(caseType: CustomMenu.extraCases().first!, color: .red)
+            let button = createButton(caseType: CustomMenu.extraCases().first!)
             extraMenu.addSubview(button)
 
-            extraMenu.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.1).isActive = true
+            extraMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
+            extraMenu.heightAnchor.constraint(equalTo: widthAnchor).isActive = true
 
             button.centerXAnchor.constraint(equalTo: extraMenu.centerXAnchor).isActive = true
             button.centerYAnchor.constraint(equalTo: extraMenu.centerYAnchor).isActive = true
-            button.heightAnchor.constraint(equalTo: extraMenu.heightAnchor, multiplier: 0.45).isActive = true
+            button.heightAnchor.constraint(equalTo: extraMenu.widthAnchor, multiplier: 0.45).isActive = true
             button.widthAnchor.constraint(equalTo: extraMenu.widthAnchor, multiplier: 0.95).isActive = true
+            
+            mainMenuHeightMultiplier = (Double(CustomMenu.allCases().count + 2) / 10) + 0.01
+            
         } else {
             let stackView = createStackView(menu: extraMenu)
 
@@ -90,14 +101,16 @@ final class CustomMenuView<T: CustomMenuDelegate>: UIView {
             }
 
             extraMenu.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            extraMenu.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2).isActive = true
+            extraMenu.heightAnchor.constraint(equalTo: heightAnchor, multiplier: Double(CustomMenu.extraCases().count * 2) / 10).isActive = true
+            
+            mainMenuHeightMultiplier = Double(CustomMenu.allCases().count * 2) / 10
         }
     }
     
     private func createMenu() -> UIView {
         let menu = UIView()
         menu.translatesAutoresizingMaskIntoConstraints = false
-        menu.backgroundColor = .init(white: 0.9, alpha: 0.4)
+        menu.backgroundColor = .init(white: 0.9, alpha: 0.1)
         menu.clipsToBounds = true
         menu.layer.cornerRadius = 10
         menu.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]

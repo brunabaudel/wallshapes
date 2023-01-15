@@ -18,11 +18,14 @@
 - [x] Add remove one shape on menu
 
 
+- [ ] Choose shape colors
+- [ ] Choose background colors
 - [ ] Fix limit characters on name
+
+
 
 
 Issues:
 
 - rename in maingrid
-- choose color
 - magnect grid

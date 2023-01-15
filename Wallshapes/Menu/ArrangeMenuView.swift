@@ -7,19 +7,20 @@
 
 import UIKit
 
-enum ArrangeMenuTypeEnum: String, CaseIterable {
-    case bringToFront = "bring-front",
-         sendToBack = "send-back",
-         bringForward = "bring-forward",
-         sendBackward = "send-backward",
-         none = ""
-}
-
 final class ArrangeMenuView: CustomMenuDelegate {
+    
+    enum ArrangeMenuTypeEnum: String, CaseIterable {
+        case bringToFront = "bring-front",
+             sendToBack = "send-back",
+             bringForward = "bring-forward",
+             sendBackward = "send-backward",
+             none = ""
+    }
+
     typealias EnumType = ArrangeMenuTypeEnum
 
     static func allCases() -> [EnumType] {
-        return ArrangeMenuTypeEnum.allCases.filter {!extraCases().contains($0) && $0 != .none}
+        return EnumType.allCases.filter {!extraCases().contains($0) && $0 != .none}
     }
     
     static func extraCases() -> [EnumType] { return []}

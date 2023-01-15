@@ -12,6 +12,7 @@ protocol MenuShapeControlDelegate: AnyObject {
     func onMainMenu(_ sender: TypeButton<MainMenuView>, shapeView: ShapeView)
     func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>, shapeView: ShapeView)
     func onShapeMenu(_ sender: TypeButton<ShapeMenuView>, shapeView: ShapeView)
+    func onColorMenu(_ sender: TypeButton<ColorMenuView>,  wallshapesViewController: WallshapesViewController, shapeView: ShapeView)
 }
 
 final class MenuShapeControl {
@@ -19,20 +20,24 @@ final class MenuShapeControl {
 
     private weak var shapeview: ShapeView?
     private(set) weak var wallshapeview: WallshapeView?
+    private(set) weak var wallshapesViewController: WallshapesViewController?
 
     private var sliderView: SliderMenu?
     private var mainMenuView: CustomMenuView<MainMenuView>?
     private var shapeMenuView: CustomMenuView<ShapeMenuView>?
     private var menuArrangeView: CustomMenuView<ArrangeMenuView>?
+    private var menuColorView: CustomMenuView<ColorMenuView>?
     private var shapeViewControl: ShapeViewControl?
 
-    init(_ wallshapeview: WallshapeView) {
+    init(_ wallshapesViewController: WallshapesViewController, wallshapeview: WallshapeView) {
+        self.wallshapesViewController = wallshapesViewController
         self.wallshapeview = wallshapeview
         self.shapeViewControl = ShapeViewControl(self)
         initSliderOnWindow()
         initMainMenuOnWindow()
         initShapeMenuOnWindow()
         initArrangeMenuOnWindow()
+        initColorMenuOnWindow()
     }
 
     private func initSliderOnWindow() {
@@ -67,7 +72,7 @@ final class MenuShapeControl {
 
         mainMenuView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
         mainMenuView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
-        mainMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.65).isActive = true
+        mainMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.6).isActive = true
         mainMenuView.widthAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.075).isActive = true
     }
 
@@ -83,7 +88,7 @@ final class MenuShapeControl {
 
         menuArrangeView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         menuArrangeView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        menuArrangeView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.6).isActive = true
+        menuArrangeView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.3).isActive = true
         menuArrangeView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
 
@@ -99,8 +104,24 @@ final class MenuShapeControl {
 
         shapeMenuView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         shapeMenuView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        shapeMenuView.heightAnchor.constraint(equalTo: mainMenuView.heightAnchor, multiplier: 0.6).isActive = true
+        shapeMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.3).isActive = true
         shapeMenuView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
+    }
+    
+    private func initColorMenuOnWindow() {
+        menuColorView = CustomMenuView<ColorMenuView>(frame: CGRect.zero)
+        guard let menuColorView = self.menuColorView, let mainMenuView = self.mainMenuView else {return}
+        menuColorView.translatesAutoresizingMaskIntoConstraints = false
+        menuColorView.isHidden = true
+        menuColorView.delegate = self
+
+        guard let window = UIApplication.window else {return}
+        window.addSubview(menuColorView)
+
+        menuColorView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
+        menuColorView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
+        menuColorView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.2).isActive = true
+        menuColorView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
 
     public func showMenu() {
@@ -112,6 +133,7 @@ final class MenuShapeControl {
             mainMenuView?.isHidden = true
             shapeMenuView?.isHidden = true
             menuArrangeView?.isHidden = true
+            menuColorView?.isHidden = true
             mainMenuView?.unselectAllButtons()
             shapeMenuView?.unselectAllButtons()
             menuArrangeView?.unselectAllButtons()
@@ -216,6 +238,21 @@ extension MenuShapeControl {
     }
 }
 
+// MARK: - Color methods
+
+extension MenuShapeControl {
+    public func showColorMenu() {
+        guard let menuColorView = self.menuColorView else {return}
+        menuColorView.isHidden = !menuColorView.isHidden
+    }
+
+    func hideMenuColor() {
+        guard let menuColorView = self.menuColorView else {return}
+        menuColorView.isHidden = true
+        menuColorView.unselectAllButtons()
+    }
+}
+
 extension MenuShapeControl: CustomMenuViewDelegate {
     func onClickMenu(_ sender: UIButton) {
         guard let shapeview = self.shapeview else {return}
@@ -226,6 +263,9 @@ extension MenuShapeControl: CustomMenuViewDelegate {
         case is TypeButton<ShapeMenuView>:
             guard let sender = sender as? TypeButton<ShapeMenuView> else {return}
             delegate?.onShapeMenu(sender, shapeView: shapeview)
+        case is TypeButton<ColorMenuView>:
+            guard let sender = sender as? TypeButton<ColorMenuView>, let wallshapesViewController = self.wallshapesViewController else {return}
+            delegate?.onColorMenu(sender, wallshapesViewController: wallshapesViewController, shapeView: shapeview)
         case is TypeButton<MainMenuView>:
             guard let sender = sender as? TypeButton<MainMenuView> else {return}
             delegate?.onMainMenu(sender, shapeView: shapeview)
