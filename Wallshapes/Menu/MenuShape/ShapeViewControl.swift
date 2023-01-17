@@ -252,12 +252,13 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         }
     }
     
-    func onColorMenu(_ sender: TypeButton<ColorMenuView>, wallshapesViewController: WallshapesViewController, shapeView: ShapeView) {
+    func onColorMenu(_ sender: TypeButton<ColorMenuView>, shapeView: ShapeView) {
         guard let type = sender.type else {return}
         switch type {
         case .plain, .gradient1, .gradient2:
             guard let picker = openColorPicker(shapeView, sender: sender) else {return}
-            wallshapesViewController.present(picker, animated: true)
+            guard let window = UIApplication.window else {return}
+            window.rootViewController?.present(picker, animated: true)
         case .none:
             NSLog("Something went wrong")
         }

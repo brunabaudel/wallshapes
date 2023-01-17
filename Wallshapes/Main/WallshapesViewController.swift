@@ -12,6 +12,7 @@ final class WallshapesViewController: UIViewController {
     private var wallshapeViewControl: WallshapeViewControl?
     private var gesturesControl: ShapeGesturesControl?
     private var menuShapeControl: MenuShapeControl?
+    private var menuNavControl: MenuNavControl?
     public var wallshape: Wallshape?
 
     override var prefersStatusBarHidden: Bool {
@@ -23,10 +24,11 @@ final class WallshapesViewController: UIViewController {
         guard let nav = self.navigationController as? WallshapesNavigationController else {return}
         nav.wallshapesDelegate = self
         guard let wallshapeView = self.wallshapeView else {return}
-        self.menuShapeControl = MenuShapeControl(self, wallshapeview: wallshapeView)
-        guard let menuShapeControl = self.menuShapeControl, let wallshape = self.wallshape else {return}
-        self.wallshapeViewControl = WallshapeViewControl(wallshapeView, with: wallshape, menuControl: menuShapeControl)
-        self.gesturesControl = ShapeGesturesControl(wallshapeView, menuControl: menuShapeControl)
+        self.menuShapeControl = MenuShapeControl(wallshapeView)
+        self.menuNavControl = MenuNavControl(wallshapeView)
+        guard let menuShapeControl = self.menuShapeControl, let menuNavControl = menuNavControl, let wallshape = self.wallshape else {return}
+        self.wallshapeViewControl = WallshapeViewControl(wallshapeView, with: wallshape, menuShapeControl: menuShapeControl, menuNavControl: menuNavControl)
+        self.gesturesControl = ShapeGesturesControl(wallshapeView, menuShapeControl: menuShapeControl, menuNavControl: menuNavControl)
     }
 
     override func loadView() {
@@ -42,32 +44,20 @@ final class WallshapesViewController: UIViewController {
 }
 
 extension WallshapesViewController: WallshapesNavigationControllerDelegate {
-    func changeViewSizeHandle() {
-        wallshapeViewControl?.resizeContentView()
-    }
-
-    func refreshPlainColorItemHandle() {
-        wallshapeViewControl?.chooseColor()
-    }
-
-    func refreshGradientItemHandle() {
-        wallshapeViewControl?.chooseColors(2)
-    }
-
     func addItemHandle() {
         wallshapeViewControl?.addShape()
     }
-
-    func clearItemHandle() {
-        UIAlertController.alertView("Clear all", message: "Do you want to erase all shapes?", isCancel: true) {
-            self.wallshapeViewControl?.clearShapes()
-        }.showAlert(self)
+    
+    func refreshColorItemHandle() {
+        wallshapeViewControl?.menuColor()
     }
-
-    func saveToPhotosHandle(completion: @escaping () -> Void) {
-        guard let wallshape = self.wallshape else { return }
-        wallshapeViewControl?.saveFileAndThumbnail(wallshape: wallshape)
-        wallshapeViewControl?.saveToPhotos(wallshape: wallshape, message: "Saving...", completion: completion)
+    
+    func shareHandle() {
+        guard let wallshape = self.wallshape, let image = wallshapeViewControl?.createImage(fileName: wallshape.fileName) else { return }
+        let imageToShare = [image]
+        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+        self.present(activityViewController, animated: true, completion: nil)
     }
 
     func saveFileHandle(completion: @escaping () -> Void) {
@@ -75,6 +65,11 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
         wallshapeViewControl?.saveFileAndThumbnail(wallshape: wallshape, completion: completion)
     }
     
+    func saveToPhotosHandle(completion: @escaping () -> Void) {
+        guard let wallshape = self.wallshape else { return }
+        wallshapeViewControl?.saveToPhotos(wallshape: wallshape, message: "Saving...", completion: completion)
+    }
+
     func renameHandle(completion: @escaping () -> Void) {
         guard let wallshape = self.wallshape else { return }
         let textField = UITextField()
@@ -95,17 +90,13 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
         alert.showAlert(self)
     }
     
+    func cancelHandle(completion: @escaping () -> Void) {
+        wallshapeViewControl?.cancel(completion: completion)
+    }
+    
     func deleteHandle(completion: @escaping () -> Void) {
         guard let wallshape = self.wallshape else { return }
         wallshapeViewControl?.delete(wallshape: wallshape, completion: completion)
-    }
-    
-    func shareHandle() {
-        guard let wallshape = self.wallshape, let image = wallshapeViewControl?.createImage(fileName: wallshape.fileName) else { return }
-        let imageToShare = [image]
-        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
-        self.present(activityViewController, animated: true, completion: nil)
     }
 }
 

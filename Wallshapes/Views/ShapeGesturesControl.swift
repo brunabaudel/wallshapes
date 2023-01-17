@@ -10,6 +10,7 @@ import UIKit
 final class ShapeGesturesControl {
     private weak var view: WallshapeView?
     private var menuShapeControl: MenuShapeControl?
+    private var menuNavControl: MenuNavControl?
     private var viewGesture: ShapeView?
     private var shapeLayerPath: CGPath?
     private var scale: CGFloat = 0
@@ -18,9 +19,10 @@ final class ShapeGesturesControl {
     private var horizontalIndicatorView: MiddleIndicatorView!
     private var verticalIndicatorView: MiddleIndicatorView!
 
-    init(_ view: WallshapeView, menuControl: MenuShapeControl) {
+    init(_ view: WallshapeView, menuShapeControl: MenuShapeControl, menuNavControl: MenuNavControl) {
         self.view = view
-        self.menuShapeControl = menuControl
+        self.menuShapeControl = menuShapeControl
+        self.menuNavControl = menuNavControl
         initMiddleIndicators()
         initGestures()
     }
@@ -141,6 +143,7 @@ extension ShapeGesturesControl {
         }
         menuShapeControl?.setupSliderMenuShape(viewGesture)
         menuShapeControl?.showMenu()
+        menuNavControl?.hideMenu()
         self.clearSubview()
     }
 }

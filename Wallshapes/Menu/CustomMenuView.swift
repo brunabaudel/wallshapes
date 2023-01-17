@@ -110,7 +110,7 @@ final class CustomMenuView<T: CustomMenuDelegate>: UIView {
     private func createMenu() -> UIView {
         let menu = UIView()
         menu.translatesAutoresizingMaskIntoConstraints = false
-        menu.backgroundColor = .init(white: 0.9, alpha: 0.1)
+        menu.backgroundColor = .init(white: 0.9, alpha: 0.3)
         menu.clipsToBounds = true
         menu.layer.cornerRadius = 10
         menu.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]

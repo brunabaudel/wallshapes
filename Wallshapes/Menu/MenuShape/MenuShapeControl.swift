@@ -12,7 +12,7 @@ protocol MenuShapeControlDelegate: AnyObject {
     func onMainMenu(_ sender: TypeButton<MainMenuView>, shapeView: ShapeView)
     func onArrangeMenu(_ sender: TypeButton<ArrangeMenuView>, shapeView: ShapeView)
     func onShapeMenu(_ sender: TypeButton<ShapeMenuView>, shapeView: ShapeView)
-    func onColorMenu(_ sender: TypeButton<ColorMenuView>,  wallshapesViewController: WallshapesViewController, shapeView: ShapeView)
+    func onColorMenu(_ sender: TypeButton<ColorMenuView>, shapeView: ShapeView)
 }
 
 final class MenuShapeControl {
@@ -20,7 +20,6 @@ final class MenuShapeControl {
 
     private weak var shapeview: ShapeView?
     private(set) weak var wallshapeview: WallshapeView?
-    private(set) weak var wallshapesViewController: WallshapesViewController?
 
     private var sliderView: SliderMenu?
     private var mainMenuView: CustomMenuView<MainMenuView>?
@@ -29,8 +28,7 @@ final class MenuShapeControl {
     private var menuColorView: CustomMenuView<ColorMenuView>?
     private var shapeViewControl: ShapeViewControl?
 
-    init(_ wallshapesViewController: WallshapesViewController, wallshapeview: WallshapeView) {
-        self.wallshapesViewController = wallshapesViewController
+    init(_ wallshapeview: WallshapeView) {
         self.wallshapeview = wallshapeview
         self.shapeViewControl = ShapeViewControl(self)
         initSliderOnWindow()
@@ -120,7 +118,7 @@ final class MenuShapeControl {
 
         menuColorView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         menuColorView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        menuColorView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.2).isActive = true
+        menuColorView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.21).isActive = true
         menuColorView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
 
@@ -264,8 +262,8 @@ extension MenuShapeControl: CustomMenuViewDelegate {
             guard let sender = sender as? TypeButton<ShapeMenuView> else {return}
             delegate?.onShapeMenu(sender, shapeView: shapeview)
         case is TypeButton<ColorMenuView>:
-            guard let sender = sender as? TypeButton<ColorMenuView>, let wallshapesViewController = self.wallshapesViewController else {return}
-            delegate?.onColorMenu(sender, wallshapesViewController: wallshapesViewController, shapeView: shapeview)
+            guard let sender = sender as? TypeButton<ColorMenuView> else {return}
+            delegate?.onColorMenu(sender, shapeView: shapeview)
         case is TypeButton<MainMenuView>:
             guard let sender = sender as? TypeButton<MainMenuView> else {return}
             delegate?.onMainMenu(sender, shapeView: shapeview)

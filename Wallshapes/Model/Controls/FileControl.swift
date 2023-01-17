@@ -16,6 +16,7 @@ final class FileControl {
             NSLog("Unable to find the document directory")
             return nil
         }
+        print(dir)
         return dir
     }
     
@@ -69,6 +70,8 @@ final class FileControl {
                 } catch {
                     NSLog("Could not delete file, probably read-only filesystem")
                 }
+            } else {
+                completion()
             }
         }
     }

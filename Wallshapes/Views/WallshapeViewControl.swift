@@ -10,18 +10,19 @@ import UIKit
 final class WallshapeViewControl {
     private weak var wallshapeview: WallshapeView?
     private weak var menuShapeControl: MenuShapeControl?
+    private weak var menuNavControl: MenuNavControl?
     private var modelControl: ModelControl?
 
-    init(_ wallshapeView: WallshapeView, with wallshape: Wallshape, menuControl: MenuShapeControl) {
+    init(_ wallshapeView: WallshapeView, with wallshape: Wallshape, menuShapeControl: MenuShapeControl, menuNavControl: MenuNavControl) {
         self.wallshapeview = wallshapeView
         self.modelControl = ModelControl()
-        self.menuShapeControl = menuControl
+        self.menuShapeControl = menuShapeControl
+        self.menuNavControl = menuNavControl
         
         self.initWallshape(with: wallshape)
     }
     
     private func initWallshape(with wallshape: Wallshape) {
-        
         wallshape.fileName = wallshape.fileName == "" ? UUID().uuidString : wallshape.fileName
         initContentView(with: wallshape)
         initShapes(with: wallshape)
@@ -45,9 +46,6 @@ final class WallshapeViewControl {
         } else {
             addGradientLayer(with: wallshape.backgroundColors)
         }
-        if wallshape.size == .small {
-            resizeContentView()
-        }
         view.addSubview(contentView)
     }
 
@@ -70,22 +68,6 @@ final class WallshapeViewControl {
 
     // MARK: - Colors
 
-    public func chooseColors(_ count: Int) {
-        let colors = self.randomColors(2)
-        guard let gradientLayer = (self.wallshapeview?.contentView?.firstSublayer) as? CAGradientLayer else {
-            addGradientLayer(with: colors)
-            return
-        }
-        let cgColors = colors.map {$0.cgColor}
-        gradientLayer.colors = cgColors
-    }
-
-    public func chooseColor() {
-        let color = UIColor.random
-        self.wallshapeview?.contentView?.layer.sublayers?.removeAll(where: { layer in layer is CAGradientLayer })
-        self.wallshapeview?.contentView?.backgroundColor = color
-    }
-
     private func addGradientLayer(with colors: [UIColor]) {
         let gradientLayer = initGradientLayer(colors)
         self.wallshapeview?.contentView?.layer.sublayers?.removeAll(where: { layer in layer is CAGradientLayer })
@@ -102,55 +84,13 @@ final class WallshapeViewControl {
         return gradientLayer
     }
 
-    private func randomColors(_ count: Int = 2) -> [UIColor] {
-        var colors: [UIColor] = []
-        for _ in 0..<count {
-            let color = UIColor.random
-            if !colors.contains(color) {
-                colors.append(color)
-            }
-        }
-        return colors
-    }
-
     // MARK: - Navigationbar Functions
-
-    @objc private func deleteShapeView(_ sender: UIButton) {
-        guard let view = self.wallshapeview, let tempview = view.tempView,
-              let menu = self.menuShapeControl else {return}
-        tempview.subviews.forEach {
-            if type(of: $0) == ShapeView.self {
-                menu.unselectShapeView()
-                menu.hideMenu()
-                $0.removeFromSuperview()
-            }
-        }
-    }
-
-    public func resizeContentView() {
-        guard let view = self.wallshapeview, let contentView = view.contentView else { return }
-        var newSize: CGRect = view.frame
-        if contentView.frame.height != contentView.frame.width {
-            newSize = CGRect(origin: CGPoint.zero, size: self.squaredSize())
-        }
-        contentView.frame.origin = CGPoint.zero
-        contentView.frame.size = newSize.size
-        contentView.center = view.center
-        CATransaction.removeAnimation {
-            contentView.firstSublayer?.frame = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-        }
-    }
-
-    private func squaredSize() -> CGSize {
-        guard let view = self.wallshapeview else { return CGSize.zero }
-        let frame = min(view.frame.height, view.frame.width)
-        return CGSize(width: frame/1.2, height: frame/1.2)
-    }
 
     public func addShape() {
         guard let view = self.wallshapeview,
               let menuShapeControl = self.menuShapeControl else { return }
         menuShapeControl.showMenu()
+        menuNavControl?.hideMenu()
         let size = view.bounds.width > view.bounds.height ? view.bounds.midY/2 : view.bounds.midX/2
         let shape = Shape()
         shape.frame = CGRect(x: size*1.75, y: size, width: size, height: size)
@@ -163,30 +103,36 @@ final class WallshapeViewControl {
         menuShapeControl.selectShapeView(shapeView)
     }
 
-    public func clearShapes() {
-        guard let view = self.wallshapeview else { return }
-        view.subviews.forEach { if type(of: $0) == ShapeView.self { $0.removeFromSuperview() } }
-        view.tempView?.subviews.forEach {
-            if type(of: $0) == ShapeView.self { $0.removeFromSuperview() }
-            $0.isHidden = true
-        }
+    public func menuColor() {
+        menuShapeControl?.unselectShapeView()
         menuShapeControl?.hideMenu()
+        menuNavControl?.showMenu()
+    }
+    
+    public func cancel(completion: @escaping () -> Void) {
+        hideMenu()
+        completion()
+    }
+    
+    public func hideMenu() {
+        menuShapeControl?.hideMenu()
+        menuNavControl?.hideMenu()
     }
 
     // MARK: - Save file
 
     public func saveFile(wallshape: Wallshape, completion: (() -> Void)? = {}) {
-        modelControl?.wallshapeSize(contentViewSize())
         modelControl?.updateBackgroundColors(backgroundUIColors())
         modelControl?.addShapeViews(subShapeViews())
         modelControl?.save(wallshape: wallshape)
-        menuShapeControl?.hideMenu()
+        hideMenu()
         (completion ?? {})()
     }
     
     public func saveFileAndThumbnail(wallshape: Wallshape, completion: (() -> Void)? = {}) {
         self.saveThumbnail(fileName: wallshape.fileName)
         self.saveFile(wallshape: wallshape, completion: completion)
+        hideMenu()
     }
 
     public func saveToPhotos(wallshape: Wallshape, message: String, completion: @escaping () -> Void) {
@@ -195,6 +141,7 @@ final class WallshapeViewControl {
               let selectedBorder = view.selectBorder,
               let isSelected = view.isSelected else {return}
         selectedBorder.isHidden = true
+        hideMenu()
         SaveImage.save(wallshape.fileName, message: message, view: view, frame: contentView.frame) {
             if isSelected { selectedBorder.isHidden = false }
         }
@@ -202,12 +149,13 @@ final class WallshapeViewControl {
     
     public func delete(wallshape: Wallshape, completion: @escaping () -> Void) {
         FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json", "png") {
+            self.hideMenu()
             completion()
         }
     }
     
     public func rename(wallshape: Wallshape, completion: @escaping () -> Void) {
-        FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json", "png") {
+        FileControl.deleteFiles(fileName: wallshape.fileName, exts: "json") {
             self.saveFile(wallshape: wallshape)
         }
     }
@@ -227,14 +175,6 @@ final class WallshapeViewControl {
         let image = self.createImage(fileName: fileName)
         guard let thumbmnail = image?.preparingThumbnail(of: CGSize(width: 80, height: 220))?.toData() else { return }
         FileControl.write(thumbmnail, fileName: fileName, ext: "png")
-    }
-
-    private func contentViewSize() -> WallshapeSize {
-        guard let view = self.wallshapeview else { return .normal }
-        if view.contentView?.frame.height ?? 0 < view.frame.height {
-            return .small
-        }
-        return .normal
     }
 
     private func subShapeViews() -> [ShapeView] {

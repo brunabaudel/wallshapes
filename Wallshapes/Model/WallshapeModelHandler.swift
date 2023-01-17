@@ -9,11 +9,10 @@ import UIKit
 
 final class WallshapeModelHandler {
     static public func store(wallshape: Wallshape) {
-        let size = wallshape.size.rawValue
         let backgroundColor = uicolorToColordata(wallshape.backgroundColors)
         let shapes = shapeToShapedata(wallshape.shapes)
         let wallshapeData = WallshapeData(name: wallshape.name, fileName: wallshape.fileName,
-                                          modifiedAt: Date(), size: size, backgroundColor: backgroundColor, shapes: shapes)
+                                          modifiedAt: Date(), backgroundColor: backgroundColor, shapes: shapes)
         guard let data = JsonControl.encodeParse(object: wallshapeData) else { return }
         guard let string = String(data: data, encoding: .utf8) else { return }
         FileControl.write(string, fileName: wallshape.fileName, ext: "json")
@@ -38,12 +37,11 @@ final class WallshapeModelHandler {
     static private func restore(fileName: String) -> Wallshape? {
         let url = FileControl.findURL(fileName: fileName, ext: "json")
         guard let wallshapeData = JsonControl.decodeParse(url: url, type: WallshapeData.self) else { return nil }
-        guard let size = WallshapeSize(rawValue: wallshapeData.size ?? "normal") else { return nil }
         let backgroundColors = colordataToUIColor(wallshapeData.backgroundColor)
         let shapes = shapedataToShape(wallshapeData.shapes)
         
         guard let urlThumbnail = FileControl.findURL(fileName: wallshapeData.fileName, ext: "png") else {
-            return Wallshape(name: wallshapeData.name, modifiedAt: wallshapeData.modifiedAt, backgroundColors: backgroundColors, shapes: shapes, size: size)
+            return Wallshape(name: wallshapeData.name, modifiedAt: wallshapeData.modifiedAt, backgroundColors: backgroundColors, shapes: shapes)
         }
         
         do {
@@ -53,8 +51,7 @@ final class WallshapeModelHandler {
                              modifiedAt: wallshapeData.modifiedAt,
                              thumbnail: thumbnail,
                              backgroundColors: backgroundColors,
-                             shapes: shapes,
-                             size: size)
+                             shapes: shapes)
         } catch {
             NSLog("Something went wrong")
         }

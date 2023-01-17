@@ -10,15 +10,14 @@ import SwiftUI
 
 protocol WallshapesNavigationControllerDelegate: AnyObject {
     func addItemHandle()
-    func refreshGradientItemHandle()
-    func refreshPlainColorItemHandle()
-    func changeViewSizeHandle()
-    func clearItemHandle()
+    func refreshColorItemHandle()
     func shareHandle()
-    func saveToPhotosHandle(completion: @escaping () -> Void)
+    
     func saveFileHandle(completion: @escaping () -> Void)
-    func deleteHandle(completion: @escaping () -> Void)
+    func saveToPhotosHandle(completion: @escaping () -> Void)
     func renameHandle(completion: @escaping () -> Void)
+    func cancelHandle(completion: @escaping () -> Void)
+    func deleteHandle(completion: @escaping () -> Void)
 }
 
 final class WallshapesNavigationController: UINavigationController {
@@ -45,12 +44,7 @@ final class WallshapesNavigationController: UINavigationController {
     }
 
     override init(rootViewController: UIViewController) {
-        if #available(iOS 13.0, *) {
-            super.init(rootViewController: rootViewController)
-        } else {
-            super.init(nibName: nil, bundle: nil)
-            self.viewControllers = [rootViewController]
-        }
+        super.init(rootViewController: rootViewController)
         setupNavigationController()
     }
 
@@ -60,30 +54,37 @@ final class WallshapesNavigationController: UINavigationController {
     }
 
     public func setupNavigationController() {
-        self.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationBar.shadowImage = UIImage()
-        self.navigationBar.isTranslucent = true
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithTransparentBackground()
+        navBarAppearance.backgroundColor = .init(white: 0.9, alpha: 0.55)
+        
+        self.navigationBar.standardAppearance = navBarAppearance
+        self.navigationBar.scrollEdgeAppearance = navBarAppearance
+        self.navigationBar.compactScrollEdgeAppearance = navBarAppearance
+        self.navigationBar.compactAppearance = navBarAppearance
         self.navigationBar.tintColor = .white
+
         self.navigationRightItems = setupNavigationRightItems()
         self.navigationLeftItems = setupNavigationLeftItems()
         setupNavigationItems()
     }
+}
 
+// MARK: - Navbar items
+
+extension WallshapesNavigationController {
     private func setupNavigationRightItems() -> [UIBarButtonItem] {
-        return [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
-                configBarButtons("gradient", action: #selector(refreshGradientItemHandle)),
-                configBarButtons("bucket", size: 23, action: #selector(refreshPlainColorItemHandle)),
-//                configBarButtons("crop", action: #selector(changeViewSizeHandle)),
-        ]
+        return [
+                UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItemHandle)),
+                configBarButtons("bucket", size: 23, action: #selector(refreshColorItemHandle)),
+            ]
     }
 
     private func setupNavigationLeftItems() -> [UIBarButtonItem] {
         return [
-//            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveFileHandle)),
-//                UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearItemHandle)),
                 UIBarButtonItem(title: "Done", primaryAction: nil, menu: createAttributeMenu()),
                 configBarButtons("square.and.arrow.up", isSystemSymbol: true, action: #selector(shareHandle))
-        ]
+            ]
     }
 
     private func setupNavigationItems() {
@@ -92,24 +93,12 @@ final class WallshapesNavigationController: UINavigationController {
         navItem.leftBarButtonItems = self.navigationLeftItems
     }
 
-    @objc private func changeViewSizeHandle() {
-        wallshapesDelegate?.changeViewSizeHandle()
-    }
-
-    @objc private func refreshPlainColorItemHandle() {
-        wallshapesDelegate?.refreshPlainColorItemHandle()
-    }
-
-    @objc private func refreshGradientItemHandle() {
-        wallshapesDelegate?.refreshGradientItemHandle()
+    @objc private func refreshColorItemHandle() {
+        wallshapesDelegate?.refreshColorItemHandle()
     }
 
     @objc private func addItemHandle() {
         wallshapesDelegate?.addItemHandle()
-    }
-
-    @objc private func clearItemHandle() {
-        wallshapesDelegate?.clearItemHandle()
     }
     
     @objc private func shareHandle() {
@@ -138,7 +127,7 @@ final class WallshapesNavigationController: UINavigationController {
                     self.wallshapesDelegate?.renameHandle(completion: self.doneAction!)
                 }),
                 UIAction(title: "Cancel", image: UIImage(systemName: "xmark.circle"), attributes: .destructive, handler: { (_) in
-                    self.doneAction!()
+                    self.wallshapesDelegate?.cancelHandle(completion: self.doneAction!)
                 }),
                 UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { (_) in
                     self.wallshapesDelegate?.deleteHandle(completion: self.doneAction!)

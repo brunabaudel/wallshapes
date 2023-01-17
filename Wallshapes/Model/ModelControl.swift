@@ -8,7 +8,6 @@
 import UIKit
 
 final class ModelControl {
-    private var size: WallshapeSize = .normal
     private var shapeViews: [ShapeView] = []
     private var backgroundColors: [UIColor] = []
 
@@ -21,7 +20,6 @@ final class ModelControl {
     public func save(wallshape: Wallshape) {
         wallshape.backgroundColors = self.backgroundColors
         wallshape.shapes = self.shapes()
-        wallshape.size = self.size
         return WallshapeModelHandler.store(wallshape: wallshape)
     }
 
@@ -33,10 +31,6 @@ final class ModelControl {
 
     public func addShapeViews(_ shapeViews: [ShapeView]) {
         self.shapeViews = shapeViews
-    }
-
-    public func wallshapeSize(_ size: WallshapeSize) {
-        self.size = size
     }
 }
 

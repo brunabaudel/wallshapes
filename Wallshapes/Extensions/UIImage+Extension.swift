@@ -8,22 +8,6 @@
 import UIKit
 
 extension UIImage {
-//    func ciblur(forRect rect: CGRect, with radius: Double) -> UIImage? {
-//        let context = CIContext(options: nil)
-//        let inputImage = CIImage(cgImage: self.cgImage!)
-//
-//        let filter = CIFilter(name: "CIGaussianBlur")
-//        filter?.setValue(inputImage, forKey: kCIInputImageKey)
-//        filter?.setValue(radius, forKey: kCIInputRadiusKey)
-//
-//        guard let outputImage = filter?.outputImage,
-//              let cgImage = context.createCGImage(outputImage, from: rect)
-//        else {
-//            return nil
-//        }
-//        return UIImage(cgImage: cgImage)
-//    }
-
     class func imageWithView(_ view: UIView) -> UIImage {
         let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
         return renderer.image { rendererContext in
@@ -64,22 +48,6 @@ extension UIImage {
         }
         return nil
     }
-    
-//    func createThumbnail() -> UIImage? {
-//        let options = [
-//            kCGImageSourceCreateThumbnailWithTransform: true,
-//            kCGImageSourceCreateThumbnailFromImageAlways: true,
-//            kCGImageSourceThumbnailMaxPixelSize: 100] as CFDictionary
-//
-//        guard let imageData = self.pngData(),
-//              let imageSource = CGImageSourceCreateWithData(imageData as NSData, nil),
-//              let image = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options)
-//        else {
-//            return nil
-//        }
-//
-//        return UIImage(cgImage: image)
-//    }
 
     func crop(_ cropRect: CGRect, sizeView: CGSize) -> UIImage? {
         let imageViewScale = max(self.size.width / sizeView.width, self.size.height / sizeView.height)

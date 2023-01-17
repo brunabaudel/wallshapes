@@ -19,7 +19,7 @@ final class WallshapeView: UIView {
         self.selectBorder = UIView()
         self.tempView = UIView()
         self.isSelected = false
-        self.backgroundColor = .init(white: 0.15, alpha: 1)
+        self.backgroundColor = .clear
     }
 
     required init?(coder: NSCoder) {

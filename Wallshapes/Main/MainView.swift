@@ -45,8 +45,7 @@ struct MainView: View {
                 Button("Cancel") {}
                 
                 Button("Ok") {
-                    if name.trimmingCharacters(in: .whitespacesAndNewlines)
-                        .range(of: "^[a-zA-Z0-9_\\s]*$", options: .regularExpression) != nil && name.count >= 1 {
+                    if name.count >= 1 {
                         isShowView = true
                     }
                 }

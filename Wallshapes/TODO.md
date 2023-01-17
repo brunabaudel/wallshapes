@@ -16,9 +16,9 @@
         Rename x
         Delete x
 - [x] Add remove one shape on menu
+- [x] Choose shape colors
 
 
-- [ ] Choose shape colors
 - [ ] Choose background colors
 - [ ] Fix limit characters on name
 

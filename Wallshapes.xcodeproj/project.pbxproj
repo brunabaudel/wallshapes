@@ -46,6 +46,8 @@
 		4CF48BDF26222504009822DA /* UIAlertController+Extenison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */; };
 		4CF48BF12624FB90009822DA /* AuthorizationAssests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF48BF02624FB90009822DA /* AuthorizationAssests.swift */; };
 		F81EF6842973367800225891 /* ColorMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81EF6832973367800225891 /* ColorMenuView.swift */; };
+		F81EF6882974979A00225891 /* MenuNavControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81EF6872974979A00225891 /* MenuNavControl.swift */; };
+		F81EF68A2974990900225891 /* NavViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81EF6892974990900225891 /* NavViewControl.swift */; };
 		F874060A294CA45100C3A6A0 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = F8740609294CA45100C3A6A0 /* TODO.md */; };
 		F8808CB52968C5B8003CB3E8 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8808CB42968C5B8003CB3E8 /* GridView.swift */; };
 		F8B67A1A2936521300A71EAD /* WallshapesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B67A192936521300A71EAD /* WallshapesApp.swift */; };
@@ -96,6 +98,8 @@
 		4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extenison.swift"; sourceTree = "<group>"; };
 		4CF48BF02624FB90009822DA /* AuthorizationAssests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationAssests.swift; sourceTree = "<group>"; };
 		F81EF6832973367800225891 /* ColorMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMenuView.swift; sourceTree = "<group>"; };
+		F81EF6872974979A00225891 /* MenuNavControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuNavControl.swift; sourceTree = "<group>"; };
+		F81EF6892974990900225891 /* NavViewControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavViewControl.swift; sourceTree = "<group>"; };
 		F8740609294CA45100C3A6A0 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		F8808CB42968C5B8003CB3E8 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		F8B67A192936521300A71EAD /* WallshapesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallshapesApp.swift; sourceTree = "<group>"; };
@@ -215,15 +219,9 @@
 		4CB5EF7725ED8B8800193A19 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				4CB5EF7C25ED8BB500193A19 /* SlideMenu.swift */,
 				4C21D42526586CDB00116116 /* CustomMenuView.swift */,
-				4CD45EC7267D043700333086 /* ShapeMenuView.swift */,
-				4C21D427265872E100116116 /* ArrangeMenuView.swift */,
-				F81EF6832973367800225891 /* ColorMenuView.swift */,
-				4C837A712661782C001869DA /* MainMenuView.swift */,
-				4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */,
-				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
-				4C6D313826B4889B00486429 /* LayoutShapeView.swift */,
+				F81EF6862974974300225891 /* MenuNav */,
+				F81EF6852974973100225891 /* MenuShape */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -244,6 +242,30 @@
 				4C5E8AA62627A62A00247C9F /* SaveImageHandlerError.swift */,
 			);
 			path = SaveImages;
+			sourceTree = "<group>";
+		};
+		F81EF6852974973100225891 /* MenuShape */ = {
+			isa = PBXGroup;
+			children = (
+				4CB5EF7C25ED8BB500193A19 /* SlideMenu.swift */,
+				4CD45EC7267D043700333086 /* ShapeMenuView.swift */,
+				4C21D427265872E100116116 /* ArrangeMenuView.swift */,
+				F81EF6832973367800225891 /* ColorMenuView.swift */,
+				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
+				4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */,
+				4C837A712661782C001869DA /* MainMenuView.swift */,
+				4C6D313826B4889B00486429 /* LayoutShapeView.swift */,
+			);
+			path = MenuShape;
+			sourceTree = "<group>";
+		};
+		F81EF6862974974300225891 /* MenuNav */ = {
+			isa = PBXGroup;
+			children = (
+				F81EF6872974979A00225891 /* MenuNavControl.swift */,
+				F81EF6892974990900225891 /* NavViewControl.swift */,
+			);
+			path = MenuNav;
 			sourceTree = "<group>";
 		};
 		F874060B294E471F00C3A6A0 /* Controls */ = {
@@ -375,6 +397,7 @@
 				4CB5EF8525ED9F9F00193A19 /* ShapeGesturesControl.swift in Sources */,
 				4C5E8AB32629B02400247C9F /* Codable+Extension.swift in Sources */,
 				4C51FFA92605214F0064CE04 /* MiddleIndicatorView.swift in Sources */,
+				F81EF68A2974990900225891 /* NavViewControl.swift in Sources */,
 				F8B67A2029365BDC00A71EAD /* UIWallshapesView.swift in Sources */,
 				4C5E8AB62629B05600247C9F /* WallshapeData.swift in Sources */,
 				4C21D428265872E100116116 /* ArrangeMenuView.swift in Sources */,
@@ -388,6 +411,7 @@
 				4C83C27D266ABE61008E97FE /* GridControl.swift in Sources */,
 				4CBE046F25FFCAD500C54C66 /* RenderIndicatorView.swift in Sources */,
 				4CB5EF7D25ED8BB500193A19 /* SlideMenu.swift in Sources */,
+				F81EF6882974979A00225891 /* MenuNavControl.swift in Sources */,
 				4C0F7831262B9F10001C26A5 /* FileControl.swift in Sources */,
 				F8808CB52968C5B8003CB3E8 /* GridView.swift in Sources */,
 				4C21D42626586CDB00116116 /* CustomMenuView.swift in Sources */,
