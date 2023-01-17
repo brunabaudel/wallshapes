@@ -22,7 +22,7 @@ final class NavViewControl {
         let picker = UIColorPickerViewController()
 
         if sender.type == .plain {
-            picker.selectedColor = wallshapeView.contentView?.backgroundColor ?? sender.color ?? .white
+            picker.selectedColor = sender.color ?? wallshapeView.contentView?.backgroundColor ?? .white
         }
         
         if sender.type == .gradient1 {
@@ -47,12 +47,14 @@ final class NavViewControl {
                     }
                     
                     if sender.type == .gradient1 {
+                        wallshapeView.contentView?.backgroundColor = .clear
                         self.gradientColors.remove(at: 0)
                         self.gradientColors.insert(color, at: 0)
                         self.chooseColors(self.gradientColors, wallshapeView: wallshapeView)
                     }
                     
                     if sender.type == .gradient2 {
+                        wallshapeView.contentView?.backgroundColor = .clear
                         self.gradientColors.remove(at: 1)
                         self.gradientColors.insert(color, at: 1)
                         self.chooseColors(self.gradientColors, wallshapeView: wallshapeView)
