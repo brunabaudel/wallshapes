@@ -56,7 +56,7 @@ final class WallshapesNavigationController: UINavigationController {
     public func setupNavigationController() {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithTransparentBackground()
-        navBarAppearance.backgroundColor = .init(white: 0.9, alpha: 0.55)
+        navBarAppearance.backgroundColor = .init(white: 0.3, alpha: 0.3)
         
         self.navigationBar.standardAppearance = navBarAppearance
         self.navigationBar.scrollEdgeAppearance = navBarAppearance

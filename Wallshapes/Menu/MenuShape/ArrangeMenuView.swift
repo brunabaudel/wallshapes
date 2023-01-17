@@ -8,7 +8,6 @@
 import UIKit
 
 final class ArrangeMenuView: CustomMenuDelegate {
-    
     enum ArrangeMenuTypeEnum: String, CaseIterable {
         case bringToFront = "bring-front",
              sendToBack = "send-back",

@@ -37,7 +37,8 @@ final class NavViewControl {
             .sink { color in
                 DispatchQueue.main.async {
                     sender.color = color
-                    let image = sender.currentImage?.tinted(with: color)
+                    sender.alpha = color.alpha
+                    let image = sender.currentImage?.tinted(with: color.withAlphaComponent(1))
                     sender.setImage(nil, for: .normal)
                     sender.setImage(image, for: .normal)
                     

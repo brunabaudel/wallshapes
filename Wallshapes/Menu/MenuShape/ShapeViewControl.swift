@@ -34,7 +34,7 @@ final class ShapeViewControl {
         let picker = UIColorPickerViewController()
         
         if sender.type == .plain {
-            picker.selectedColor = sender.color ?? shape.layerColors?.first ?? .white
+            picker.selectedColor = shape.layerColors?.first ?? sender.color  ?? .white
         }
         
         if sender.type == .gradient1 {
@@ -49,7 +49,8 @@ final class ShapeViewControl {
             .sink { color in
                 DispatchQueue.main.async {
                     sender.color = color
-                    let image = sender.currentImage?.tinted(with: color)
+                    sender.alpha = color.alpha
+                    let image = sender.currentImage?.tinted(with: color.withAlphaComponent(1))
                     sender.setImage(nil, for: .normal)
                     sender.setImage(image, for: .normal)
                     

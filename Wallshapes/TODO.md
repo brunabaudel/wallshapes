@@ -17,15 +17,16 @@
         Delete x
 - [x] Add remove one shape on menu
 - [x] Choose shape colors
+- [x] Choose background colors
 
 
-- [ ] Choose background colors
+
 - [ ] Fix limit characters on name
-
-
 
 
 Issues:
 
+- add image
+- add text
 - rename in maingrid
 - magnect grid
