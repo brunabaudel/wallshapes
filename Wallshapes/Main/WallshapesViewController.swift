@@ -52,12 +52,10 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
         wallshapeViewControl?.menuColor()
     }
     
-    func shareHandle() {
-        guard let wallshape = self.wallshape, let image = wallshapeViewControl?.createImage(fileName: wallshape.fileName) else { return }
-        let imageToShare = [image]
-        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
-        self.present(activityViewController, animated: true, completion: nil)
+    
+    func shareHandle() -> [UIImage] {
+        guard let wallshape = self.wallshape, let image = wallshapeViewControl?.createImage(fileName: wallshape.fileName) else { return [] }
+        return [image]
     }
 
     func saveFileHandle(completion: @escaping () -> Void) {

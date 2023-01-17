@@ -11,7 +11,7 @@ import SwiftUI
 protocol WallshapesNavigationControllerDelegate: AnyObject {
     func addItemHandle()
     func refreshColorItemHandle()
-    func shareHandle()
+    func shareHandle() -> [UIImage]
     
     func saveFileHandle(completion: @escaping () -> Void)
     func saveToPhotosHandle(completion: @escaping () -> Void)
@@ -93,16 +93,20 @@ extension WallshapesNavigationController {
         navItem.leftBarButtonItems = self.navigationLeftItems
     }
 
-    @objc private func refreshColorItemHandle() {
-        wallshapesDelegate?.refreshColorItemHandle()
-    }
-
     @objc private func addItemHandle() {
         wallshapesDelegate?.addItemHandle()
     }
     
+    @objc private func refreshColorItemHandle() {
+        wallshapesDelegate?.refreshColorItemHandle()
+    }
+    }
+    
     @objc private func shareHandle() {
-        wallshapesDelegate?.shareHandle()
+        let imageToShare = wallshapesDelegate?.shareHandle() ?? []
+        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.barButtonItem = self.navigationLeftItems.last
+        self.present(activityViewController, animated: true, completion: nil)
     }
     
     func createAttributeMenu() -> UIMenu  {
