@@ -105,16 +105,6 @@ extension WallshapesNavigationController {
         wallshapesDelegate?.shareHandle()
     }
     
-    private func configBarButtons(_ title: String, size: CGFloat = 20, isSystemSymbol: Bool = false, action: Selector?) -> UIBarButtonItem {
-        guard let icon = createIcon(title, size: size, isSystemSymbol: isSystemSymbol) else {return UIBarButtonItem()}
-        return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
-    }
-
-    private func createIcon(_ title: String, size: CGFloat = 20, isSystemSymbol: Bool) -> UIImage? {
-        return isSystemSymbol ? UIImage(systemName: title) :
-                                UIImage(named: title)?.resize(targetSize: CGSize(width: size, height: size))
-    }
-    
     func createAttributeMenu() -> UIMenu  {
         let menuActions: [UIAction] = [
                 UIAction(title: "Save", image: UIImage(systemName: "square.and.arrow.down"), handler: { (_) in
@@ -135,5 +125,15 @@ extension WallshapesNavigationController {
         ]
         
         return UIMenu(title: "", children: menuActions)
+    }
+    
+    private func configBarButtons(_ title: String, size: CGFloat = 20, isSystemSymbol: Bool = false, action: Selector?) -> UIBarButtonItem {
+        guard let icon = createIcon(title, size: size, isSystemSymbol: isSystemSymbol) else {return UIBarButtonItem()}
+        return UIBarButtonItem(image: icon, style: .plain, target: self, action: action)
+    }
+
+    private func createIcon(_ title: String, size: CGFloat = 20, isSystemSymbol: Bool) -> UIImage? {
+        return isSystemSymbol ? UIImage(systemName: title) :
+                                UIImage(named: title)?.resize(targetSize: CGSize(width: size, height: size))
     }
 }

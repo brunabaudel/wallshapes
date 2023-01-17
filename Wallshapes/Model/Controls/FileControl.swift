@@ -16,7 +16,6 @@ final class FileControl {
             NSLog("Unable to find the document directory")
             return nil
         }
-        print(dir)
         return dir
     }
     

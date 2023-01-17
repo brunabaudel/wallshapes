@@ -33,7 +33,17 @@ final class ShapeViewControl {
         guard let shape = shapeview.shape else {return nil}
         let picker = UIColorPickerViewController()
         
-        picker.selectedColor = sender.color ?? shape.layerColors?.first ?? .white
+        if sender.type == .plain {
+            picker.selectedColor = sender.color ?? shape.layerColors?.first ?? .white
+        }
+        
+        if sender.type == .gradient1 {
+            picker.selectedColor = gradientColors.first ?? sender.color ?? .white
+        }
+        
+        if sender.type == .gradient2 {
+            picker.selectedColor = gradientColors.last ?? sender.color ?? .white
+        }
         
         cancellable = picker.publisher(for: \.selectedColor)
             .sink { color in

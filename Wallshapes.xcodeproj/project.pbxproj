@@ -248,12 +248,12 @@
 			isa = PBXGroup;
 			children = (
 				4CB5EF7C25ED8BB500193A19 /* SlideMenu.swift */,
+				4C837A712661782C001869DA /* MainMenuView.swift */,
 				4CD45EC7267D043700333086 /* ShapeMenuView.swift */,
 				4C21D427265872E100116116 /* ArrangeMenuView.swift */,
 				F81EF6832973367800225891 /* ColorMenuView.swift */,
-				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
 				4CB5EF7825ED8BA100193A19 /* MenuShapeControl.swift */,
-				4C837A712661782C001869DA /* MainMenuView.swift */,
+				4C51FFA0260413320064CE04 /* ShapeViewControl.swift */,
 				4C6D313826B4889B00486429 /* LayoutShapeView.swift */,
 			);
 			path = MenuShape;
