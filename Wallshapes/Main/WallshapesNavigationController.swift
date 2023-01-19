@@ -100,7 +100,6 @@ extension WallshapesNavigationController {
     @objc private func refreshColorItemHandle() {
         wallshapesDelegate?.refreshColorItemHandle()
     }
-    }
     
     @objc private func shareHandle() {
         let imageToShare = wallshapesDelegate?.shareHandle() ?? []
