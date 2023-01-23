@@ -28,15 +28,15 @@ struct GridView: View {
                 ForEach(viewModel.wallshapes) { item in
                     NavigationLink(destination: WallshapesView(wallshape: item)) {
                         ItemGridView(item: item)
-                            .contextMenu {
-                                Button(role: .destructive, action: {
-                                    viewModel.delete(wallshape: item)
-                                }) {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
-                    } 
+                    }
                     .padding(4)
+                    .contextMenu {
+                        Button(role: .destructive, action: {
+                            viewModel.delete(wallshape: item)
+                        }) {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
             }
         }

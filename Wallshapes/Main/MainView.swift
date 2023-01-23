@@ -42,7 +42,7 @@ struct MainView: View {
             .onAppear {
                 viewModel.reload()
             }
-            .navigationViewStyle(.stack)
+            
 //            .alert("Wallshape", isPresented: $isShowAlert) {
 //                TextField("Wallshape name", text: $name)
 //
@@ -54,7 +54,10 @@ struct MainView: View {
 //                    }
 //                }
 //            }
+        
+            
         }
+        .navigationViewStyle(.stack)
         .textFieldAlert(isShowing: $isShowAlert, text: $name, title: "Rename", placeholder: "Wallshape name") {
             if name.count >= 1 && name.count <= nameLimit {
                 isShowView = true
