@@ -28,21 +28,33 @@ extension UIAlertController {
     
     class func alertWithTextField(_ title: String,
                                   message: String = "",
+                                  text: String = "",
+                                  placeholder: String = "",
+                                  keyboardType: UIKeyboardType = UIKeyboardType.default,
                                   titleCancel: String = "Cancel",
                                   titleOK: String = "OK",
                                   isCancel: Bool = false,
-                                  textField: UITextField) -> UIAlertController {
+                                  okAction: ((_ text: String?) -> Void)? = nil) -> UIAlertController {
         let alert = Self(title: title, message: message, preferredStyle: .alert)
         
+        alert.addTextField { (textField : UITextField!) in
+            textField.text = text
+            textField.placeholder = placeholder
+            textField.keyboardType = keyboardType
+        }
+                                      
         if isCancel {
-            alert.addAction(UIAlertAction(title: titleCancel, style: .cancel))
+          alert.addAction(UIAlertAction(title: titleCancel, style: .cancel))
         }
-        
-        alert.addTextField { (uiTextField : UITextField!) in
-            uiTextField.text = textField.text
-            uiTextField.placeholder = textField.placeholder
-            uiTextField.delegate = textField.delegate
-        }
+
+        alert.addAction(UIAlertAction(title: titleOK, style: .default, handler: { (action: UIAlertAction) in
+            guard let textField =  alert.textFields?.first else {
+                okAction?(nil)
+                return
+            }
+            okAction?(textField.text)
+        }))
+                                      
         return alert
     }
 }

@@ -70,21 +70,13 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
 
     func renameHandle(completion: @escaping () -> Void) {
         guard let wallshape = self.wallshape else { return }
-        let textField = UITextField()
-        textField.text = wallshape.name
-        textField.delegate = self
-        textField.placeholder = "Wallshape name"
         
-        let alert = UIAlertController.alertWithTextField("Rename", isCancel: true, textField: textField)
+        let alert = UIAlertController.alertWithTextField("Rename", text: wallshape.name,
+                                                         placeholder: "Wallshape name", isCancel: true) { text in
+            wallshape.name = text ?? ""
+            self.wallshapeViewControl?.rename(wallshape: wallshape, completion: completion)
+        }
         
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: { okAction -> Void in
-            if let textFields = alert.textFields, let textField = textFields.first {
-                wallshape.name = textField.text ?? ""
-                self.wallshapeViewControl?.rename(wallshape: wallshape, completion: completion)
-            }
-        })
-        
-        alert.addAction(okAction)
         alert.showAlert(self)
     }
     
@@ -97,5 +89,3 @@ extension WallshapesViewController: WallshapesNavigationControllerDelegate {
         wallshapeViewControl?.delete(wallshape: wallshape, completion: completion)
     }
 }
-
-extension WallshapesViewController: UITextFieldDelegate {}

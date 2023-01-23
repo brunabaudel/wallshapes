@@ -19,6 +19,7 @@ struct WallshapesView: View {
     var body: some View {
         UIWallshapesView(wallshape: wallshape, wallshapesViewController: wallshapesViewController)
             .ignoresSafeArea()
+            .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
             .onChange(of: scenePhase) { newPhase in
                 if newPhase == .inactive {

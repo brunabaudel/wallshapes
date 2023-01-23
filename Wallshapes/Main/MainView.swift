@@ -10,10 +10,13 @@ import SwiftUI
 struct MainView: View {
     @ObservedObject private var viewModel = ViewModel()
 
-    @State private var isShowAlert = false
-    @State private var isShowView = false
     @State private var isValid = false
+    @State private var isShowView = false
+    
+    @State private var isShowAlert = false
     @State private var name = ""
+    
+    private let nameLimit = 10
     
     var body: some View {
         NavigationView {
@@ -39,19 +42,24 @@ struct MainView: View {
             .onAppear {
                 viewModel.reload()
             }
-            .alert("Wallshape", isPresented: $isShowAlert) {
-                TextField("Wallshape name", text: $name)
-
-                Button("Cancel") {}
-                
-                Button("Ok") {
-                    if name.count >= 1 {
-                        isShowView = true
-                    }
-                }
+            .navigationViewStyle(.stack)
+//            .alert("Wallshape", isPresented: $isShowAlert) {
+//                TextField("Wallshape name", text: $name)
+//
+//                Button("Cancel") {}
+//
+//                Button("Ok") {
+//                    if name.count >= 1 {
+//                        isShowView = true
+//                    }
+//                }
+//            }
+        }
+        .textFieldAlert(isShowing: $isShowAlert, text: $name, title: "Rename", placeholder: "Wallshape name") {
+            if name.count >= 1 && name.count <= nameLimit {
+                isShowView = true
             }
         }
-        .navigationViewStyle(.stack)
     }
 }
 
