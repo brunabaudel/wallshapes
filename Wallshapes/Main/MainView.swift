@@ -10,7 +10,6 @@ import SwiftUI
 struct MainView: View {
     @ObservedObject private var viewModel = ViewModel()
 
-    @State private var isValid = false
     @State private var isShowView = false
     
     @State private var isShowAlert = false

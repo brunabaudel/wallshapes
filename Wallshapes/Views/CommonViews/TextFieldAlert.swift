@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TextFieldAlert<Presenting>: View where Presenting: View {
     @Environment(\.colorScheme) var colorScheme
+    @FocusState var isFocused: Bool
     
     @Binding var isShowing: Bool
     @Binding var text: String
@@ -31,6 +32,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                         .bold()
                     
                     TextField(self.placeholder, text: self.$text)
+                        .focused($isFocused)
                         .padding(.vertical)
                         .textFieldStyle(RoundedBorderTextFieldStyle ())
                     
@@ -39,6 +41,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                     HStack {
                         Button (action: {
                             withAnimation {
+                                self.isFocused = false
                                 self.isShowing = false
                             }
                         }) {
@@ -51,6 +54,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                         Button (action: {
                             withAnimation {
                                 okAction()
+                                self.isFocused = false
                                 self.isShowing = false
                             }
                         }) {
