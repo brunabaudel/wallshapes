@@ -48,7 +48,6 @@
 		F81EF6842973367800225891 /* ColorMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81EF6832973367800225891 /* ColorMenuView.swift */; };
 		F81EF6882974979A00225891 /* MenuNavControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81EF6872974979A00225891 /* MenuNavControl.swift */; };
 		F81EF68A2974990900225891 /* NavViewControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81EF6892974990900225891 /* NavViewControl.swift */; };
-		F856781C297ED93300D27D96 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F856781B297ED93300D27D96 /* Color+Extension.swift */; };
 		F856781E297EDBD000D27D96 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = F856781D297EDBD000D27D96 /* TextFieldAlert.swift */; };
 		F8567820297EDBE900D27D96 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F856781F297EDBE900D27D96 /* View+Extension.swift */; };
 		F874060A294CA45100C3A6A0 /* TODO.md in Resources */ = {isa = PBXBuildFile; fileRef = F8740609294CA45100C3A6A0 /* TODO.md */; };
@@ -103,7 +102,6 @@
 		F81EF6832973367800225891 /* ColorMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMenuView.swift; sourceTree = "<group>"; };
 		F81EF6872974979A00225891 /* MenuNavControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuNavControl.swift; sourceTree = "<group>"; };
 		F81EF6892974990900225891 /* NavViewControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavViewControl.swift; sourceTree = "<group>"; };
-		F856781B297ED93300D27D96 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		F856781D297EDBD000D27D96 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		F856781F297EDBE900D27D96 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		F8740609294CA45100C3A6A0 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
@@ -205,7 +203,6 @@
 				4CF48BDE26222504009822DA /* UIAlertController+Extenison.swift */,
 				4C5E8AB22629B02400247C9F /* Codable+Extension.swift */,
 				4C8092D4264B49E600DDD590 /* UIButton+Extension.swift */,
-				F856781B297ED93300D27D96 /* Color+Extension.swift */,
 				F856781F297EDBE900D27D96 /* View+Extension.swift */,
 			);
 			path = Extensions;
@@ -394,7 +391,6 @@
 				4CB5EF8C25F154D800193A19 /* UIView+Extension.swift in Sources */,
 				4C8092D5264B49E600DDD590 /* UIButton+Extension.swift in Sources */,
 				4C6D313926B4889B00486429 /* LayoutShapeView.swift in Sources */,
-				F856781C297ED93300D27D96 /* Color+Extension.swift in Sources */,
 				4CB5EF5E25ED8A0600193A19 /* Array+Extension.swift in Sources */,
 				4CB5EF6325ED8A2900193A19 /* UIImage+Extension.swift in Sources */,
 				4CF48BD82621F380009822DA /* SaveImageControl.swift in Sources */,
