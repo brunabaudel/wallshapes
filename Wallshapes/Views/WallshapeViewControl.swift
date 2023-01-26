@@ -96,7 +96,7 @@ final class WallshapeViewControl {
         shape.frame = CGRect(x: size*1.75, y: size, width: size, height: size)
         shape.type = ShapeType.circle
         shape.layerColors?.append(UIColor.random)
-        shape.layerColors?.append(UIColor.random)
+        shape.layerColors?.append(UIColor.white)
         let shapeView = ShapeView(shape: shape)
         menuShapeControl.createShapeView(shapeView)
         menuShapeControl.unselectShapeView()

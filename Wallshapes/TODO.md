@@ -18,10 +18,8 @@
 - [x] Add remove one shape on menu
 - [x] Choose shape colors
 - [x] Choose background colors
+- [x] Fix limit characters on name
 
-
-
-- [ ] Fix limit characters on name
 
 
 Issues:
@@ -30,3 +28,4 @@ Issues:
 - add text
 - rename in maingrid
 - magnect grid
+- undo/redo

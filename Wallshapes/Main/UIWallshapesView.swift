@@ -9,28 +9,30 @@ import SwiftUI
 import UIKit
 
 struct WallshapesView: View {
-    
     @State var wallshape: Wallshape
-    
     @Environment(\.scenePhase) var scenePhase
     
-    let wallshapesViewController = WallshapesViewController()
+    @State var wallshapesViewController: WallshapesViewController? = WallshapesViewController()
     
     var body: some View {
-        UIWallshapesView(wallshape: wallshape, wallshapesViewController: wallshapesViewController)
+        UIWallshapesView(wallshape: wallshape, wallshapesViewController: wallshapesViewController ?? WallshapesViewController())
             .ignoresSafeArea()
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
             .onChange(of: scenePhase) { newPhase in
                 if newPhase == .inactive {
-                    wallshapesViewController.saveFileHandle(completion: {})
+                    wallshapesViewController?.saveFileHandle(completion: {})
+                    wallshapesViewController = nil
                 }
+            }
+            .onAppear {
+                wallshapesViewController = WallshapesViewController()
+                
             }
     }
 }
 
 struct UIWallshapesView: UIViewControllerRepresentable {
-    
     var wallshape: Wallshape
     let wallshapesViewController: WallshapesViewController
 

@@ -11,7 +11,6 @@ struct MainView: View {
     @ObservedObject private var viewModel = ViewModel()
 
     @State private var isShowView = false
-    
     @State private var isShowAlert = false
     @State private var name = ""
     
@@ -41,20 +40,6 @@ struct MainView: View {
             .onAppear {
                 viewModel.reload()
             }
-            
-//            .alert("Wallshape", isPresented: $isShowAlert) {
-//                TextField("Wallshape name", text: $name)
-//
-//                Button("Cancel") {}
-//
-//                Button("Ok") {
-//                    if name.count >= 1 {
-//                        isShowView = true
-//                    }
-//                }
-//            }
-        
-            
         }
         .navigationViewStyle(.stack)
         .textFieldAlert(isShowing: $isShowAlert, text: $name, title: "Rename", placeholder: "Wallshape name") {

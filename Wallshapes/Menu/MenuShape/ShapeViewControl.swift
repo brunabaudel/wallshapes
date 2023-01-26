@@ -32,21 +32,22 @@ final class ShapeViewControl {
     private func openColorPicker(_ shapeview: ShapeView, sender: TypeButton<ColorMenuView>) -> UIColorPickerViewController? {
         guard let shape = shapeview.shape else {return nil}
         let picker = UIColorPickerViewController()
-        
+                
         if sender.type == .plain {
-            picker.selectedColor = shape.layerColors?.first ?? sender.color  ?? .white
+            picker.selectedColor = sender.color ?? shape.layerColors?.first ?? .white
         }
         
         if sender.type == .gradient1 {
-            picker.selectedColor = gradientColors.first ?? sender.color ?? .white
+            picker.selectedColor = sender.color ?? gradientColors.first ?? .white
         }
         
         if sender.type == .gradient2 {
-            picker.selectedColor = gradientColors.last ?? sender.color ?? .white
+            picker.selectedColor = sender.color ?? gradientColors.last ?? .white
         }
         
         cancellable = picker.publisher(for: \.selectedColor)
             .sink { color in
+                print(color)
                 DispatchQueue.main.async {
                     sender.color = color
                     sender.alpha = color.alpha
@@ -90,12 +91,12 @@ final class ShapeViewControl {
         guard let shape = shapeview.shape, let shapeLayer = shape.shapeLayer else {return}
         if let gradient = shape.gradientLayer {
             self.replaceGradientLayer(shapeview, shapeLayer, gradient, colors: colors)
+            return
         }
         let gradient = CAGradientLayer()
         shapeLayer.fillColor = UIColor.white.cgColor
         gradient.bounds = shapeview.bounds
         gradient.position = CGPoint(x: shapeview.bounds.midX, y: shapeview.bounds.midY)
-        guard let colors = shape.layerColors else {return}
         self.replaceGradientLayer(shapeview, shapeLayer, gradient, colors: colors)
     }
 
