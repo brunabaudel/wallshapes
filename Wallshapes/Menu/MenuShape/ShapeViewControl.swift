@@ -47,7 +47,6 @@ final class ShapeViewControl {
         
         cancellable = picker.publisher(for: \.selectedColor)
             .sink { color in
-                print(color)
                 DispatchQueue.main.async {
                     sender.color = color
                     sender.alpha = color.alpha
