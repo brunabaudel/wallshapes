@@ -268,8 +268,8 @@ extension ShapeViewControl: MenuShapeControlDelegate {
         switch type {
         case .plain, .gradient1, .gradient2:
             guard let picker = openColorPicker(shapeView, sender: sender) else {return}
-            guard let window = UIApplication.window else {return}
-            window.rootViewController?.present(picker, animated: true)
+            guard let window = UIApplication.window, let rootViewController = window.rootViewController else {return}
+            rootViewController.present(picker, animated: true)
         case .none:
             NSLog("Something went wrong")
         }

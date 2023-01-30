@@ -32,13 +32,13 @@ final class MenuNavControl {
         menuColorView.isHidden = true
         menuColorView.delegate = self
 
-        guard let window = UIApplication.window else {return}
-        window.addSubview(menuColorView)
+        guard let window = UIApplication.window, let rootViewController = window.rootViewController else {return}
+        rootViewController.view.addSubview(menuColorView)
 
-        menuColorView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
-        menuColorView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
-        menuColorView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.21).isActive = true
-        menuColorView.widthAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.075).isActive = true
+        menuColorView.trailingAnchor.constraint(equalTo: rootViewController.view.trailingAnchor).isActive = true
+        menuColorView.centerYAnchor.constraint(equalTo: rootViewController.view.centerYAnchor).isActive = true
+        menuColorView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.21).isActive = true
+        menuColorView.widthAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.075).isActive = true
     }
 }
 

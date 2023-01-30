@@ -49,13 +49,13 @@ final class MenuShapeControl {
         sliderView.isHidden = true
         sliderView.addTarget(self, action: #selector(onSliderValueChanged(_:_:)), for: .valueChanged)
 
-        guard let window = UIApplication.window else {return}
-        window.addSubview(sliderView)
+        guard let window = UIApplication.window, let rootViewController = window.rootViewController else {return}
+        rootViewController.view.addSubview(sliderView)
 
-        sliderView.centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true
-        sliderView.bottomAnchor.constraint(equalTo: window.bottomAnchor, constant: -32).isActive = true
-        sliderView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.05).isActive = true
-        sliderView.widthAnchor.constraint(equalTo: window.widthAnchor, multiplier: 0.6).isActive = true
+        sliderView.centerXAnchor.constraint(equalTo: rootViewController.view.centerXAnchor).isActive = true
+        sliderView.bottomAnchor.constraint(equalTo: rootViewController.view.bottomAnchor, constant: -32).isActive = true
+        sliderView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.05).isActive = true
+        sliderView.widthAnchor.constraint(equalTo: rootViewController.view.widthAnchor, multiplier: 0.6).isActive = true
     }
 
     private func initMainMenuOnWindow() {
@@ -65,13 +65,13 @@ final class MenuShapeControl {
         mainMenuView.isHidden = true
         mainMenuView.delegate = self
 
-        guard let window = UIApplication.window else {return}
-        window.addSubview(mainMenuView)
+        guard let window = UIApplication.window, let rootViewController = window.rootViewController else {return}
+        rootViewController.view.addSubview(mainMenuView)
 
-        mainMenuView.trailingAnchor.constraint(equalTo: window.trailingAnchor).isActive = true
-        mainMenuView.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
-        mainMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.6).isActive = true
-        mainMenuView.widthAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.075).isActive = true
+        mainMenuView.trailingAnchor.constraint(equalTo: rootViewController.view.trailingAnchor).isActive = true
+        mainMenuView.centerYAnchor.constraint(equalTo: rootViewController.view.centerYAnchor).isActive = true
+        mainMenuView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.6).isActive = true
+        mainMenuView.widthAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.075).isActive = true
     }
 
     private func initArrangeMenuOnWindow() {
@@ -81,12 +81,12 @@ final class MenuShapeControl {
         menuArrangeView.isHidden = true
         menuArrangeView.delegate = self
 
-        guard let window = UIApplication.window else {return}
-        window.addSubview(menuArrangeView)
+        guard let window = UIApplication.window, let rootViewController = window.rootViewController else {return}
+        rootViewController.view.addSubview(menuArrangeView)
 
         menuArrangeView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         menuArrangeView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        menuArrangeView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.3).isActive = true
+        menuArrangeView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.3).isActive = true
         menuArrangeView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
 
@@ -97,12 +97,12 @@ final class MenuShapeControl {
         shapeMenuView.isHidden = true
         shapeMenuView.delegate = self
 
-        guard let window = UIApplication.window else {return}
-        window.addSubview(shapeMenuView)
+        guard let window = UIApplication.window, let rootViewController = window.rootViewController else {return}
+        rootViewController.view.addSubview(shapeMenuView)
 
         shapeMenuView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         shapeMenuView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        shapeMenuView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.3).isActive = true
+        shapeMenuView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.3).isActive = true
         shapeMenuView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
     
@@ -113,12 +113,12 @@ final class MenuShapeControl {
         menuColorView.isHidden = true
         menuColorView.delegate = self
 
-        guard let window = UIApplication.window else {return}
-        window.addSubview(menuColorView)
+        guard let window = UIApplication.window, let rootViewController = window.rootViewController else {return}
+        rootViewController.view.addSubview(menuColorView)
 
         menuColorView.trailingAnchor.constraint(equalTo: mainMenuView.leadingAnchor, constant: -4).isActive = true
         menuColorView.centerYAnchor.constraint(equalTo: mainMenuView.centerYAnchor).isActive = true
-        menuColorView.heightAnchor.constraint(equalTo: window.heightAnchor, multiplier: 0.21).isActive = true
+        menuColorView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.21).isActive = true
         menuColorView.widthAnchor.constraint(equalTo: mainMenuView.widthAnchor).isActive = true
     }
 

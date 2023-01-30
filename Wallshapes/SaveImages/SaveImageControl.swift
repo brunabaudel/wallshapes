@@ -56,8 +56,8 @@ final class SaveImage: NSObject {
 
     static private func showIndicator(with message: String) {
         DispatchQueue.main.async {
-            guard let window = UIApplication.window else { return }
-            self.renderIndicatorView = RenderIndicatorView(frame: window.frame, message: message)
+            guard let window = UIApplication.window, let rootViewController = window.rootViewController else { return }
+            self.renderIndicatorView = RenderIndicatorView(frame: rootViewController.view.frame, message: message)
         }
     }
 

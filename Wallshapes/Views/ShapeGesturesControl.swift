@@ -251,17 +251,17 @@ extension ShapeGesturesControl {
 
 extension ShapeGesturesControl {
     private func initMiddleIndicators() {
-        guard let window = UIApplication.window else { return }
+        guard let window = UIApplication.window, let rootViewController = window.rootViewController else { return }
         self.verticalIndicatorView = MiddleIndicatorView(
-            frame: CGRect(x: window.frame.midX, y: window.frame.minY, width: 10, height: window.frame.height),
+            frame: CGRect(x: rootViewController.view.frame.midX, y: rootViewController.view.frame.minY, width: 10, height: rootViewController.view.frame.height),
             type: MiddleIndicatorViewType.vertical)
 
         self.horizontalIndicatorView = MiddleIndicatorView(
-            frame: CGRect(x: window.frame.minX, y: window.frame.midY, width: window.frame.width, height: 10),
+            frame: CGRect(x: rootViewController.view.frame.minX, y: rootViewController.view.frame.midY, width: rootViewController.view.frame.width, height: 10),
             type: MiddleIndicatorViewType.horizontal)
 
-        window.addSubview(verticalIndicatorView)
-        window.addSubview(horizontalIndicatorView)
+        rootViewController.view.addSubview(verticalIndicatorView)
+        rootViewController.view.addSubview(horizontalIndicatorView)
     }
 
     private func showMiddleIndicators() {
